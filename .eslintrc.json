@@ -1,6 +1,11 @@
 {
   "root": true,
-  "ignorePatterns": ["projects/**/*"],
+  "ignorePatterns": [
+    "projects/**/*",
+    "node_modules/**/*",
+    "dist/**/*",
+    "coverage/**/*"
+  ],
   "plugins": ["simple-import-sort", "import"],
   "overrides": [
     {

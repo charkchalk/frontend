@@ -32,7 +32,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: ESLint Check
-        run: yarn eslint
+        run: yarn eslint .
 
       - name: Prettier Check
         run: yarn prettier --check --ignore-unknown .
