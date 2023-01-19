@@ -1,4 +1,5 @@
 <div class="flex flex-wrap justify-around">
+  <mat-spinner *ngIf="loading"></mat-spinner>
   <app-course-list-item
     *ngFor="let course of _courses"
     [course]="course"

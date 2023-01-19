@@ -8,14 +8,14 @@ import { CourseService } from "../../_api/course/course.service";
   styleUrls: ["./course-list.component.css"],
 })
 export class CourseListComponent implements OnInit {
+  protected loading = true;
   protected _courses: RawCourse[] = [];
 
   constructor(private courseService: CourseService) {}
 
   ngOnInit(): void {
     this.courseService.search().subscribe(courses => {
-      console.log(courses);
-
+      this.loading = false;
       this._courses = courses;
     });
   }
