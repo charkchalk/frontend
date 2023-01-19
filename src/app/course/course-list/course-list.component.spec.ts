@@ -1,5 +1,7 @@
+import { HttpClientModule } from "@angular/common/http";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
+import { CourseListItemModule } from "../course-list-item/course-list-item.module";
 import { CourseListComponent } from "./course-list.component";
 
 describe("CourseListComponent", () => {
@@ -9,6 +11,7 @@ describe("CourseListComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CourseListComponent],
+      imports: [CourseListItemModule, HttpClientModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CourseListComponent);
