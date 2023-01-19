@@ -2,41 +2,44 @@
   <mat-card-header class="mb-2">
     <mat-card-title class="space-x-1 align-middle">
       <span class="space-x-1 border border-black px-1 py-0.5">
-        <span>必修</span>
-        <span>4</span>
+        <span aria-label="修別">{{ course?.type?.name }}</span>
+        <span aria-label="學分數">{{ course?.credit }}</span>
       </span>
-      <span>VTuber 實習</span>
+      <span aria-label="課程名稱">{{ course?.name }}</span>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content class="space-y-1">
-    <div aria-label="teachers" class="flex flex-row items-center">
+    <div aria-label="授課教師" class="flex flex-row items-center">
       <mat-icon class="shrink-0" fontIcon="person_pin"></mat-icon>
       <div class="flex flex-row flex-wrap">
-        <button class="m-1 rounded-full border border-black py-0.5 px-2">
-          兔田佩可拉
-        </button>
-        <button class="m-1 rounded-full border border-black py-0.5 px-2">
-          櫻女巫
+        <button
+          class="m-1 rounded-full border border-black py-0.5 px-2"
+          *ngFor="let host; in: course?.hosts"
+        >
+          {{ host.name }}
         </button>
       </div>
     </div>
-    <div aria-label="place" class="flex flex-row items-center space-x-2">
+    <div aria-label="上課地點" class="flex flex-row items-center space-x-2">
       <mat-icon fontIcon="location_on"></mat-icon>
-      <span>主顧 115</span>
+      <span *ngFor="let place; in: course?.places">{{ place.name }}</span>
     </div>
-    <div aria-label="time" class="flex flex-row items-center space-x-2">
+    <div aria-label="上課時間" class="flex flex-row items-center space-x-2">
       <mat-icon
         aria-hidden="false"
         aria-label="Time"
         fontIcon="schedule"
       ></mat-icon>
-      <span>四 5、6</span>
+      <span *ngFor="let time; in: course?.timeRanges">
+        {{ time.day }} {{ time.start }} ~ {{ time.end }}
+      </span>
     </div>
     <button
-      aria-label="code"
-      class="float-right ml-1 flex items-center space-x-0.5 border border-black p-1 text-sm"
+      aria-label="選課代號"
+      class="float-right ml-1 flex items-center space-x-0.5 border border-black p-1 text-sm disabled:hidden"
+      [disabled]="!course?.code"
     >
-      <span>2234</span>
+      <span>{{ course?.code }}</span>
       <mat-icon
         class="text-xs"
         style="height: auto; width: auto"
@@ -44,15 +47,20 @@
       ></mat-icon>
     </button>
     <div
-      aria-label="class"
+      aria-label="開課班級"
       class="course-class flex flex-row items-center space-x-2"
     >
       <mat-icon fontIcon="groups"></mat-icon>
-      <span>資傳四A</span>
+      <span>{{ course?.organization?.name }}</span>
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <a mat-button color="primary">
+    <a
+      mat-button
+      color="primary"
+      [href]="course?.link"
+      [disabled]="!course?.link"
+    >
       <mat-icon fontIcon="info"></mat-icon>
       查看資訊
     </a>

@@ -20,7 +20,7 @@ interface RawCourse {
   /** 日期範圍 */
   dateRange: RawDateRange;
   /** 時間範圍 */
-  timeRange: RawTimeRange[];
+  timeRanges: RawTimeRange[];
   /** 原系統頁面 */
   link: string;
 }
