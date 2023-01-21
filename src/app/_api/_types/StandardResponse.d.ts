@@ -1,3 +1,5 @@
 interface StandardResponse<T> {
-  data: T;
+  totalPages: number;
+  currentPage: number;
+  content: T;
 }

@@ -23,6 +23,6 @@ export class CourseService {
         responseType: "json",
         params: params,
       })
-      .pipe(map(response => response.data));
+      .pipe(map(response => response.content));
   }
 }
