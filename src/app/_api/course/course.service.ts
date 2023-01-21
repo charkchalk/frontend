@@ -8,7 +8,7 @@ import { map, Observable } from "rxjs";
 export class CourseService {
   private _uri = "/courses";
 
-  constructor(private http: HttpClient) {}
+  constructor(private _http: HttpClient) {}
 
   search(options?: CanPaginate): Observable<RawCourse[]> {
     const params = new HttpParams();
@@ -18,7 +18,7 @@ export class CourseService {
       }
     }
 
-    return this.http
+    return this._http
       .get<StandardResponse<RawCourse[]>>(this._uri, {
         responseType: "json",
         params: params,

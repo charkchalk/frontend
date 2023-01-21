@@ -10,12 +10,12 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 export class CourseListItemComponent {
   @Input() course?: RawCourse;
 
-  constructor(private _snackBar: MatSnackBar, private clipboard: Clipboard) {}
+  constructor(private _snackBar: MatSnackBar, private _clipboard: Clipboard) {}
 
   copyCourseCode() {
     if (!this.course?.code) return;
 
-    this.clipboard.copy(this.course.code);
+    this._clipboard.copy(this.course.code);
 
     this._snackBar.open("已經複製到剪貼簿囉～", "關閉", {
       duration: 1000,
@@ -43,7 +43,7 @@ export class CourseListItemComponent {
       ` 上課。`,
     ].join("");
 
-    this.clipboard.copy(courseText);
+    this._clipboard.copy(courseText);
 
     this._snackBar.open("已經複製到剪貼簿囉～", "關閉", {
       duration: 1000,

@@ -1,7 +1,7 @@
 <div class="flex flex-wrap justify-center p-2">
   <mat-spinner *ngIf="loading"></mat-spinner>
   <app-course-list-item
-    *ngFor="let course of _courses"
+    *ngFor="let course of courses"
     [course]="course"
     class="m-2"
   ></app-course-list-item>
