@@ -6,5 +6,5 @@ interface RawPerson {
   /** 附註 */
   description: string;
   /** 通常為教師的個人網站 */
-  url: string;
+  link: string;
 }
