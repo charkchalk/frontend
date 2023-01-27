@@ -17,11 +17,16 @@ export class CourseListComponent implements OnInit {
 
   /** For waterfall loading */
   intersectionObserver: IntersectionObserver = new IntersectionObserver(
-    () => {
+    entries => {
+      if (!entries[0].isIntersecting) {
+        this.loading = false;
+        return;
+      }
+      this.loading = true;
       this.search();
     },
     {
-      threshold: 0.5,
+      threshold: 1,
     },
   );
 
@@ -34,14 +39,16 @@ export class CourseListComponent implements OnInit {
   }
 
   search(): void {
-    this.loading = true;
     this.courseService.search().subscribe(courses => {
       this.pagination = courses.pagination;
-      this.courses = this.courses.concat(courses.content);
-      this.loading = false;
+      this.courses.push(...courses.content);
       if (this.pagination.current >= this.pagination.total) {
         this.intersectionObserver.disconnect();
+        return;
       }
+      setTimeout(() => {
+        if (this.loading) this.search();
+      }, 500);
     });
   }
 }
