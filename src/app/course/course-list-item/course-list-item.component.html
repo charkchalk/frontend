@@ -18,22 +18,22 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content class="space-y-1">
-    <div aria-label="授課教師" class="flex flex-row items-center">
+    <div aria-label="授課教師" class="flex flex-row">
       <mat-icon
         matTooltip="授課教師"
-        class="shrink-0"
+        class="shrink-0 py-2"
         fontIcon="person_pin"
       ></mat-icon>
       <div class="flex flex-row flex-wrap">
-        <button
+        <a
           class="m-1 rounded-full border border-black py-0.5 px-2"
           *ngFor="let host of course?.hosts"
         >
           {{ host.name }}
-        </button>
+        </a>
       </div>
     </div>
-    <div aria-label="上課地點" class="flex flex-row items-center space-x-2">
+    <div aria-label="上課地點" class="flex flex-row space-x-2">
       <mat-icon
         matTooltip="上課地點"
         class="shrink-0"
@@ -43,7 +43,7 @@
         <span *ngFor="let place of course?.places">{{ place.name }}</span>
       </div>
     </div>
-    <div aria-label="上課時間" class="flex flex-row items-center space-x-2">
+    <div aria-label="上課時間" class="flex flex-row space-x-2">
       <mat-icon
         matTooltip="上課時間"
         class="shrink-0"
@@ -60,7 +60,7 @@
     <button
       matTooltip="選課代號"
       aria-label="選課代號"
-      class="float-right ml-1 flex items-center space-x-0.5 border border-black p-1 text-sm disabled:hidden"
+      class="float-right ml-1 flex space-x-0.5 border border-black p-1 text-sm disabled:hidden"
       [disabled]="!course?.code"
       (click)="copyCourseCode()"
     >
