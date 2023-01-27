@@ -51,10 +51,10 @@
         aria-label="Time"
         fontIcon="schedule"
       ></mat-icon>
-      <div class="separate-children">
-        <span *ngFor="let time of course?.timeRanges">
+      <div>
+        <div *ngFor="let time of course?.timeRanges">
           {{ time.day }} {{ time.start_time }} ~ {{ time.end_time }}
-        </span>
+        </div>
       </div>
     </div>
     <button
