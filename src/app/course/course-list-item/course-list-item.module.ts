@@ -5,6 +5,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { RouterModule } from "@angular/router";
 
 import { CourseListItemComponent } from "./course-list-item.component";
 
@@ -17,6 +18,7 @@ import { CourseListItemComponent } from "./course-list-item.component";
     MatIconModule,
     MatSnackBarModule,
     MatTooltipModule,
+    RouterModule,
   ],
   exports: [CourseListItemComponent],
 })
