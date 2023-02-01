@@ -4,6 +4,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { RouterTestingModule } from "@angular/router/testing";
 
 import { CourseListItemComponent } from "./course-list-item.component";
 
@@ -20,6 +21,7 @@ describe("CourseListItemComponent", () => {
         MatIconModule,
         MatSnackBarModule,
         MatTooltipModule,
+        RouterTestingModule,
       ],
     }).compileComponents();
 
