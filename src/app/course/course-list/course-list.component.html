@@ -1,8 +1,8 @@
-<div class="flex flex-wrap justify-center p-2">
+<div class="columns-xs gap-6 px-10">
   <app-course-list-item
     *ngFor="let course of courses"
     [course]="course"
-    class="m-2"
+    class="m-2 break-before-all break-inside-avoid"
   ></app-course-list-item>
   <div id="end"></div>
 </div>
