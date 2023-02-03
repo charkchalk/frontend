@@ -1,0 +1,104 @@
+<mat-card class="break-before-all break-inside-avoid">
+  <mat-card-header class="mb-2">
+    <mat-card-title class="space-x-1 align-middle">
+      <span class="space-x-1 border border-black px-1 py-0.5">
+        <span matTooltip="修別" aria-label="修別">{{
+          course?.type?.name
+        }}</span>
+        <span matTooltip="學分數" aria-label="學分數">{{
+          course?.credit
+        }}</span>
+      </span>
+      <span
+        matTooltip="課程名稱"
+        aria-label="課程名稱"
+        class="select-contain"
+        >{{ course?.name }}</span
+      >
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="space-y-1">
+    <div aria-label="授課教師" class="flex flex-row">
+      <mat-icon
+        matTooltip="授課教師"
+        class="shrink-0 py-2"
+        fontIcon="person_pin"
+      ></mat-icon>
+      <div class="flex flex-row flex-wrap">
+        <a
+          class="m-1 rounded-full border border-black py-0.5 px-2"
+          *ngFor="let host of course?.hosts"
+          [routerLink]="['/courses']"
+          [queryParams]="{ q: 'host-id:' + host.id }"
+        >
+          {{ host.name }}
+        </a>
+      </div>
+    </div>
+    <div aria-label="上課地點" class="flex flex-row space-x-2">
+      <mat-icon
+        matTooltip="上課地點"
+        class="shrink-0"
+        fontIcon="location_on"
+      ></mat-icon>
+      <div class="separate-children">
+        <span *ngFor="let place of course?.places">{{ place.name }}</span>
+      </div>
+    </div>
+    <div aria-label="上課時間" class="flex flex-row space-x-2">
+      <mat-icon
+        matTooltip="上課時間"
+        class="shrink-0"
+        aria-hidden="false"
+        aria-label="Time"
+        fontIcon="schedule"
+      ></mat-icon>
+      <div>
+        <div *ngFor="let time of course?.timeRanges">
+          {{ time.day }} {{ time.start_time }} ~ {{ time.end_time }}
+        </div>
+      </div>
+    </div>
+    <button
+      matTooltip="選課代號"
+      aria-label="選課代號"
+      class="float-right ml-1 flex space-x-0.5 border border-black p-1 text-sm disabled:hidden"
+      [disabled]="!course?.code"
+      (click)="copyCourseCode()"
+    >
+      <span>{{ course?.code }}</span>
+      <mat-icon
+        class="shrink-0"
+        class="text-xs"
+        style="height: auto; width: auto"
+        fontIcon="content_copy"
+      ></mat-icon>
+    </button>
+    <div
+      aria-label="開課班級"
+      class="course-class flex flex-row items-center space-x-2"
+    >
+      <mat-icon
+        matTooltip="開課班級"
+        class="shrink-0"
+        fontIcon="groups"
+      ></mat-icon>
+      <span>{{ course?.organization?.name }}</span>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <a
+      mat-button
+      color="primary"
+      [href]="course?.link"
+      [disabled]="!course?.link"
+    >
+      <mat-icon fontIcon="info"></mat-icon>
+      查看資訊
+    </a>
+    <button mat-button (click)="copyCourseText()">
+      <mat-icon fontIcon="content_copy"></mat-icon>
+      複製
+    </button>
+  </mat-card-actions>
+</mat-card>

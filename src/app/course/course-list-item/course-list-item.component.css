@@ -1,0 +1,3 @@
+.separate-children * + *::before {
+  content: " & ";
+}

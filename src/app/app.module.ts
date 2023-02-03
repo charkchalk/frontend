@@ -1,8 +1,10 @@
+import { HttpClientModule } from "@angular/common/http";
 import { isDevMode, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ServiceWorkerModule } from "@angular/service-worker";
 
+import { httpInterceptorProviders } from "./_api/_http-interceptors";
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
 
@@ -10,6 +12,7 @@ import { AppRoutingModule } from "./app-routing.module";
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
@@ -19,7 +22,7 @@ import { AppRoutingModule } from "./app-routing.module";
       registrationStrategy: "registerWhenStable:30000",
     }),
   ],
-  providers: [],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
