@@ -1,11 +1,34 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Injectable, OnInit } from "@angular/core";
+import { MatPaginatorIntl, PageEvent } from "@angular/material/paginator";
+import { Subject } from "rxjs";
 
 import { CourseService } from "../../_api/course/course.service";
+
+@Injectable()
+export class MyCustomPaginatorIntl implements MatPaginatorIntl {
+  changes = new Subject<void>();
+
+  firstPageLabel = `First page`;
+  itemsPerPageLabel = `Items per page:`;
+  lastPageLabel = `Last page`;
+
+  nextPageLabel = "Next page";
+  previousPageLabel = "Previous page";
+
+  getRangeLabel(page: number, pageSize: number, length: number): string {
+    if (length === 0) {
+      return `Page 1 of 1`;
+    }
+    const amountPages = Math.ceil(length / pageSize);
+    return `Page ${page + 1} of ${amountPages}`;
+  }
+}
 
 @Component({
   selector: "app-course-list",
   templateUrl: "./course-list.component.html",
   styleUrls: ["./course-list.component.css"],
+  providers: [{ provide: MatPaginatorIntl, useClass: MyCustomPaginatorIntl }],
 })
 export class CourseListComponent implements OnInit {
   loading = true;
@@ -15,40 +38,23 @@ export class CourseListComponent implements OnInit {
   };
   courses: RawCourse[] = [];
 
-  /** For waterfall loading */
-  intersectionObserver: IntersectionObserver = new IntersectionObserver(
-    entries => {
-      if (!entries[0].isIntersecting) {
-        this.loading = false;
-        return;
-      }
-      this.loading = true;
-      this.search();
-    },
-    {
-      threshold: 1,
-    },
-  );
-
   constructor(private courseService: CourseService) {}
 
   ngOnInit(): void {
-    const end = document.querySelector("#end");
-    if (!end) return;
-    this.intersectionObserver.observe(end);
+    this.search(0);
   }
 
-  search(): void {
-    this.courseService.search().subscribe(courses => {
+  search(page: number): void {
+    this.courseService.search({ page }).subscribe(courses => {
       this.pagination = courses.pagination;
-      this.courses.push(...courses.content);
-      if (this.pagination.current >= this.pagination.total) {
-        this.intersectionObserver.disconnect();
-        return;
-      }
-      setTimeout(() => {
-        if (this.loading) this.search();
-      }, 500);
+      this.courses = courses.content;
+      this.loading = false;
     });
+  }
+
+  handlePageEvent(event: PageEvent) {
+    this.courses = [];
+    this.loading = true;
+    this.search(event.pageIndex);
   }
 }
