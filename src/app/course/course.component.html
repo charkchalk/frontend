@@ -1,0 +1,5 @@
+<app-course-search
+  class="flex items-center justify-center p-5"
+  [ngClass]="{ 'block h-screen': !searching }"
+></app-course-search>
+<app-course-list *ngIf="searching"></app-course-list>

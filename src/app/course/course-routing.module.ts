@@ -1,12 +1,13 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
+import { CourseComponent } from "./course.component";
+
 const routes: Routes = [
   {
     path: "",
     pathMatch: "full",
-    loadChildren: () =>
-      import("./course-list/course-list.module").then(m => m.CourseListModule),
+    component: CourseComponent,
   },
 ];
 
