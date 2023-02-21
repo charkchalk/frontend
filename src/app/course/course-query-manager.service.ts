@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
-import { Observable, Subject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class CourseQueryManagerService {
-  queries: unknown[] = [];
-  private queriesSubject = new Subject<unknown[]>();
+  queries: unknown[] = [{}];
+  private queriesSubject = new BehaviorSubject<unknown[]>(this.queries);
 
   getQueries(): Observable<unknown[]> {
     return this.queriesSubject.asObservable();

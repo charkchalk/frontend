@@ -8,7 +8,7 @@ import { CourseQueryManagerService } from "../course-query-manager.service";
   styleUrls: ["./course-search.component.css"],
 })
 export class CourseSearchComponent implements OnInit {
-  queries: unknown[] = [{}];
+  queries: unknown[] = [];
 
   constructor(private courseQueryManagerService: CourseQueryManagerService) {}
 
