@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 
 import { CourseSearchHelperModule } from "../course-search-helper/course-search-helper.module";
 import { CourseSearchComponent } from "./course-search.component";
@@ -14,6 +15,7 @@ describe("CourseSearchComponent", () => {
     await TestBed.configureTestingModule({
       declarations: [CourseSearchComponent],
       imports: [
+        NoopAnimationsModule,
         CourseSearchHelperModule,
         MatButtonModule,
         MatTooltipModule,
