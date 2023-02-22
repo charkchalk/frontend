@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
+import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 import { CourseListItemModule } from "../course-list-item/course-list-item.module";
@@ -13,6 +14,7 @@ import { CourseListRoutingModule } from "./course-list-routing.module";
     CourseListRoutingModule,
     CourseListItemModule,
     MatProgressSpinnerModule,
+    MatPaginatorModule,
   ],
 })
 export class CourseListModule {}
