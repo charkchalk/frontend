@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 
-import { CourseQueryManagerService } from "../course-query-manager.service";
+import { CourseQueryManagerService } from "../_query/course-query-manager.service";
 
 @Component({
   selector: "app-course-search-helper",

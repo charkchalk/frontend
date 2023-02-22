@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
-import { CourseQueryManagerService } from "../course-query-manager.service";
+import { CourseQueryManagerService } from "../_query/course-query-manager.service";
 
 @Component({
   selector: "app-course-search",
@@ -8,7 +8,7 @@ import { CourseQueryManagerService } from "../course-query-manager.service";
   styleUrls: ["./course-search.component.css"],
 })
 export class CourseSearchComponent implements OnInit {
-  queries: unknown[] = [];
+  queries: QueryItem[] = [];
 
   constructor(private courseQueryManagerService: CourseQueryManagerService) {}
 

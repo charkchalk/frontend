@@ -5,10 +5,10 @@ import { BehaviorSubject, Observable } from "rxjs";
   providedIn: "root",
 })
 export class CourseQueryManagerService {
-  queries: unknown[] = [{}];
-  private queriesSubject = new BehaviorSubject<unknown[]>(this.queries);
+  queries: QueryItem[] = [{}];
+  private queriesSubject = new BehaviorSubject<QueryItem[]>(this.queries);
 
-  getQueries(): Observable<unknown[]> {
+  getQueries(): Observable<QueryItem[]> {
     return this.queriesSubject.asObservable();
   }
 
