@@ -5,12 +5,14 @@ import { Observable } from "rxjs";
 @Injectable({
   providedIn: "root",
 })
-export class CourseService {
-  private _uri = "/courses";
+export class TeacherApiService {
+  private _uri = "/teachers";
 
   constructor(private _http: HttpClient) {}
 
-  search(options?: CanPaginate): Observable<StandardResponse<RawCourse[]>> {
+  search(
+    options?: CanPaginate | { keyword: string },
+  ): Observable<StandardResponse<RawPerson[]>> {
     const params = new HttpParams();
     if (options) {
       for (const [key, value] of Object.entries(options)) {
@@ -18,7 +20,7 @@ export class CourseService {
       }
     }
 
-    return this._http.get<StandardResponse<RawCourse[]>>(this._uri, {
+    return this._http.get<StandardResponse<RawPerson[]>>(this._uri, {
       responseType: "json",
       params: params,
     });

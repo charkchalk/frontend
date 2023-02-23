@@ -2,7 +2,7 @@ import { Component, Injectable, OnInit } from "@angular/core";
 import { MatPaginatorIntl, PageEvent } from "@angular/material/paginator";
 import { Subject } from "rxjs";
 
-import { CourseService } from "../../_api/course/course.service";
+import { CourseApiService } from "../../_api/course/course-api.service";
 
 @Injectable()
 export class MyCustomPaginatorIntl implements MatPaginatorIntl {
@@ -38,14 +38,14 @@ export class CourseListComponent implements OnInit {
   };
   courses: RawCourse[] = [];
 
-  constructor(private courseService: CourseService) {}
+  constructor(private courseApiService: CourseApiService) {}
 
   ngOnInit(): void {
     this.search(0);
   }
 
   search(page: number): void {
-    this.courseService.search({ page }).subscribe(courses => {
+    this.courseApiService.search({ page }).subscribe(courses => {
       this.pagination = courses.pagination;
       this.courses = courses.content;
       this.loading = false;
