@@ -1,5 +1,5 @@
-interface QueryItem {
+interface QueryItem<T = unknown> {
   key?: string;
   method?: string;
-  value?: string;
+  value?: T;
 }

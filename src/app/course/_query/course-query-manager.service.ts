@@ -12,8 +12,17 @@ export class CourseQueryManagerService {
     return this.queriesSubject.asObservable();
   }
 
+  getQuery(index: number): QueryItem {
+    return this.queriesSubject.value[index];
+  }
+
   addQuery() {
     this.queries.push({});
+    this.queriesSubject.next(this.queries);
+  }
+
+  updateQuery(index: number, query: QueryItem) {
+    this.queries[index] = query;
     this.queriesSubject.next(this.queries);
   }
 
