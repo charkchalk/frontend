@@ -14,5 +14,6 @@ import { CourseListComponent } from "./course-list.component";
     MatProgressSpinnerModule,
     MatPaginatorModule,
   ],
+  exports: [CourseListComponent],
 })
 export class CourseListModule {}
