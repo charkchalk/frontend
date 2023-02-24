@@ -1,13 +1,13 @@
 import { TestBed } from "@angular/core/testing";
 
-import { CourseQueryManagerService } from "./course-query-manager.service";
+import { CourseQueryService } from "./course-query.service";
 
-describe("CourseQueryManagerService", () => {
-  let service: CourseQueryManagerService;
+describe("CourseQueryService", () => {
+  let service: CourseQueryService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(CourseQueryManagerService);
+    service = TestBed.inject(CourseQueryService);
   });
 
   it("should be created", () => {

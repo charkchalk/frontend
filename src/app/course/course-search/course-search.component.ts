@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
-import { CourseQueryManagerService } from "../_query/course-query-manager.service";
+import { CourseQueryService } from "../_query/course-query.service";
 
 @Component({
   selector: "app-course-search",
@@ -10,7 +10,7 @@ import { CourseQueryManagerService } from "../_query/course-query-manager.servic
 export class CourseSearchComponent implements OnInit {
   queries: QueryItem[] = [];
 
-  constructor(private courseQueryManagerService: CourseQueryManagerService) {}
+  constructor(private courseQueryManagerService: CourseQueryService) {}
 
   ngOnInit() {
     this.courseQueryManagerService.getQueries().subscribe(queries => {

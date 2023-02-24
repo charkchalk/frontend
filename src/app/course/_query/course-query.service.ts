@@ -1,10 +1,29 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 
+import { QueryDataProvider } from "./query-data-provider";
+import { TeacherQueryDataProviderService } from "./query-data-providers/teacher-query-data-provider.service";
+
 @Injectable({
   providedIn: "root",
 })
-export class CourseQueryManagerService {
+export class CourseQueryService {
+  providers: QueryDataProvider[] = [];
+
+  constructor(
+    teacherQueryDataProviderService: TeacherQueryDataProviderService,
+  ) {
+    this.providers.push(teacherQueryDataProviderService);
+  }
+
+  getProviders(): QueryDataProvider[] {
+    return this.providers;
+  }
+
+  getProvider(key: string): QueryDataProvider | undefined {
+    return this.providers.find(queryable => queryable.key === key);
+  }
+
   queries: QueryItem[] = [{}];
   private queriesSubject = new BehaviorSubject<QueryItem[]>(this.queries);
 
