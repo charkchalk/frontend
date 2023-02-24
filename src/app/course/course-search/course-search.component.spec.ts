@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -15,6 +16,7 @@ describe("CourseSearchComponent", () => {
     await TestBed.configureTestingModule({
       declarations: [CourseSearchComponent],
       imports: [
+        HttpClientTestingModule,
         NoopAnimationsModule,
         CourseSearchHelperModule,
         MatButtonModule,

@@ -1,4 +1,4 @@
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
@@ -15,7 +15,7 @@ describe("CourseListComponent", () => {
       declarations: [CourseListComponent],
       imports: [
         CourseListItemModule,
-        HttpClientModule,
+        HttpClientTestingModule,
         MatProgressSpinnerModule,
         MatPaginatorModule,
       ],
