@@ -24,7 +24,7 @@ describe("CourseQueryService", () => {
   });
 
   it("should update a query", () => {
-    const query = { name: "query1", value: "value1" };
+    const query = { key: "query1" };
     service.updateQuery(0, query);
     expect(service.getQuery(0)).toEqual(query);
   });
