@@ -1,15 +1,19 @@
 <div class="flex flex-col lg:flex-row lg:space-x-2">
   <mat-form-field>
     <mat-label>過濾項</mat-label>
-    <mat-select>
-      <mat-option value="option">option</mat-option>
+    <mat-select [value]="query.key" (valueChange)="setProvider($event)">
+      <mat-option *ngFor="let provider of providers" [value]="provider.key">
+        {{ provider.label }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>比對方式</mat-label>
-    <mat-select>
-      <mat-option value="option">option</mat-option>
+    <mat-select [value]="query.method" [disabled]="!provider">
+      <mat-option *ngFor="let method of methods" [value]="method.key">
+        {{ method.label }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 
