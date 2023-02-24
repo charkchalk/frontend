@@ -36,10 +36,16 @@ export class TeacherQueryDataProviderService implements QueryDataProvider {
       map(response => {
         return {
           pagination: response.pagination,
-          content: response.content.map(teacher => ({
-            key: teacher.id.toString(),
-            label: teacher.name,
-          })),
+          content: response.content
+            .map(teacher => ({
+              key: teacher.id.toString(),
+              label: teacher.name,
+            }))
+            .filter(teacher =>
+              teacher.label
+                .toLowerCase()
+                .includes(options.keyword.toLowerCase()),
+            ),
         };
       }),
     );

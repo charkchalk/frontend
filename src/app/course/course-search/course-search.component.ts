@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 
 import { CourseQueryService } from "../_query/course-query.service";
+import { QueryItem } from "../_query/query-item";
 
 @Component({
   selector: "app-course-search",

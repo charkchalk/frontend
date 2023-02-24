@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 
 import { QueryDataProvider } from "./query-data-provider";
 import { TeacherQueryDataProviderService } from "./query-data-providers/teacher-query-data-provider.service";
+import { QueryItem } from "./query-item";
 
 @Injectable({
   providedIn: "root",

@@ -17,7 +17,45 @@
     </mat-select>
   </mat-form-field>
 
-  <div class="grow"></div>
+  <mat-form-field class="grow">
+    <mat-label>比對內容</mat-label>
+
+    <mat-chip-grid
+      #chipGrid
+      aria-label="Content Selection"
+      [disabled]="!provider"
+    >
+      <mat-chip-row
+        *ngFor="let selected of query.value; let index = index"
+        (removed)="removeSelectedOption(index)"
+      >
+        {{ selected.label }}
+        <button matChipRemove [attr.aria-label]="'remove ' + selected">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    </mat-chip-grid>
+
+    <input
+      matInput
+      type="text"
+      placeholder="輸入來過濾或選擇"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipGrid"
+      [formControl]="inputControl"
+    />
+
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      autoActiveFirstOption
+      autoSelectActiveOption
+      (optionSelected)="selectOption($event)"
+    >
+      <mat-option *ngFor="let option of options" [value]="option">
+        {{ option.label }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 
   <button
     mat-icon-button
