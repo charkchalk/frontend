@@ -26,11 +26,10 @@ export class CourseComponent implements OnInit {
         const values = params.getAll(displayable.key);
         values.forEach(value => {
           this.courseQueryService.addQuery(provider.parseQuery(value));
-
           this.searching = true;
         });
       });
-      this.courseQueryService.removeEmptyQueries();
+      if (this.searching) this.courseQueryService.removeEmptyQueries();
     });
   }
 }
