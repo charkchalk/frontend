@@ -21,6 +21,7 @@ export class CourseSearchHelperComponent implements OnInit {
   provider?: QueryDataProvider;
   methods?: Displayable[];
   options?: Displayable[];
+  lastQuery?: string;
   lastInputTime = 0;
   waiting = false;
 
@@ -31,8 +32,11 @@ export class CourseSearchHelperComponent implements OnInit {
       .getProviders()
       .map(provider => ({ key: provider.key, label: provider.label }));
     this.query = this.courseQueryService.getQuery(this.index);
-    this.inputControl.valueChanges.subscribe(() => {
+    this.inputControl.valueChanges.subscribe(value => {
       if (this.provider?.type === "text") return;
+      value = value?.trim() ?? "";
+      if (this.lastQuery === value) return;
+      this.lastQuery = value;
       this.lastInputTime = Date.now();
       if (!this.waiting) this.getOptionsWhenIdle(this.inputControl);
     });
