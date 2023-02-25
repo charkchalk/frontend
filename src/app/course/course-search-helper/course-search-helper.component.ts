@@ -51,10 +51,18 @@ export class CourseSearchHelperComponent implements OnInit {
   }
 
   setProvider(providerKey: string) {
+    this.query.key = providerKey;
+    this.query.method = undefined;
+    this.query.value = undefined;
+    this.notifyQueryUpdate();
     this.provider = this.courseQueryService.getProvider(providerKey);
     this.methods = this.provider?.getMethods();
     if (this.provider?.type === "text") return;
     this.getOptions("");
+  }
+
+  notifyQueryUpdate() {
+    this.courseQueryService.setQuery(this.index, this.query);
   }
 
   removeQuery() {
@@ -72,6 +80,7 @@ export class CourseSearchHelperComponent implements OnInit {
       label: event.value.trim(),
     });
     this.inputControl.setValue("");
+    this.notifyQueryUpdate();
   }
 
   getOptions(value: string): void {
@@ -93,10 +102,12 @@ export class CourseSearchHelperComponent implements OnInit {
     this.query.value.push(event.option.value);
     this.options?.splice(this.options.indexOf(event.option.value), 1);
     this.inputControl.setValue("");
+    this.notifyQueryUpdate();
   }
 
   removeSelectedOption(index: number): void {
     this.query.value?.splice(index, 1);
     this.getOptions("");
+    this.notifyQueryUpdate();
   }
 }
