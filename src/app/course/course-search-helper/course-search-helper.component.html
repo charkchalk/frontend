@@ -11,7 +11,7 @@
   <mat-form-field>
     <mat-label>比對方式</mat-label>
     <mat-select
-      [value]="query.method"
+      [(ngModel)]="query.method"
       [disabled]="!provider"
       (valueChange)="notifyQueryUpdate()"
     >

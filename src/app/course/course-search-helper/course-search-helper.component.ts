@@ -34,9 +34,8 @@ export class CourseSearchHelperComponent implements OnInit {
     this.query = this.courseQueryService.getQuery(this.index);
     this.inputControl.valueChanges.subscribe(value => {
       if (this.provider?.type === "text") return;
-      value = value?.trim() ?? "";
       if (this.lastQuery === value) return;
-      this.lastQuery = value;
+      this.lastQuery = value ?? "";
       this.lastInputTime = Date.now();
       if (!this.waiting) this.getOptionsWhenIdle(this.inputControl);
     });
@@ -90,7 +89,7 @@ export class CourseSearchHelperComponent implements OnInit {
   getOptions(value: string): void {
     this.provider
       ?.getOptions({
-        keyword: value,
+        keyword: value.trim(),
       })
       .subscribe(options => {
         this.options = options.content.filter(option => {
