@@ -55,7 +55,7 @@ export class CourseSearchHelperComponent implements OnInit {
     this.getOptions(inputControl.value ?? "");
   }
 
-  setProvider(providerKey: string, reset = false) {
+  setProvider(providerKey: string, reset = true) {
     if (reset) {
       this.query.key = providerKey;
       this.query.method = undefined;

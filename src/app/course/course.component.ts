@@ -17,7 +17,6 @@ export class CourseComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.courseQueryService.removeQuery(0);
     this.route.queryParamMap
       .subscribe(params => {
         const providers = this.courseQueryService.getProviders();
@@ -30,6 +29,7 @@ export class CourseComponent implements OnInit {
             this.searching = true;
           });
         });
+        if (this.searching) this.courseQueryService.removeQuery(0);
       })
       .unsubscribe();
   }
