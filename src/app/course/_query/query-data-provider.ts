@@ -1,6 +1,7 @@
 import { Observable } from "rxjs";
 
 import { Displayable } from "../../_types/displayable";
+import { QueryItem } from "./query-item";
 
 export interface QueryDataProvider extends Displayable {
   type: QueryDataType;
@@ -8,6 +9,8 @@ export interface QueryDataProvider extends Displayable {
   getOptions(
     options?: CanPaginate | unknown,
   ): Observable<StandardResponse<Displayable[]>>;
+  stringifyQuery(query: QueryItem): string;
+  parseQuery(query: string): QueryItem;
 }
 
 export enum QueryDataType {

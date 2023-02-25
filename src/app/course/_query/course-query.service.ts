@@ -39,8 +39,8 @@ export class CourseQueryService {
     return this.queriesSubject.value[index];
   }
 
-  addQuery() {
-    this.queries.push({});
+  addQuery(query: QueryItem = {}) {
+    this.queries.push(query);
     this.queriesSubject.next(this.queries);
   }
 
@@ -59,9 +59,9 @@ export class CourseQueryService {
     this.queries.forEach(query => {
       if (!query.key || !query.method || !query.value?.length) return;
       if (!params[query.key]) params[query.key] = [];
-      params[query.key].push(
-        query.method + ":" + query.value.map(v => v.key).join(" "),
-      );
+      const provider = this.getProvider(query.key);
+      if (!provider) return;
+      params[query.key].push(provider.stringifyQuery(query));
     });
 
     return params;

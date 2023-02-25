@@ -33,6 +33,7 @@ export class CourseSearchHelperComponent implements OnInit {
       .getProviders()
       .map(provider => ({ key: provider.key, label: provider.label }));
     this.query = this.courseQueryService.getQuery(this.index);
+    if (this.query.key) this.setProvider(this.query.key, false);
     this.inputControl.valueChanges.subscribe(value => {
       if (this.provider?.type === "text") return;
       if (this.lastQuery === value) return;
@@ -54,11 +55,13 @@ export class CourseSearchHelperComponent implements OnInit {
     this.getOptions(inputControl.value ?? "");
   }
 
-  setProvider(providerKey: string) {
-    this.query.key = providerKey;
-    this.query.method = undefined;
-    this.query.value = undefined;
-    this.notifyQueryUpdate();
+  setProvider(providerKey: string, reset = false) {
+    if (reset) {
+      this.query.key = providerKey;
+      this.query.method = undefined;
+      this.query.value = undefined;
+      this.notifyQueryUpdate();
+    }
     this.provider = this.courseQueryService.getProvider(providerKey);
     this.methods = this.provider?.getMethods();
     if (this.provider?.type === "text") return;
