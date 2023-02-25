@@ -16,10 +16,8 @@ export class CourseSearchComponent implements OnInit {
   ngOnInit() {
     this.courseQueryManagerService.getQueries().subscribe(queries => {
       this.queries = queries;
+      if (queries[queries.length - 1].key)
+        this.courseQueryManagerService.addQuery();
     });
-  }
-
-  addQuery() {
-    this.courseQueryManagerService.addQuery();
   }
 }

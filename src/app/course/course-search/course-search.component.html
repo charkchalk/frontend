@@ -3,15 +3,4 @@
     *ngFor="let query of queries; let index = index"
     [index]="index"
   ></app-course-search-helper>
-
-  <div class="mt-5 text-center">
-    <button
-      mat-stroked-button
-      matTooltip="新增過濾條件"
-      aria-label="新增過濾條件的按鈕"
-      (click)="addQuery()"
-    >
-      <mat-icon aria-hidden="true">add</mat-icon>
-    </button>
-  </div>
 </div>
