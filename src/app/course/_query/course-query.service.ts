@@ -59,6 +59,13 @@ export class CourseQueryService {
     this.queriesSubject.next(this.queries);
   }
 
+  removeEmptyQueries() {
+    this.queries = this.queries.filter(query => {
+      return query.key && query.method && query.value?.length;
+    });
+    this.queriesSubject.next(this.queries);
+  }
+
   convertToQueryParams(): { [key: string]: string[] } {
     const params: { [key: string]: string[] } = {};
     this.queries.forEach(query => {
