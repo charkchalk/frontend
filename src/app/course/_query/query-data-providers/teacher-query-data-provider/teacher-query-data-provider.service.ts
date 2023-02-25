@@ -1,14 +1,16 @@
 import { Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 
-import { TeacherApiService } from "../../../_api/teacher/teacher-api.service";
-import { Displayable } from "../../../_types/displayable";
-import { QueryDataProvider } from "../query-data-provider";
+import { TeacherApiService } from "../../../../_api/teacher/teacher-api.service";
+import { Displayable } from "../../../../_types/displayable";
+import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({
   providedIn: "root",
 })
 export class TeacherQueryDataProviderService implements QueryDataProvider {
+  type = QueryDataType.select;
+
   private methods: Displayable[] = [
     {
       key: "=",

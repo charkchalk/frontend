@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { MatChipInputEvent } from "@angular/material/chips";
 
 import { Displayable } from "../../_types/displayable";
 import { CourseQueryService } from "../_query/course-query.service";
@@ -31,6 +32,7 @@ export class CourseSearchHelperComponent implements OnInit {
       .map(provider => ({ key: provider.key, label: provider.label }));
     this.query = this.courseQueryService.getQuery(this.index);
     this.inputControl.valueChanges.subscribe(() => {
+      if (this.provider?.type === "text") return;
       this.lastInputTime = Date.now();
       if (!this.waiting) this.getOptionsWhenIdle(this.inputControl);
     });
@@ -51,6 +53,7 @@ export class CourseSearchHelperComponent implements OnInit {
   setProvider(providerKey: string) {
     this.provider = this.courseQueryService.getProvider(providerKey);
     this.methods = this.provider?.getMethods();
+    if (this.provider?.type === "text") return;
     this.getOptions("");
   }
 
@@ -59,6 +62,17 @@ export class CourseSearchHelperComponent implements OnInit {
   }
 
   inputControl = new FormControl("");
+
+  addText(event: MatChipInputEvent): void {
+    if (this.provider?.type !== "text") return;
+    if (event.value.trim() === "") return;
+    if (!this.query.value) this.query.value = [];
+    this.query.value.push({
+      key: event.value.trim(),
+      label: event.value.trim(),
+    });
+    this.inputControl.setValue("");
+  }
 
   getOptions(value: string): void {
     this.provider

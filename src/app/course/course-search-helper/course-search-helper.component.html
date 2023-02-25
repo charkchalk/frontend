@@ -1,7 +1,7 @@
 <div class="flex flex-col lg:flex-row lg:space-x-2">
   <mat-form-field>
     <mat-label>過濾項</mat-label>
-    <mat-select [value]="query.key" (valueChange)="setProvider($event)">
+    <mat-select [(ngModel)]="query.key" (valueChange)="setProvider($event)">
       <mat-option *ngFor="let provider of providers" [value]="provider.key">
         {{ provider.label }}
       </mat-option>
@@ -10,7 +10,7 @@
 
   <mat-form-field>
     <mat-label>比對方式</mat-label>
-    <mat-select [value]="query.method" [disabled]="!provider">
+    <mat-select [(ngModel)]="query.method" [disabled]="!provider">
       <mat-option *ngFor="let method of methods" [value]="method.key">
         {{ method.label }}
       </mat-option>
@@ -41,8 +41,12 @@
       type="text"
       placeholder="輸入來過濾或選擇"
       [matAutocomplete]="auto"
+      [matAutocompleteDisabled]="provider?.type === 'text'"
       [matChipInputFor]="chipGrid"
+      [matChipInputAddOnBlur]="provider?.type === 'text'"
+      (matChipInputTokenEnd)="addText($event)"
       [formControl]="inputControl"
+      [value]="inputControl.value"
     />
 
     <mat-autocomplete
