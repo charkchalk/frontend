@@ -17,20 +17,19 @@ export class CourseComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParamMap
-      .subscribe(params => {
-        const providers = this.courseQueryService.getProviders();
-        providers.forEach(displayable => {
-          const provider = this.courseQueryService.getProvider(displayable.key);
-          if (!provider) return;
-          const values = params.getAll(displayable.key);
-          values.forEach(value => {
-            this.courseQueryService.addQuery(provider.parseQuery(value));
-            this.searching = true;
-          });
+    this.courseQueryService.clearQueries();
+    this.route.queryParamMap.subscribe(params => {
+      const providers = this.courseQueryService.getProviders();
+      providers.forEach(displayable => {
+        const provider = this.courseQueryService.getProvider(displayable.key);
+        if (!provider) return;
+        const values = params.getAll(displayable.key);
+        values.forEach(value => {
+          this.courseQueryService.addQuery(provider.parseQuery(value));
+          this.searching = true;
         });
-        if (this.searching) this.courseQueryService.removeQuery(0);
-      })
-      .unsubscribe();
+      });
+      if (this.searching) this.courseQueryService.removeQuery(0);
+    });
   }
 }
