@@ -1,3 +1,4 @@
+import { ENTER, SPACE } from "@angular/cdk/keycodes";
 import { Component, Input, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
@@ -72,6 +73,7 @@ export class CourseSearchHelperComponent implements OnInit {
     this.courseQueryService.removeQuery(this.index);
   }
 
+  separatorKeyCodes = [SPACE, ENTER];
   inputControl = new FormControl("");
 
   addText(event: MatChipInputEvent): void {

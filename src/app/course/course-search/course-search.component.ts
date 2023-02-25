@@ -10,12 +10,14 @@ import { QueryItem } from "../_query/query-item";
 })
 export class CourseSearchComponent implements OnInit {
   queries: QueryItem[] = [];
+  queryParams: { [key: string]: string[] } = {};
 
   constructor(private courseQueryManagerService: CourseQueryService) {}
 
   ngOnInit() {
     this.courseQueryManagerService.getQueries().subscribe(queries => {
       this.queries = queries;
+      this.queryParams = this.courseQueryManagerService.convertToQueryParams();
       if (queries[queries.length - 1].key)
         this.courseQueryManagerService.addQuery();
     });

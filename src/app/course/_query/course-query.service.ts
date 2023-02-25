@@ -53,4 +53,17 @@ export class CourseQueryService {
     this.queries.splice(index, 1);
     this.queriesSubject.next(this.queries);
   }
+
+  convertToQueryParams(): { [key: string]: string[] } {
+    const params: { [key: string]: string[] } = {};
+    this.queries.forEach(query => {
+      if (!query.key || !query.method || !query.value?.length) return;
+      if (!params[query.key]) params[query.key] = [];
+      params[query.key].push(
+        query.method + ":" + query.value.map(v => v.key).join(" "),
+      );
+    });
+
+    return params;
+  }
 }

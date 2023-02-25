@@ -3,4 +3,15 @@
     *ngFor="let query of queries; let index = index"
     [index]="index"
   ></app-course-search-helper>
+
+  <div class="text-center">
+    <a
+      mat-flat-button
+      color="primary"
+      class="mx-auto"
+      routerLink="/courses"
+      [queryParams]="queryParams"
+      >Charkchalk!</a
+    >
+  </div>
 </div>

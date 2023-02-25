@@ -49,6 +49,7 @@
       [matChipInputFor]="chipGrid"
       [matChipInputAddOnBlur]="provider?.type === 'text'"
       (matChipInputTokenEnd)="addText($event)"
+      [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
       [formControl]="inputControl"
       [value]="inputControl.value"
     />
