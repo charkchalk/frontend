@@ -16,6 +16,7 @@ import { QueryItem } from "../_query/query-item";
 })
 export class CourseSearchHelperComponent implements OnInit {
   @Input() index!: number;
+  @Input() deletable = true;
   providers: Displayable[] = [];
   query: QueryItem = {};
 

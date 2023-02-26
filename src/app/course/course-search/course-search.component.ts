@@ -18,7 +18,7 @@ export class CourseSearchComponent implements OnInit {
     this.courseQueryManagerService.getQueries().subscribe(queries => {
       this.queries = queries;
       this.queryParams = this.courseQueryManagerService.convertToQueryParams();
-      if (queries[queries.length - 1].key)
+      if (!queries.length || queries[queries.length - 1].key)
         this.courseQueryManagerService.addQuery();
     });
   }

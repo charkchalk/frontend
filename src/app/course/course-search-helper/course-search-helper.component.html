@@ -71,6 +71,7 @@
     color="warn"
     aria-label="刪除條件"
     (click)="removeQuery()"
+    [disabled]="!deletable"
   >
     <mat-icon>delete_forever</mat-icon>
   </button>

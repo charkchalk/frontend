@@ -2,6 +2,7 @@
   <app-course-search-helper
     *ngFor="let query of queries; let index = index"
     [index]="index"
+    [deletable]="index !== queries.length - 1"
   ></app-course-search-helper>
 
   <div class="text-center">
