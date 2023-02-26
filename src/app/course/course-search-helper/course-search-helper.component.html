@@ -29,15 +29,15 @@
       aria-label="Content Selection"
       [disabled]="!provider"
     >
-      <mat-chip-row
-        *ngFor="let selected of query.value; let index = index"
-        (removed)="removeSelectedOption(index)"
-      >
-        {{ selected.label }}
-        <button matChipRemove [attr.aria-label]="'remove ' + selected">
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </mat-chip-row>
+      <ng-container *ngFor="let selected of query.value; let index = index">
+        <span class="inline-block self-center" *ngIf="index > 0">或</span>
+        <mat-chip-row (removed)="removeSelectedOption(index)">
+          {{ selected.label }}
+          <button matChipRemove [attr.aria-label]="'remove ' + selected">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      </ng-container>
     </mat-chip-grid>
 
     <input
