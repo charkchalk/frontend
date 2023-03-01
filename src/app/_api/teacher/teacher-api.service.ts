@@ -13,12 +13,9 @@ export class TeacherApiService {
   getAll(
     options?: CanPaginate | { keyword: string },
   ): Observable<StandardResponse<RawPerson[]>> {
-    const params = new HttpParams();
-    if (options) {
-      for (const [key, value] of Object.entries(options)) {
-        params.set(key, value);
-      }
-    }
+    const params = new HttpParams({
+      fromObject: options as Record<string, string>,
+    });
 
     return this._http.get<StandardResponse<RawPerson[]>>(this._uri, {
       responseType: "json",

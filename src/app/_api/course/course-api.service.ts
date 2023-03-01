@@ -11,12 +11,9 @@ export class CourseApiService {
   constructor(private _http: HttpClient) {}
 
   getAll(options?: CanPaginate): Observable<StandardResponse<RawCourse[]>> {
-    const params = new HttpParams();
-    if (options) {
-      for (const [key, value] of Object.entries(options)) {
-        params.set(key, value);
-      }
-    }
+    const params = new HttpParams({
+      fromObject: options as Record<string, string>,
+    });
 
     return this._http.get<StandardResponse<RawCourse[]>>(this._uri, {
       responseType: "json",
