@@ -10,7 +10,7 @@ export class CourseApiService {
 
   constructor(private _http: HttpClient) {}
 
-  search(options?: CanPaginate): Observable<StandardResponse<RawCourse[]>> {
+  getAll(options?: CanPaginate): Observable<StandardResponse<RawCourse[]>> {
     const params = new HttpParams();
     if (options) {
       for (const [key, value] of Object.entries(options)) {

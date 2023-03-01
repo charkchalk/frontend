@@ -45,7 +45,7 @@ export class CourseListComponent implements OnInit {
   }
 
   search(page: number): void {
-    this.courseApiService.search({ page }).subscribe(courses => {
+    this.courseApiService.getAll({ page }).subscribe(courses => {
       this.pagination = courses.pagination;
       this.courses = courses.content;
       this.loading = false;

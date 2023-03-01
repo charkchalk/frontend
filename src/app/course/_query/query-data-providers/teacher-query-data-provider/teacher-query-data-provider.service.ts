@@ -35,7 +35,7 @@ export class TeacherQueryDataProviderService implements QueryDataProvider {
   getOptions(
     options: CanPaginate & { keyword: string },
   ): Observable<StandardResponse<Displayable[]>> {
-    return this.teacherApiService.search(options).pipe(
+    return this.teacherApiService.getAll(options).pipe(
       map(response => {
         return {
           pagination: response.pagination,

@@ -10,7 +10,7 @@ export class TeacherApiService {
 
   constructor(private _http: HttpClient) {}
 
-  search(
+  getAll(
     options?: CanPaginate | { keyword: string },
   ): Observable<StandardResponse<RawPerson[]>> {
     const params = new HttpParams();
