@@ -41,7 +41,7 @@ export class KeywordQueryDataProviderService implements QueryDataProvider {
     return query.method + ":" + query.value.map(v => v.key).join(" ");
   }
 
-  parseQuery(query: string): QueryItem {
+  async parseQuery(query: string): Promise<QueryItem> {
     const [method, ...values] = query.split(":");
     const value = values
       .join(":")

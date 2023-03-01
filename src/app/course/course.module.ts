@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 import { CourseComponent } from "./course.component";
 import { CourseListModule } from "./course-list/course-list.module";
@@ -13,6 +14,7 @@ import { CourseSearchModule } from "./course-search/course-search.module";
     CourseRoutingModule,
     CourseSearchModule,
     CourseListModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class CourseModule {}

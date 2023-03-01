@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { map, Observable } from "rxjs";
+import { firstValueFrom, map, Observable } from "rxjs";
 
 import { TeacherApiService } from "../../../../_api/teacher/teacher-api.service";
 import { Displayable } from "../../../../_types/displayable";
@@ -59,16 +59,25 @@ export class TeacherQueryDataProviderService implements QueryDataProvider {
       throw new Error("Invalid query.");
     }
 
-    return query.method + ":" + query.value.map(v => v.key).join(" ");
+    return query.method + ":" + query.value.map(v => v.key).join(",");
   }
 
-  parseQuery(query: string): QueryItem {
+  async parseQuery(query: string): Promise<QueryItem> {
     const [method, ...values] = query.split(":");
     const value = values
       .join(":")
-      .split(" ")
-      .map(v => ({ key: v, label: v }));
+      .split(",")
+      .map(async v => {
+        const teacher = await firstValueFrom(
+          this.teacherApiService.get(v).pipe(map(response => response.content)),
+        );
 
-    return { key: this.key, method, value };
+        return {
+          key: teacher.id,
+          label: teacher.name,
+        };
+      });
+
+    return { key: this.key, method, value: await Promise.all(value) };
   }
 }

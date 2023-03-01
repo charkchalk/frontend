@@ -9,6 +9,7 @@ import { CourseQueryService } from "./_query/course-query.service";
   styleUrls: ["./course.component.css"],
 })
 export class CourseComponent implements OnInit {
+  loading = true;
   searching = false;
 
   constructor(
@@ -20,16 +21,22 @@ export class CourseComponent implements OnInit {
     this.route.queryParamMap.subscribe(params => {
       this.courseQueryService.clearQueries();
       const providers = this.courseQueryService.getProviders();
-      providers.forEach(displayable => {
+      const queryParsers = providers.map(displayable => {
         const provider = this.courseQueryService.getProvider(displayable.key);
         if (!provider) return;
         const values = params.getAll(displayable.key);
-        values.forEach(value => {
-          this.courseQueryService.addQuery(provider.parseQuery(value));
+
+        const queryParsers = values.map(async value => {
+          this.courseQueryService.addQuery(await provider.parseQuery(value));
           this.searching = true;
         });
+        return Promise.all(queryParsers);
       });
-      if (this.searching) this.courseQueryService.removeEmptyQueries();
+
+      Promise.all(queryParsers).then(() => {
+        this.loading = false;
+        if (this.searching) this.courseQueryService.removeEmptyQueries();
+      });
     });
   }
 }

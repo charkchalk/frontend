@@ -10,7 +10,7 @@ export interface QueryDataProvider extends Displayable {
     options?: CanPaginate | unknown,
   ): Observable<StandardResponse<Displayable[]>>;
   stringifyQuery(query: QueryItem): string;
-  parseQuery(query: string): QueryItem;
+  parseQuery(query: string): Promise<QueryItem>;
 }
 
 export enum QueryDataType {

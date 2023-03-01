@@ -25,4 +25,10 @@ export class TeacherApiService {
       params: params,
     });
   }
+
+  get(id: string): Observable<StandardResponse<RawPerson>> {
+    return this._http.get<StandardResponse<RawPerson>>(this._uri + "/" + id, {
+      responseType: "json",
+    });
+  }
 }
