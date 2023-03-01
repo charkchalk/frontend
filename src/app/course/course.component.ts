@@ -19,6 +19,7 @@ export class CourseComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
+      this.loading = true;
       this.courseQueryService.clearQueries();
       const providers = this.courseQueryService.getProviders();
       const queryParsers = providers.map(displayable => {
