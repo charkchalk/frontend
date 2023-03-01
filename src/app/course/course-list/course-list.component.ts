@@ -20,7 +20,7 @@ export class MyCustomPaginatorIntl implements MatPaginatorIntl {
       return `Page 1 of 1`;
     }
     const amountPages = Math.ceil(length / pageSize);
-    return `Page ${page} of ${amountPages}`;
+    return `Page ${page + 1} of ${amountPages}`;
   }
 }
 
@@ -33,15 +33,15 @@ export class MyCustomPaginatorIntl implements MatPaginatorIntl {
 export class CourseListComponent implements OnInit {
   loading = true;
   pagination: PaginationStat = {
-    total: 0,
-    current: 0,
+    total: 1,
+    current: 1,
   };
   courses: RawCourse[] = [];
 
   constructor(private courseApiService: CourseApiService) {}
 
   ngOnInit(): void {
-    this.search(1);
+    this.search(this.pagination.current);
   }
 
   search(page: number): void {
@@ -55,6 +55,6 @@ export class CourseListComponent implements OnInit {
   handlePageEvent(event: PageEvent) {
     this.courses = [];
     this.loading = true;
-    this.search(event.pageIndex);
+    this.search(event.pageIndex + 1);
   }
 }
