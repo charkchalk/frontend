@@ -1,4 +1,4 @@
-interface StandardResponse<T> {
+interface StandardResponse<T = unknown> {
   content: T;
   pagination: PaginationStat;
 }

@@ -29,8 +29,8 @@ export class CourseListItemComponent {
       `我在看選課代號是 ${this.course?.code}，`,
       `由 `,
       this.course?.hosts.map(host => host.name).join(" 跟 "),
-      ` 開給 ${this.course?.organization.name} 的「${this.course?.name}」。\n`,
-      `${this.course?.type.name} ${this.course?.credit} 學分，`,
+      ` 開給 ${this.course?.organization?.name} 的「${this.course?.name}」。\n`,
+      `${this.course?.type?.name} ${this.course?.credit} 學分，`,
       `每週 `,
       this.course?.timeRanges
         .map(
