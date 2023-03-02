@@ -161,7 +161,6 @@ export class CourseSearchHelperComponent implements OnInit {
 
   removeSelectedOption(index: number): void {
     this.query.value?.splice(index, 1);
-    this.getOptions("");
     this.notifyQueryUpdate();
   }
 }
