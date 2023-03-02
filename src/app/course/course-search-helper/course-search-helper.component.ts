@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MatChipInputEvent } from "@angular/material/chips";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 
 import { Displayable } from "../../_types/displayable";
 import { CourseQueryService } from "../_query/course-query.service";
@@ -28,16 +28,16 @@ export class CourseSearchHelperComponent implements OnInit {
   lastInputTime = 0;
   waiting = false;
 
-  loading = new BehaviorSubject(false);
+  loading = false;
   intersectionObserver: IntersectionObserver = new IntersectionObserver(
     entries => {
       if (!entries[0].isIntersecting) {
-        this.loading.next(false);
+        this.loading = false;
         return;
       }
       console.log("triggered loading, removed trigger");
 
-      this.loading.next(true);
+      this.loading = true;
       this.intersectionObserver.disconnect();
       this.getOptions(this.inputControl.value ?? "");
     },
@@ -145,7 +145,7 @@ export class CourseSearchHelperComponent implements OnInit {
           }),
         );
         this.page = options.pagination.current;
-        this.loading.next(false);
+        this.loading = false;
         if (options.pagination.current >= options.pagination.total) return;
         this.bindLoadingTrigger();
       });
