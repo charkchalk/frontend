@@ -1,5 +1,6 @@
-<div class="container">
+<div class="container space-y-4 lg:space-y-0">
   <app-course-search-helper
+    class="block"
     *ngFor="let query of queries; let index = index"
     [index]="index"
     [deletable]="index !== queries.length - 1"
