@@ -183,7 +183,7 @@ export class CourseSearchHelperComponent implements OnInit {
     this.lastQueryRequest?.unsubscribe();
     this.lastQueryRequest = this.provider
       ?.getOptions({
-        page: ++this.page,
+        page: this.page + 1,
         keyword: value.trim(),
       })
       .subscribe(options => {
