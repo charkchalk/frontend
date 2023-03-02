@@ -65,5 +65,10 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Create .env file
+        uses: ozaytsev86/create-env-file-action@v1
+        with:
+          ENV_NG_APP_API_ENDPOINT: ${{ vars.API_ENDPOINT }}
+
       - name: Unit Test
         run: yarn test --no-watch --no-progress --code-coverage --browsers=ChromeHeadless
