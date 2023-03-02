@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { firstValueFrom, map, Observable } from "rxjs";
 
-import { TeacherApiService } from "../../../../_api/teacher/teacher-api.service";
+import { PersonApiService } from "../../../../_api/person/person-api.service";
 import { Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 import { QueryItem } from "../../query-item";
@@ -23,7 +23,7 @@ export class TeacherQueryDataProviderService implements QueryDataProvider {
     },
   ];
 
-  constructor(private teacherApiService: TeacherApiService) {}
+  constructor(private personApiService: PersonApiService) {}
 
   key = "teacher";
   label = "授課教師";
@@ -35,7 +35,7 @@ export class TeacherQueryDataProviderService implements QueryDataProvider {
   getOptions(
     options: CanPaginate & { keyword: string },
   ): Observable<StandardResponse<Displayable[]>> {
-    return this.teacherApiService.getAll(options).pipe(
+    return this.personApiService.getAll(options).pipe(
       map(response => {
         return {
           pagination: response.pagination,
@@ -69,7 +69,7 @@ export class TeacherQueryDataProviderService implements QueryDataProvider {
       .split(",")
       .map(async v => {
         const teacher = await firstValueFrom(
-          this.teacherApiService.get(v).pipe(map(response => response.content)),
+          this.personApiService.get(v).pipe(map(response => response.content)),
         );
 
         return {
