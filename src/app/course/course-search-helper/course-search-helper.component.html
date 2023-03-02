@@ -68,7 +68,10 @@
       <mat-option *ngFor="let option of options" [value]="option">
         {{ option.label }}
       </mat-option>
-      <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+      <mat-progress-bar
+        mode="indeterminate"
+        *ngIf="isLoadingOptions"
+      ></mat-progress-bar>
       <mat-option class="loading-trigger" disabled></mat-option>
     </mat-autocomplete>
   </mat-form-field>
