@@ -8,17 +8,20 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field hideRequiredMarker>
     <mat-label>比對方式</mat-label>
     <mat-select
+      #methodSelect
       [(ngModel)]="query.method"
       [disabled]="!provider"
       (valueChange)="notifyQueryUpdate()"
+      required
     >
       <mat-option *ngFor="let method of methods" [value]="method.key">
         {{ method.label }}
       </mat-option>
     </mat-select>
+    <mat-error>請選擇比對方式</mat-error>
   </mat-form-field>
 
   <mat-form-field class="grow">
@@ -44,6 +47,7 @@
       matInput
       type="text"
       placeholder="輸入來過濾或選擇"
+      (focus)="methodSelect._onBlur()"
       [matAutocomplete]="auto"
       [matAutocompleteDisabled]="provider?.type === 'text'"
       [matChipInputFor]="chipGrid"
