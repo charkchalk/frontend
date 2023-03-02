@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MatChipInputEvent } from "@angular/material/chips";
+import { BehaviorSubject, Subscription } from "rxjs";
 
 import { Displayable } from "../../_types/displayable";
 import { CourseQueryService } from "../_query/course-query.service";
@@ -22,10 +23,28 @@ export class CourseSearchHelperComponent implements OnInit {
 
   provider?: QueryDataProvider;
   methods?: Displayable[];
-  options?: Displayable[];
-  lastQuery?: string;
+  options: Displayable[] = [];
+  lastQueryValue?: string;
   lastInputTime = 0;
   waiting = false;
+
+  loading = new BehaviorSubject(false);
+  intersectionObserver: IntersectionObserver = new IntersectionObserver(
+    entries => {
+      if (!entries[0].isIntersecting) {
+        this.loading.next(false);
+        return;
+      }
+      console.log("triggered loading, removed trigger");
+
+      this.loading.next(true);
+      this.intersectionObserver.disconnect();
+      this.getOptions(this.inputControl.value ?? "");
+    },
+    {
+      threshold: 1,
+    },
+  );
 
   constructor(private courseQueryService: CourseQueryService) {}
 
@@ -37,8 +56,8 @@ export class CourseSearchHelperComponent implements OnInit {
     if (this.query.key) this.setProvider(this.query.key, false);
     this.inputControl.valueChanges.subscribe(value => {
       if (this.provider?.type === "text") return;
-      if (this.lastQuery === value) return;
-      this.lastQuery = value ?? "";
+      if (this.lastQueryValue === value) return;
+      this.lastQueryValue = value ?? "";
       this.lastInputTime = Date.now();
       if (!this.waiting) this.getOptionsWhenIdle(this.inputControl);
     });
@@ -53,6 +72,9 @@ export class CourseSearchHelperComponent implements OnInit {
       return;
     }
     this.waiting = false;
+    this.page = 0;
+    console.log("trigger option searching", inputControl.value);
+
     this.getOptions(inputControl.value ?? "");
   }
 
@@ -65,8 +87,6 @@ export class CourseSearchHelperComponent implements OnInit {
     }
     this.provider = this.courseQueryService.getProvider(providerKey);
     this.methods = this.provider?.getMethods();
-    if (this.provider?.type === "text") return;
-    this.getOptions("");
   }
 
   notifyQueryUpdate() {
@@ -92,24 +112,49 @@ export class CourseSearchHelperComponent implements OnInit {
     this.notifyQueryUpdate();
   }
 
+  bindLoadingTrigger(): void {
+    console.log("rebinding loading trigger");
+
+    const target = document.querySelector(
+      ".mat-mdc-autocomplete-panel .loading-trigger",
+    );
+    if (!target) return;
+    this.intersectionObserver.disconnect();
+    this.intersectionObserver.unobserve(target);
+    this.intersectionObserver.observe(target);
+  }
+
+  page = 0;
+  lastQueryRequest?: Subscription;
   getOptions(value: string): void {
-    this.provider
+    if (this.page == 0) this.options = [];
+    console.log("getting options", this.page);
+
+    this.lastQueryRequest?.unsubscribe();
+    this.lastQueryRequest = this.provider
       ?.getOptions({
+        page: ++this.page,
         keyword: value.trim(),
       })
       .subscribe(options => {
-        this.options = options.content.filter(option => {
-          return !this.query.value?.find(
-            selected => selected.key === option.key,
-          );
-        });
+        this.options.push(
+          ...options.content.filter(option => {
+            return !this.query.value?.find(
+              selected => selected.key === option.key,
+            );
+          }),
+        );
+        this.page = options.pagination.current;
+        this.loading.next(false);
+        if (options.pagination.current >= options.pagination.total) return;
+        this.bindLoadingTrigger();
       });
   }
 
   selectOption(event: MatAutocompleteSelectedEvent): void {
     if (!this.query.value) this.query.value = [];
     this.query.value.push(event.option.value);
-    this.options?.splice(this.options.indexOf(event.option.value), 1);
+    this.options.splice(this.options.indexOf(event.option.value), 1);
     this.inputControl.setValue("");
     this.notifyQueryUpdate();
   }

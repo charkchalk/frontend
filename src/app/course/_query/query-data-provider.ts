@@ -7,7 +7,7 @@ export interface QueryDataProvider extends Displayable {
   type: QueryDataType;
   getMethods(): Displayable[];
   getOptions(
-    options?: CanPaginate | unknown,
+    options?: CanPaginate | Record<string, unknown>,
   ): Observable<StandardResponse<Displayable[]>>;
   stringifyQuery(query: QueryItem): string;
   parseQuery(query: string): Promise<QueryItem>;

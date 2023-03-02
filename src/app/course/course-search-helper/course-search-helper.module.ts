@@ -7,6 +7,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatSelectModule } from "@angular/material/select";
 
 import { CourseSearchHelperComponent } from "./course-search-helper.component";
@@ -22,6 +23,7 @@ import { CourseSearchHelperComponent } from "./course-search-helper.component";
     MatButtonModule,
     MatIconModule,
     MatAutocompleteModule,
+    MatProgressBarModule,
     MatInputModule,
     MatChipsModule,
   ],
