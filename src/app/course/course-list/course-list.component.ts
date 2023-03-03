@@ -1,5 +1,6 @@
 import { Component, Injectable, OnInit } from "@angular/core";
 import { MatPaginatorIntl, PageEvent } from "@angular/material/paginator";
+import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 
 import { CourseApiService } from "../../_api/course/course-api.service";
@@ -42,14 +43,15 @@ export class CourseListComponent implements OnInit {
   queries: QueryItem[] = [];
 
   constructor(
+    private router: Router,
     private courseApiService: CourseApiService,
     private courseQueryService: CourseQueryService,
   ) {}
 
   ngOnInit(): void {
-    this.queries = Object.freeze(
-      this.courseQueryService.queries.slice(0, -1),
-    ) as QueryItem[];
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    const queries = this.courseQueryService.queries.slice(0, -1);
+    this.queries = JSON.parse(JSON.stringify(queries)) as QueryItem[];
     this.search(this.pagination.current);
   }
 
