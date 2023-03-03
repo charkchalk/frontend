@@ -42,22 +42,13 @@ export class CourseSearchHelperComponent implements OnInit {
     if (this.query.key) this.setProvider(this.query.key, false);
 
     // listen to value change to filter selectable options
-    this.inputControl.valueChanges.subscribe(value => {
+    this.inputControl.valueChanges.subscribe(() => {
       if (this.provider?.type === "text") return;
-      if (this.lastQueryValue === value) return;
-      this.lastQueryValue = value ?? "";
       this.lastInputTime = Date.now();
       if (!this.isWaiting) this.getOptionsWhenIdle(this.inputControl);
     });
   }
 
-  /**
-   * Last user entered query value to filter options.
-   * This is used to detect user input changed or not,
-   * in order to prevent too many requests sent to server.
-   * Could be remove when requests been cached.
-   */
-  lastQueryValue?: string;
   /** Last time user entered something to the input */
   lastInputTime = 0;
   /**

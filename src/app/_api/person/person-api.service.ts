@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { NgHttpCachingHeaders } from "ng-http-caching";
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -20,12 +21,18 @@ export class PersonApiService {
     return this._http.get<StandardResponse<RawPerson[]>>(this._uri, {
       responseType: "json",
       params: params,
+      headers: {
+        [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
+      },
     });
   }
 
   get(id: string): Observable<StandardResponse<RawPerson>> {
     return this._http.get<StandardResponse<RawPerson>>(this._uri + "/" + id, {
       responseType: "json",
+      headers: {
+        [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
+      },
     });
   }
 }

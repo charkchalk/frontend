@@ -30,6 +30,8 @@
     "@angular/platform-browser-dynamic": "^15.0.0",
     "@angular/router": "^15.0.0",
     "@angular/service-worker": "^15.0.0",
+    "ng-http-caching": "^15.0.2",
+    "object-hash": "^3.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
@@ -47,6 +49,7 @@
     "@commitlint/config-conventional": "^17.4.0",
     "@ngx-env/builder": "15.1.0",
     "@types/jasmine": "~4.3.0",
+    "@types/object-hash": "^3.0.2",
     "@typescript-eslint/eslint-plugin": "5.44.0",
     "@typescript-eslint/parser": "5.44.0",
     "autoprefixer": "^10.4.13",

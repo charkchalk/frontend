@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { NgHttpCachingHeaders } from "ng-http-caching";
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -18,6 +19,9 @@ export class CourseApiService {
     return this._http.get<StandardResponse<RawCourse[]>>(this._uri, {
       responseType: "json",
       params: params,
+      headers: {
+        [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
+      },
     });
   }
 }
