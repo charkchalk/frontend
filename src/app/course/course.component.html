@@ -2,7 +2,7 @@
   class="flex items-center justify-center p-5"
   [ngClass]="{ 'block h-screen': !searching }"
 ></app-course-search>
-<app-course-list *ngIf="searching"></app-course-list>
+<app-course-list *ngIf="!loading && searching"></app-course-list>
 <div
   *ngIf="loading"
   class="fixed top-0 bottom-0 left-0 right-0 z-30 flex flex-col items-center justify-center bg-gray-500 bg-opacity-50"

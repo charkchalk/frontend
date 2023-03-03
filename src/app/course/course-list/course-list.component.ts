@@ -3,6 +3,8 @@ import { MatPaginatorIntl, PageEvent } from "@angular/material/paginator";
 import { Subject } from "rxjs";
 
 import { CourseApiService } from "../../_api/course/course-api.service";
+import { CourseQueryService } from "../_query/course-query.service";
+import { QueryItem } from "../_query/query-item";
 
 @Injectable()
 export class MyCustomPaginatorIntl implements MatPaginatorIntl {
@@ -37,19 +39,28 @@ export class CourseListComponent implements OnInit {
     current: 1,
   };
   courses: RawCourse[] = [];
+  queries: QueryItem[] = [];
 
-  constructor(private courseApiService: CourseApiService) {}
+  constructor(
+    private courseApiService: CourseApiService,
+    private courseQueryService: CourseQueryService,
+  ) {}
 
   ngOnInit(): void {
+    this.queries = Object.freeze(
+      this.courseQueryService.queries.slice(0, -1),
+    ) as QueryItem[];
     this.search(this.pagination.current);
   }
 
   search(page: number): void {
-    this.courseApiService.getAll({ page, size: 20 }).subscribe(courses => {
-      this.pagination = courses.pagination;
-      this.courses = courses.content;
-      this.loading = false;
-    });
+    this.courseApiService
+      .getAll(this.queries, { page, size: 20 })
+      .subscribe(courses => {
+        this.pagination = courses.pagination;
+        this.courses = courses.content;
+        this.loading = false;
+      });
   }
 
   handlePageEvent(event: PageEvent) {
