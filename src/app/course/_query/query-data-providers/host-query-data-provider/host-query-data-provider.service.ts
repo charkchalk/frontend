@@ -39,14 +39,10 @@ export class HostQueryDataProviderService implements QueryDataProvider {
       map(response => {
         return {
           pagination: response.pagination,
-          content: response.content
-            .map(host => ({
-              key: host.id.toString(),
-              label: host.name,
-            }))
-            .filter(host =>
-              host.label.toLowerCase().includes(options.keyword.toLowerCase()),
-            ),
+          content: response.content.map(host => ({
+            key: host.id.toString(),
+            label: host.name,
+          })),
         };
       }),
     );
