@@ -6,6 +6,7 @@ import { CodeQueryDataProviderService } from "./query-data-providers/code-query-
 import { HostQueryDataProviderService } from "./query-data-providers/host-query-data-provider/host-query-data-provider.service";
 import { KeywordQueryDataProviderService } from "./query-data-providers/keyword-query-data-provider/keyword-query-data-provider.service";
 import { OrganizationQueryDataProviderService } from "./query-data-providers/organization-query-data-provider/organization-query-data-provider.service";
+import { PlaceQueryDataProviderService } from "./query-data-providers/place-query-data-provider/place-query-data-provider.service";
 import { QueryItem } from "./query-item";
 
 @Injectable({
@@ -19,11 +20,13 @@ export class CourseQueryService {
     hostQueryDataProviderService: HostQueryDataProviderService,
     codeQueryDataProviderService: CodeQueryDataProviderService,
     organizationQueryDataProviderService: OrganizationQueryDataProviderService,
+    placeQueryDataProviderService: PlaceQueryDataProviderService,
   ) {
     this.providers.push(keywordQueryDataProviderService);
     this.providers.push(hostQueryDataProviderService);
     this.providers.push(codeQueryDataProviderService);
     this.providers.push(organizationQueryDataProviderService);
+    this.providers.push(placeQueryDataProviderService);
   }
 
   getProviders(): QueryDataProvider[] {
