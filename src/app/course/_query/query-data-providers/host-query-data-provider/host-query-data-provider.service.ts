@@ -9,7 +9,7 @@ import { QueryItem } from "../../query-item";
 @Injectable({
   providedIn: "root",
 })
-export class TeacherQueryDataProviderService implements QueryDataProvider {
+export class HostQueryDataProviderService implements QueryDataProvider {
   type = QueryDataType.select;
 
   private methods: Displayable[] = [
@@ -25,7 +25,7 @@ export class TeacherQueryDataProviderService implements QueryDataProvider {
 
   constructor(private personApiService: PersonApiService) {}
 
-  key = "teacher";
+  key = "host";
   label = "授課教師";
 
   getMethods(): Displayable[] {
@@ -40,14 +40,12 @@ export class TeacherQueryDataProviderService implements QueryDataProvider {
         return {
           pagination: response.pagination,
           content: response.content
-            .map(teacher => ({
-              key: teacher.id.toString(),
-              label: teacher.name,
+            .map(host => ({
+              key: host.id.toString(),
+              label: host.name,
             }))
-            .filter(teacher =>
-              teacher.label
-                .toLowerCase()
-                .includes(options.keyword.toLowerCase()),
+            .filter(host =>
+              host.label.toLowerCase().includes(options.keyword.toLowerCase()),
             ),
         };
       }),
@@ -68,13 +66,13 @@ export class TeacherQueryDataProviderService implements QueryDataProvider {
       .join(":")
       .split(",")
       .map(async v => {
-        const teacher = await firstValueFrom(
+        const host = await firstValueFrom(
           this.personApiService.get(v).pipe(map(response => response.content)),
         );
 
         return {
-          key: teacher.id,
-          label: teacher.name,
+          key: host.id,
+          label: host.name,
         };
       });
 

@@ -2,8 +2,8 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 
 import { QueryDataProvider } from "./query-data-provider";
+import { HostQueryDataProviderService } from "./query-data-providers/host-query-data-provider/host-query-data-provider.service";
 import { KeywordQueryDataProviderService } from "./query-data-providers/keyword-query-data-provider/keyword-query-data-provider.service";
-import { TeacherQueryDataProviderService } from "./query-data-providers/teacher-query-data-provider/teacher-query-data-provider.service";
 import { QueryItem } from "./query-item";
 
 @Injectable({
@@ -14,10 +14,10 @@ export class CourseQueryService {
 
   constructor(
     keywordQueryDataProviderService: KeywordQueryDataProviderService,
-    teacherQueryDataProviderService: TeacherQueryDataProviderService,
+    hostQueryDataProviderService: HostQueryDataProviderService,
   ) {
     this.providers.push(keywordQueryDataProviderService);
-    this.providers.push(teacherQueryDataProviderService);
+    this.providers.push(hostQueryDataProviderService);
   }
 
   getProviders(): QueryDataProvider[] {
