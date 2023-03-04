@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 
 import { OrganizationQueryDataProviderService } from "./organization-query-data-provider.service";
@@ -6,7 +7,9 @@ describe("OrganizationQueryDataProviderService", () => {
   let service: OrganizationQueryDataProviderService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+    });
     service = TestBed.inject(OrganizationQueryDataProviderService);
   });
 
