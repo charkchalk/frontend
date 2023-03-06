@@ -10,7 +10,7 @@ const hashOptions: objectHash.NormalOption = {
 export const ngHttpCachingConfig: NgHttpCachingConfig = {
   cacheStrategy: NgHttpCachingStrategy.DISALLOW_ALL,
   allowedMethod: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  getKey: (req: HttpRequest<any>): string | undefined => {
+  getKey: (req: HttpRequest<unknown>): string | undefined => {
     const coreRequest = {
       method: req.method,
       url: req.url,
