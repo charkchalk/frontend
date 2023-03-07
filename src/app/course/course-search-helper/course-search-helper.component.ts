@@ -1,8 +1,8 @@
 import { ENTER, SPACE } from "@angular/cdk/keycodes";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { MatChipInputEvent } from "@angular/material/chips";
+import { MatChipGrid, MatChipInputEvent } from "@angular/material/chips";
 import { Subscription } from "rxjs";
 
 import { Displayable } from "../../_types/displayable";
@@ -111,14 +111,25 @@ export class CourseSearchHelperComponent implements OnInit {
   /** Input of value */
   inputControl = new FormControl("");
 
+  @ViewChild("chipGrid") chipGrid!: MatChipGrid;
+  error: string | null = null;
   /**
    * Add text in input to query value and clear input
    * @param event event of input sent by MatChipInput
    */
   addText(event: MatChipInputEvent): void {
+    this.chipGrid.errorState = false;
     if (this.provider?.type !== "text") return;
 
-    if (event.value.trim() === "") return;
+    const value = event.value.trim();
+    if (value === "") return;
+
+    const error = this.provider.getValidationResult(value);
+    if (error) {
+      this.chipGrid.errorState = true;
+      this.error = error;
+      return;
+    }
 
     if (!this.query.value) this.query.value = [];
     this.query.value.push({

@@ -49,6 +49,10 @@ export class PlaceQueryDataProviderService implements QueryDataProvider {
     );
   }
 
+  getValidationResult(): string | null {
+    return null;
+  }
+
   stringifyQuery(query: QueryItem): string {
     if (!query.method || !query.value?.length) {
       throw new Error("Invalid query.");

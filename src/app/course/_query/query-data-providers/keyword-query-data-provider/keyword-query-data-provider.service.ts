@@ -34,6 +34,10 @@ export class KeywordQueryDataProviderService implements QueryDataProvider {
     throw new Error("Method not supported.");
   }
 
+  getValidationResult(): string | null {
+    return null;
+  }
+
   stringifyQuery(query: QueryItem): string {
     if (!query.method || !query.value?.length) {
       throw new Error("Invalid query.");
