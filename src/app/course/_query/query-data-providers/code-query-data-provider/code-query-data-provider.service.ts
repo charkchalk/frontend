@@ -9,6 +9,7 @@ import { QueryItem } from "../../query-item";
   providedIn: "root",
 })
 export class CodeQueryDataProviderService implements QueryDataProvider {
+  valueSeparator = ",";
   type = QueryDataType.text;
 
   private methods: Displayable[] = [
@@ -38,14 +39,16 @@ export class CodeQueryDataProviderService implements QueryDataProvider {
       throw new Error("Invalid query.");
     }
 
-    return query.method + ":" + query.value.map(v => v.key).join(",");
+    return (
+      query.method + ":" + query.value.map(v => v.key).join(this.valueSeparator)
+    );
   }
 
   async parseQuery(query: string): Promise<QueryItem> {
     const [method, ...values] = query.split(":");
     const value = values
       .join(":")
-      .split(",")
+      .split(this.valueSeparator)
       .map(v => ({ key: v, label: v }));
 
     return { key: this.key, method, value };

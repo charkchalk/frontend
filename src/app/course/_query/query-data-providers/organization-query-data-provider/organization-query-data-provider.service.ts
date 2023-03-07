@@ -10,6 +10,7 @@ import { QueryItem } from "../../query-item";
   providedIn: "root",
 })
 export class OrganizationQueryDataProviderService implements QueryDataProvider {
+  valueSeparator = ",";
   type = QueryDataType.select;
 
   private methods: Displayable[] = [
@@ -53,14 +54,16 @@ export class OrganizationQueryDataProviderService implements QueryDataProvider {
       throw new Error("Invalid query.");
     }
 
-    return query.method + ":" + query.value.map(v => v.key).join(",");
+    return (
+      query.method + ":" + query.value.map(v => v.key).join(this.valueSeparator)
+    );
   }
 
   async parseQuery(query: string): Promise<QueryItem> {
     const [method, ...values] = query.split(":");
     const value = values
       .join(":")
-      .split(",")
+      .split(this.valueSeparator)
       .map(async v => {
         const host = await firstValueFrom(
           this.organizationApiService
