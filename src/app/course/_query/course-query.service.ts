@@ -9,6 +9,7 @@ import { HostQueryDataProviderService } from "./query-data-providers/host-query-
 import { KeywordQueryDataProviderService } from "./query-data-providers/keyword-query-data-provider/keyword-query-data-provider.service";
 import { OrganizationQueryDataProviderService } from "./query-data-providers/organization-query-data-provider/organization-query-data-provider.service";
 import { PlaceQueryDataProviderService } from "./query-data-providers/place-query-data-provider/place-query-data-provider.service";
+import { TimeRangeQueryDataProviderService } from "./query-data-providers/time-range-query-data-provider/time-range-query-data-provider.service";
 import { QueryItem } from "./query-item";
 
 @Injectable({
@@ -25,6 +26,7 @@ export class CourseQueryService {
     organizationQueryDataProviderService: OrganizationQueryDataProviderService,
     placeQueryDataProviderService: PlaceQueryDataProviderService,
     dateRangeQueryDataProviderService: DateRangeQueryDataProviderService,
+    timeRangeQueryDataProviderService: TimeRangeQueryDataProviderService,
   ) {
     this.providers.push(keywordQueryDataProviderService);
     this.providers.push(creditQueryDataProviderService);
@@ -33,6 +35,7 @@ export class CourseQueryService {
     this.providers.push(organizationQueryDataProviderService);
     this.providers.push(placeQueryDataProviderService);
     this.providers.push(dateRangeQueryDataProviderService);
+    this.providers.push(timeRangeQueryDataProviderService);
   }
 
   getProviders(): QueryDataProvider[] {
