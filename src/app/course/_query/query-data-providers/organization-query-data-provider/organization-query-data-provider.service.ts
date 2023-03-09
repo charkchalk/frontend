@@ -40,10 +40,22 @@ export class OrganizationQueryDataProviderService implements QueryDataProvider {
       map(response => {
         return {
           pagination: response.pagination,
-          content: response.content.map(organization => ({
-            key: organization.uuid,
-            label: organization.name,
-          })),
+          content: response.content.map(organization => {
+            const parents = [];
+            let currentParent = organization.parent;
+            while (currentParent) {
+              parents.push(currentParent.name);
+              currentParent = currentParent.parent;
+            }
+            let label = organization.name;
+            if (parents.length)
+              label += " (" + parents.reverse().join(" > ") + ")";
+
+            return {
+              key: organization.uuid,
+              label,
+            };
+          }),
         };
       }),
     );
