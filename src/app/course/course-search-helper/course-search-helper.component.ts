@@ -71,7 +71,7 @@ export class CourseSearchHelperComponent implements OnInit {
       return;
     }
     this.isWaiting = false;
-    this.page = 0;
+    this.optionsPage = 0;
 
     this.getOptions(inputControl.value ?? "");
   }
@@ -90,6 +90,8 @@ export class CourseSearchHelperComponent implements OnInit {
     }
     this.provider = this.courseQueryService.getProvider(providerKey);
     this.methods = this.provider?.getMethods();
+    this.options = [];
+    this.optionsPage = 0;
   }
 
   /**
@@ -171,7 +173,7 @@ export class CourseSearchHelperComponent implements OnInit {
   }
 
   /** Current page of options, needs to be reset when searching context changed */
-  page = 0;
+  optionsPage = 0;
   /** Last query request, used to cancel last request when new request is triggered */
   lastQueryRequest?: Subscription;
 
@@ -180,12 +182,10 @@ export class CourseSearchHelperComponent implements OnInit {
    * @param value value to search options
    */
   getOptions(value: string): void {
-    if (this.page == 0) this.options = [];
-
     this.lastQueryRequest?.unsubscribe();
     this.lastQueryRequest = this.provider
       ?.getOptions({
-        page: this.page + 1,
+        page: this.optionsPage + 1,
         keyword: value.trim(),
       })
       .subscribe(options => {
@@ -196,7 +196,7 @@ export class CourseSearchHelperComponent implements OnInit {
             );
           }),
         );
-        this.page = options.pagination.current;
+        this.optionsPage = options.pagination.current;
         this.isLoadingOptions = false;
         if (options.pagination.current >= options.pagination.total) return;
         this.bindLoadingTrigger();
