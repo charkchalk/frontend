@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MatChipGrid, MatChipInputEvent } from "@angular/material/chips";
-import { Subscription } from "rxjs";
+import { interval, Subscription, take } from "rxjs";
 
 import { Displayable } from "../../_types/displayable";
 import { CourseQueryService } from "../_query/course-query.service";
@@ -42,39 +42,31 @@ export class CourseSearchHelperComponent implements OnInit {
     if (this.query.key) this.setProvider(this.query.key, false);
 
     // listen to value change to filter selectable options
-    this.inputControl.valueChanges.subscribe(() => {
-      this.setInputError(null);
-      if (this.provider?.type === "text") return;
-      this.lastInputTime = Date.now();
-      if (!this.isWaiting) this.getOptionsWhenIdle(this.inputControl);
-    });
+    this.inputControl.valueChanges.subscribe(() =>
+      this.inputValueChangeHandler(),
+    );
   }
 
-  /** Last time user entered something to the input */
-  lastInputTime = 0;
-  /**
-   * Is already detecting user typing or not
-   * @see getOptionsWhenIdle
-   */
-  isWaiting = false;
+  /** Subscription of user idle detector */
+  whenIdleSubscription?: Subscription;
 
   /**
-   * A recursive function to check if user has stopped typing.
-   * If user has stopped typing, will trigger getOptions to get options from server.
-   * @param inputControl input control to get value from
+   * Handler when input value changed, will trigger option fetch when user stop typing for 500ms
    */
-  getOptionsWhenIdle(inputControl: FormControl) {
-    this.isWaiting = true;
-    if (Date.now() - this.lastInputTime < 500) {
-      setTimeout(() => {
-        this.getOptionsWhenIdle(inputControl);
-      }, 200);
-      return;
-    }
-    this.isWaiting = false;
-    this.optionsPage = 0;
+  inputValueChangeHandler(): void {
+    this.setInputError(null);
+    if (this.provider?.type === "text") return;
 
-    this.getOptions(inputControl.value ?? "");
+    this.whenIdleSubscription?.unsubscribe();
+    this.whenIdleSubscription = interval(500)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.whenIdleSubscription?.unsubscribe();
+        this.whenIdleSubscription = undefined;
+        this.optionsPage = 0;
+        this.options = [];
+        this.getOptions(this.inputControl.value ?? "");
+      });
   }
 
   /**
