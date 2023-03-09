@@ -41,7 +41,7 @@ export class TimeRangeQueryDataProviderService implements QueryDataProvider {
         return {
           pagination: response.pagination,
           content: response.content.map(dateRange => ({
-            key: dateRange.id,
+            key: dateRange.uuid,
             label: `${dateRange.day} ${dateRange.start_time} ~ ${dateRange.end_time}`,
           })),
         };
@@ -76,7 +76,7 @@ export class TimeRangeQueryDataProviderService implements QueryDataProvider {
         );
 
         return {
-          key: dateRange.id,
+          key: dateRange.uuid,
           label: `${dateRange.day} ${dateRange.start_time} ~ ${dateRange.end_time}`,
         };
       });

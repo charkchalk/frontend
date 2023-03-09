@@ -41,7 +41,7 @@ export class HostQueryDataProviderService implements QueryDataProvider {
         return {
           pagination: response.pagination,
           content: response.content.map(host => ({
-            key: host.id.toString(),
+            key: host.uuid,
             label: host.name,
           })),
         };
@@ -74,7 +74,7 @@ export class HostQueryDataProviderService implements QueryDataProvider {
         );
 
         return {
-          key: host.id,
+          key: host.uuid,
           label: host.name,
         };
       });

@@ -41,7 +41,7 @@ export class OrganizationQueryDataProviderService implements QueryDataProvider {
         return {
           pagination: response.pagination,
           content: response.content.map(organization => ({
-            key: organization.id.toString(),
+            key: organization.uuid,
             label: organization.name,
           })),
         };
@@ -76,7 +76,7 @@ export class OrganizationQueryDataProviderService implements QueryDataProvider {
         );
 
         return {
-          key: host.id,
+          key: host.uuid,
           label: host.name,
         };
       });

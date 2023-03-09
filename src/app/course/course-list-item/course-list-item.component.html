@@ -29,7 +29,7 @@
           class="m-1 rounded-full border border-black py-0.5 px-2"
           *ngFor="let host of course?.hosts"
           [routerLink]="['/courses']"
-          [queryParams]="{ host: '=:' + host.id }"
+          [queryParams]="{ host: '=:' + host.uuid }"
         >
           {{ host.name }}
         </a>

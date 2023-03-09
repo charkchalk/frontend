@@ -41,7 +41,7 @@ export class PlaceQueryDataProviderService implements QueryDataProvider {
         return {
           pagination: response.pagination,
           content: response.content.map(place => ({
-            key: place.id.toString(),
+            key: place.uuid,
             label: place.name,
           })),
         };
@@ -74,7 +74,7 @@ export class PlaceQueryDataProviderService implements QueryDataProvider {
         );
 
         return {
-          key: host.id,
+          key: host.uuid,
           label: host.name,
         };
       });
