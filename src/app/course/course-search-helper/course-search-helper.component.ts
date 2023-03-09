@@ -43,6 +43,7 @@ export class CourseSearchHelperComponent implements OnInit {
 
     // listen to value change to filter selectable options
     this.inputControl.valueChanges.subscribe(() => {
+      this.setInputError(null);
       if (this.provider?.type === "text") return;
       this.lastInputTime = Date.now();
       if (!this.isWaiting) this.getOptionsWhenIdle(this.inputControl);
@@ -115,23 +116,29 @@ export class CourseSearchHelperComponent implements OnInit {
 
   @ViewChild("chipGrid") chipGrid!: MatChipGrid;
   error: string | null = null;
+
+  /**
+   * Set input error to display or clear error
+   * @param error error message to set, if null, will clear error
+   */
+  setInputError(error: string | null) {
+    this.chipGrid.errorState = !!error;
+    this.error = error;
+  }
+
   /**
    * Add text in input to query value and clear input
    * @param event event of input sent by MatChipInput
    */
   addText(event: MatChipInputEvent): void {
-    this.chipGrid.errorState = false;
     if (this.provider?.type !== "text") return;
 
     const value = event.value.trim();
     if (value === "") return;
 
     const error = this.provider.getValidationResult(value);
-    if (error) {
-      this.chipGrid.errorState = true;
-      this.error = error;
-      return;
-    }
+    this.setInputError(error);
+    if (error) return;
 
     if (!this.query.value) this.query.value = [];
     this.query.value.push({
