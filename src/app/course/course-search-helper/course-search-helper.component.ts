@@ -150,6 +150,7 @@ export class CourseSearchHelperComponent implements OnInit {
       // observer will be triggered when target is going to visible or invisible
       // so we have to ignore invisible event
       if (!entries[0].isIntersecting) return;
+      if (this.optionsPage < 0) return;
 
       this.isLoadingOptions = true;
       // Stop observing while loading options
@@ -198,7 +199,10 @@ export class CourseSearchHelperComponent implements OnInit {
         );
         this.optionsPage = options.pagination.current;
         this.isLoadingOptions = false;
-        if (options.pagination.current >= options.pagination.total) return;
+        if (options.pagination.current >= options.pagination.total) {
+          this.optionsPage = -1;
+          return;
+        }
         this.bindLoadingTrigger();
       });
   }
