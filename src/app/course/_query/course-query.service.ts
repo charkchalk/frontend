@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { QueryDataProvider } from "./query-data-provider";
 import { CodeQueryDataProviderService } from "./query-data-providers/code-query-data-provider/code-query-data-provider.service";
 import { CreditQueryDataProviderService } from "./query-data-providers/credit-query-data-provider/credit-query-data-provider.service";
+import { DateRangeQueryDataProviderService } from "./query-data-providers/date-range-query-data-provider/date-range-query-data-provider.service";
 import { HostQueryDataProviderService } from "./query-data-providers/host-query-data-provider/host-query-data-provider.service";
 import { KeywordQueryDataProviderService } from "./query-data-providers/keyword-query-data-provider/keyword-query-data-provider.service";
 import { OrganizationQueryDataProviderService } from "./query-data-providers/organization-query-data-provider/organization-query-data-provider.service";
@@ -23,6 +24,7 @@ export class CourseQueryService {
     codeQueryDataProviderService: CodeQueryDataProviderService,
     organizationQueryDataProviderService: OrganizationQueryDataProviderService,
     placeQueryDataProviderService: PlaceQueryDataProviderService,
+    dateRangeQueryDataProviderService: DateRangeQueryDataProviderService,
   ) {
     this.providers.push(keywordQueryDataProviderService);
     this.providers.push(creditQueryDataProviderService);
@@ -30,6 +32,7 @@ export class CourseQueryService {
     this.providers.push(codeQueryDataProviderService);
     this.providers.push(organizationQueryDataProviderService);
     this.providers.push(placeQueryDataProviderService);
+    this.providers.push(dateRangeQueryDataProviderService);
   }
 
   getProviders(): QueryDataProvider[] {
