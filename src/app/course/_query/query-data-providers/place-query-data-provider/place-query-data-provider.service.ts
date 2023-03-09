@@ -40,10 +40,22 @@ export class PlaceQueryDataProviderService implements QueryDataProvider {
       map(response => {
         return {
           pagination: response.pagination,
-          content: response.content.map(place => ({
-            key: place.uuid,
-            label: place.name,
-          })),
+          content: response.content.map(place => {
+            const parents = [];
+            let currentParent = place.parent;
+            while (currentParent) {
+              parents.push(currentParent.name);
+              currentParent = currentParent.parent;
+            }
+            let label = place.name;
+            if (parents.length)
+              label += " (" + parents.reverse().join(" > ") + ")";
+
+            return {
+              key: place.uuid,
+              label,
+            };
+          }),
         };
       }),
     );
