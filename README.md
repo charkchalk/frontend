@@ -1,27 +1,29 @@
-# CharkchalkFrontend
+# Charkchalk Frontend
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.5.
 
-## Development server
+## Getting Started
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Install Dependencies
 
-## Code scaffolding
+We use [`yarn`](https://yarnpkg.com/getting-started/install) as our package manager, run `yarn install` to install dependencies.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Setup Environment Variables
 
-## Build
+You can set variables by create a `.env` file.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+This application have following environment variables:
 
-## Running unit tests
+- `NG_APP_API_ENDPOINT`: An url to API endpoint.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+#### Example
 
-## Running end-to-end tests
+```text
+NG_APP_API_ENDPOINT=https://api.charkchalk.io
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Run Application
 
-## Further help
+Run `yarn dev` for a development dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+or you can build static files by running `yarn build`, it will generate static files into `dist` folder. Then you're free to use any web server to host it up.
