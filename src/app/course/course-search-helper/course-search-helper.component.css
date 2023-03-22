@@ -1,0 +1,7 @@
+mat-chip-row {
+  @apply mx-1 !important;
+}
+
+.loading-trigger {
+  min-height: 0;
+}

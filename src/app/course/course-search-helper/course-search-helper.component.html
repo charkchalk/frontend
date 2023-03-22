@@ -1,0 +1,90 @@
+<div class="flex flex-col lg:flex-row lg:space-x-2">
+  <mat-form-field>
+    <mat-label>過濾項</mat-label>
+    <mat-select [value]="query.key" (valueChange)="setProvider($event)">
+      <mat-option *ngFor="let provider of providers" [value]="provider.key">
+        {{ provider.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field hideRequiredMarker>
+    <mat-label>比對方式</mat-label>
+    <mat-select
+      #methodSelect
+      [(ngModel)]="query.method"
+      [disabled]="!provider"
+      (valueChange)="notifyQueryUpdate()"
+      required
+    >
+      <mat-option *ngFor="let method of methods" [value]="method.key">
+        {{ method.label }}
+      </mat-option>
+    </mat-select>
+    <mat-error>請選擇比對方式</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="grow">
+    <mat-label>比對內容</mat-label>
+
+    <mat-chip-grid
+      #chipGrid
+      aria-label="Content Selection"
+      [disabled]="!provider"
+    >
+      <ng-container *ngFor="let selected of query.value; let index = index">
+        <span class="inline-block self-center" *ngIf="index > 0">或</span>
+        <mat-chip-row (removed)="removeSelectedOption(index)">
+          {{ selected.label }}
+          <button matChipRemove [attr.aria-label]="'remove ' + selected">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      </ng-container>
+    </mat-chip-grid>
+
+    <input
+      matInput
+      type="text"
+      placeholder="輸入來過濾或選擇"
+      (focus)="methodSelect._onBlur()"
+      [matAutocomplete]="auto"
+      [matAutocompleteDisabled]="provider?.type === 'text'"
+      [matChipInputFor]="chipGrid"
+      [matChipInputAddOnBlur]="provider?.type === 'text'"
+      (matChipInputTokenEnd)="addText($event)"
+      [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+      [formControl]="inputControl"
+      [value]="inputControl.value"
+    />
+    <mat-error>{{ error }}</mat-error>
+
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      autoActiveFirstOption
+      autoSelectActiveOption
+      (opened)="bindLoadingTrigger()"
+      (optionSelected)="selectOption($event)"
+    >
+      <mat-option *ngFor="let option of options" [value]="option">
+        {{ option.label }}
+      </mat-option>
+      <mat-progress-bar
+        mode="indeterminate"
+        *ngIf="isLoadingOptions"
+      ></mat-progress-bar>
+      <mat-option class="loading-trigger" disabled></mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <button
+    mat-icon-button
+    color="warn"
+    class="place-self-center lg:place-self-auto"
+    aria-label="刪除條件"
+    (click)="removeQuery()"
+    [disabled]="!deletable"
+  >
+    <mat-icon>delete_forever</mat-icon>
+  </button>
+</div>

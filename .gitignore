@@ -36,9 +36,11 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+.eslintcache
 
 # System files
 .DS_Store
 Thumbs.db
 
-.eslintcache
+# Project files
+.env

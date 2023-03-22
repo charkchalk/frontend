@@ -1,8 +1,11 @@
 import { Component, Injectable, OnInit } from "@angular/core";
 import { MatPaginatorIntl, PageEvent } from "@angular/material/paginator";
+import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 
-import { CourseService } from "../../_api/course/course.service";
+import { CourseApiService } from "../../_api/course/course-api.service";
+import { CourseQueryService } from "../_query/course-query.service";
+import { QueryItem } from "../_query/query-item";
 
 @Injectable()
 export class MyCustomPaginatorIntl implements MatPaginatorIntl {
@@ -33,28 +36,38 @@ export class MyCustomPaginatorIntl implements MatPaginatorIntl {
 export class CourseListComponent implements OnInit {
   loading = true;
   pagination: PaginationStat = {
-    total: 0,
-    current: 0,
+    total: 1,
+    current: 1,
   };
   courses: RawCourse[] = [];
+  queries: QueryItem[] = [];
 
-  constructor(private courseService: CourseService) {}
+  constructor(
+    private router: Router,
+    private courseApiService: CourseApiService,
+    private courseQueryService: CourseQueryService,
+  ) {}
 
   ngOnInit(): void {
-    this.search(0);
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    const queries = this.courseQueryService.queries.slice(0, -1);
+    this.queries = JSON.parse(JSON.stringify(queries)) as QueryItem[];
+    this.search(this.pagination.current);
   }
 
   search(page: number): void {
-    this.courseService.search({ page }).subscribe(courses => {
-      this.pagination = courses.pagination;
-      this.courses = courses.content;
-      this.loading = false;
-    });
+    this.courseApiService
+      .getAll(this.queries, { page, size: 20 })
+      .subscribe(courses => {
+        this.pagination = courses.pagination;
+        this.courses = courses.content;
+        this.loading = false;
+      });
   }
 
   handlePageEvent(event: PageEvent) {
     this.courses = [];
     this.loading = true;
-    this.search(event.pageIndex);
+    this.search(event.pageIndex + 1);
   }
 }

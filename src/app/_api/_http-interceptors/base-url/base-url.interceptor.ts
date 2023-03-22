@@ -7,18 +7,24 @@ import {
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
+import { environment } from "../../../../environments/environment";
+
 @Injectable()
 export class BaseUrlInterceptor implements HttpInterceptor {
-  _base = "https://virtserver.swaggerhub.com/moontai0724/charkchalk/1.0.0";
+  private _endpoint = environment.API_ENDPOINT;
 
-  intercept(
-    request: HttpRequest<unknown>,
+  constructor() {
+    if (!this._endpoint) throw new Error("No API endpoint provided.");
+  }
+
+  intercept<T>(
+    request: HttpRequest<T>,
     next: HttpHandler,
-  ): Observable<HttpEvent<unknown>> {
+  ): Observable<HttpEvent<T>> {
     if (request.url.includes("://")) return next.handle(request);
 
     const requestWithBase = request.clone({
-      url: this._base + request.url,
+      url: this._endpoint + request.url,
     });
     return next.handle(requestWithBase);
   }
