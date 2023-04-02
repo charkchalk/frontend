@@ -24,58 +24,23 @@
     <mat-error>請選擇比對方式</mat-error>
   </mat-form-field>
 
-  <mat-form-field class="grow">
-    <mat-label>比對內容</mat-label>
-
-    <mat-chip-grid
-      #chipGrid
-      aria-label="Content Selection"
-      [disabled]="!provider"
-    >
-      <ng-container *ngFor="let selected of query.value; let index = index">
-        <span class="inline-block self-center" *ngIf="index > 0">或</span>
-        <mat-chip-row (removed)="removeSelectedOption(index)">
-          {{ selected.label }}
-          <button matChipRemove [attr.aria-label]="'remove ' + selected">
-            <mat-icon>cancel</mat-icon>
-          </button>
-        </mat-chip-row>
-      </ng-container>
-    </mat-chip-grid>
-
-    <input
-      matInput
-      type="text"
-      placeholder="輸入來過濾或選擇"
-      (focus)="methodSelect._onBlur()"
-      [matAutocomplete]="auto"
-      [matAutocompleteDisabled]="provider?.type === 'text'"
-      [matChipInputFor]="chipGrid"
-      [matChipInputAddOnBlur]="provider?.type === 'text'"
-      (matChipInputTokenEnd)="addText($event)"
-      [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
-      [formControl]="inputControl"
-      [value]="inputControl.value"
-    />
-    <mat-error>{{ error }}</mat-error>
-
-    <mat-autocomplete
-      #auto="matAutocomplete"
-      autoActiveFirstOption
-      autoSelectActiveOption
-      (opened)="bindLoadingTrigger()"
-      (optionSelected)="selectOption($event)"
-    >
-      <mat-option *ngFor="let option of options" [value]="option">
-        {{ option.label }}
-      </mat-option>
-      <mat-progress-bar
-        mode="indeterminate"
-        *ngIf="isLoadingOptions"
-      ></mat-progress-bar>
-      <mat-option class="loading-trigger" disabled></mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+  <app-text-input
+    class="grow"
+    *ngIf="provider?.type === 'text'"
+    [provider]="provider"
+    [value]="query.value"
+    (active)="methodSelect._onBlur()"
+    (updated)="valueUpdated($event)"
+  ></app-text-input>
+  <app-select-input
+    class="grow"
+    *ngIf="provider?.type === 'select'"
+    [provider]="provider"
+    [providerChange]="providerChange.asObservable()"
+    [value]="query.value"
+    (active)="methodSelect._onBlur()"
+    (updated)="valueUpdated($event)"
+  ></app-select-input>
 
   <button
     mat-icon-button
