@@ -11,9 +11,15 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatSelectModule } from "@angular/material/select";
 
 import { CourseSearchHelperComponent } from "./course-search-helper.component";
+import { SelectInputComponent } from "./select-input/select-input.component";
+import { TextInputComponent } from "./text-input/text-input.component";
 
 @NgModule({
-  declarations: [CourseSearchHelperComponent],
+  declarations: [
+    CourseSearchHelperComponent,
+    TextInputComponent,
+    SelectInputComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
