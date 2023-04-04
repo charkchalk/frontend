@@ -5,6 +5,10 @@ on:
     branches:
       - main
       - develop
+  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
   build-and-deploy:
@@ -25,4 +29,4 @@ jobs:
       - name: Deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: yarn ng -- deploy --no-silent --name="Charkchalk" --email=contact@charkchalk.io
+        run: yarn ng -- deploy --no-silent --cname=charkchalk.io --name="Charkchalk" --email=contact@charkchalk.io
