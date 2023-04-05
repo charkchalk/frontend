@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup node and cache dependencies
         uses: actions/setup-node@v3
@@ -22,7 +22,12 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Create .env file
+        uses: ozaytsev86/create-env-file-action@v1
+        with:
+          ENV_NG_APP_API_ENDPOINT: ${{ vars.API_ENDPOINT }}
+
       - name: Deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: yarn ng -- deploy --no-silent --name="Charkchalk" --email=contact@charkchalk.io
+        run: yarn ng -- deploy --no-silent --cname=charkchalk.io --name="Charkchalk" --email=contact@charkchalk.io
