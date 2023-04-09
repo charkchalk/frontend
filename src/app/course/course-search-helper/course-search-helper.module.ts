@@ -15,6 +15,7 @@ import { CourseSearchHelperComponent } from "./course-search-helper.component";
 import { SelectInputComponent } from "./select-input/select-input.component";
 import { TextInputComponent } from "./text-input/text-input.component";
 import { WeekTimeInputComponent } from "./week-time-input/week-time-input.component";
+import { WeekTimeRangeInputComponent } from "./week-time-range-input/week-time-range-input.component";
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { WeekTimeInputComponent } from "./week-time-input/week-time-input.compon
     TextInputComponent,
     SelectInputComponent,
     WeekTimeInputComponent,
+    WeekTimeRangeInputComponent,
   ],
   imports: [
     CommonModule,

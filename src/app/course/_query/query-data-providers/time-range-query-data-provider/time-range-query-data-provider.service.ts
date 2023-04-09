@@ -10,7 +10,7 @@ import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 })
 export class TimeRangeQueryDataProviderService extends QueryDataProvider<string> {
   valueSeparator = ",";
-  type = QueryDataType.select;
+  type = QueryDataType.timeRange;
 
   private methods: Displayable<string>[] = [
     {

@@ -1,4 +1,4 @@
-<div class="flex flex-col lg:flex-row lg:space-x-2">
+<div class="flex flex-col items-center lg:flex-row lg:space-x-2">
   <mat-form-field>
     <mat-label>過濾項</mat-label>
     <mat-select [value]="query.key" (valueChange)="setProvider($event)">
@@ -41,6 +41,15 @@
     (active)="methodSelect._onBlur()"
     (updated)="valueUpdated($event)"
   ></app-select-input>
+  <app-week-time-range-input
+    class="grow"
+    *ngIf="provider?.type === 'time-range'"
+    [provider]="provider"
+    [providerChange]="providerChange.asObservable()"
+    [value]="query.value"
+    (active)="methodSelect._onBlur()"
+    (updated)="valueUpdated($event)"
+  ></app-week-time-range-input>
 
   <button
     mat-icon-button
