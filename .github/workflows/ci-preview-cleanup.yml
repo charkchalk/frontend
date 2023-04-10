@@ -1,4 +1,4 @@
-name: Continuous Integration Cleanup
+name: Continuous Integration Preview
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ jobs:
     name: Revoke Cloudflare Pages Preview Deployment
     runs-on: ubuntu-latest
     steps:
-      - name: Revoke Deployment
+      - name: Revoke Preview Deployment
         run: |
           curl --request DELETE \
             --url https://api.cloudflare.com/client/v4/accounts/${{ env.CLOUDFLARE_ACCOUNT_ID }}/pages/projects/charkchalk-dev-pr-${{ github.event.number }} \
