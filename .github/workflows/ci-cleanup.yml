@@ -6,13 +6,13 @@ on:
       - closed
 
 jobs:
-  revoke-deploy:
-    name: Revoke Cloudflare Pages Deployment
+  revoke-preview-deploy:
+    name: Revoke Cloudflare Pages Preview Deployment
     runs-on: ubuntu-latest
     steps:
       - name: Revoke Deployment
-        uses: cloudflare/wrangler-action@2.0.0
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_PAGES_DEPLOY_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages delete --name=charkchalk-dev-pr-${{ github.event.number }}
+        run: |
+          curl --request DELETE \
+            --url https://api.cloudflare.com/client/v4/accounts/${{ env.CLOUDFLARE_ACCOUNT_ID }}/pages/projects/charkchalk-dev-pr-${{ github.event.number }} \
+            --header 'Content-Type: application/json' \
+            --header 'Authorization: Bearer ${{ secrets.CLOUDFLARE_PAGES_DEPLOY_TOKEN }}'
