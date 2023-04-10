@@ -95,7 +95,7 @@ jobs:
           ENV_NG_APP_API_ENDPOINT: ${{ vars.API_ENDPOINT }}
 
       - name: Build
-        run: yarn ng build --prod --output-path=dist
+        run: yarn ng build
 
       - name: Publish
         uses: cloudflare/wrangler-action@2.0.0
