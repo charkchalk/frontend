@@ -1,0 +1,18 @@
+name: Continuous Integration Cleanup
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  revoke-deploy:
+    name: Revoke Cloudflare Pages Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revoke Deployment
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_DEPLOY_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages delete --name=charkchalk-dev-pr-${{ github.event.number }}
