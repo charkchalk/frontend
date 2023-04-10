@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      deployments: write
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -100,6 +100,12 @@ jobs:
       - name: Build
         run: yarn ng build
 
+      - uses: bhowell2/github-substring-action@v1.0.0
+        id: sha
+        with:
+          value: ${{ github.sha }}
+          length_from_start: 7
+
       - name: Deploy Preview to Cloudflare Pages
         id: deployment
         uses: cloudflare/pages-action@v1
@@ -108,10 +114,11 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: charkchalk-dev-pr-${{ github.event.number }}
           directory: dist/charkchalk-frontend
-          branch: ${{ github.sha }}
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: true
+          branch: ${{ steps.sha.outputs.substring }}
 
-      - name: Test Output
-        run: |
-          echo "url=${{ steps.deployment.outputs.url }}"
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Preview ${{ steps.sha.outputs.substring }} at: ${{ steps.deployment.outputs.url }}
