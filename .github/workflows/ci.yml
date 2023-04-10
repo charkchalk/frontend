@@ -94,9 +94,12 @@ jobs:
         with:
           ENV_NG_APP_API_ENDPOINT: ${{ vars.API_ENDPOINT }}
 
+      - name: Build
+        run: yarn ng build --prod --output-path=dist
+
       - name: Publish
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_DEPLOY_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages publish --project-name=charkchalk-dev-pr-${{ github.event.number }}
+          command: pages publish --project-name=charkchalk-dev-pr-${{ github.event.number }} dist/charkchalk-frontend
