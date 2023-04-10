@@ -1,4 +1,4 @@
-name: Continuous Integration Preview
+name: Continuous Integration Preview Cleanup
 
 on:
   pull_request:

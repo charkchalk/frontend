@@ -72,3 +72,46 @@ jobs:
 
       - name: Unit Test
         run: yarn test --no-watch --no-progress --code-coverage --browsers=ChromeHeadless
+
+  deploy-preview:
+    name: Deploy Preview to Cloudflare Pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup node and cache dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "yarn"
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Create .env file
+        uses: ozaytsev86/create-env-file-action@v1
+        with:
+          ENV_NG_APP_API_ENDPOINT: ${{ vars.API_ENDPOINT }}
+
+      - name: Build
+        run: yarn ng build
+
+      - name: Deploy Preview to Cloudflare Pages
+        id: deployment
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_PAGES_DEPLOY_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: charkchalk-dev-pr-${{ github.event.number }}
+          directory: dist/charkchalk-frontend
+          branch: ${{ github.sha }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Test Output
+        run: |
+          echo "url=${{ steps.deployment.outputs.url }}"
