@@ -9,7 +9,7 @@ import { QueryItem } from "../_query/query-item";
   styleUrls: ["./course-search.component.css"],
 })
 export class CourseSearchComponent implements OnInit {
-  queries: QueryItem[] = [];
+  queries: QueryItem<unknown>[] = [];
   queryParams: { [key: string]: string[] } = {};
 
   constructor(private courseQueryManagerService: CourseQueryService) {}

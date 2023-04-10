@@ -23,17 +23,17 @@ export class SelectInputComponent implements OnInit {
   /** An event emitter that emit events when input has been focused */
   @Output() active: EventEmitter<void> = new EventEmitter();
   /** An event emitter that emit events when value has been updated */
-  @Output() updated: EventEmitter<Displayable[]> = new EventEmitter();
+  @Output() updated: EventEmitter<Displayable<string>[]> = new EventEmitter();
   /** Data provider of current filtering condition */
   @Input() provider?: QueryDataProvider;
   /** Value of current filtering condition */
-  @Input() value?: Displayable[] = [];
+  @Input() value?: Displayable<unknown>[] = [];
   /** Writable value */
-  private localValue: Displayable[] = [];
+  protected localValue: Displayable<string>[] = [];
   /** An event emitter that receive event from parent when provider changed */
   @Input() providerChange?: Observable<void>;
   /** Selectable options */
-  options: Displayable[] = [];
+  options: Displayable<string>[] = [];
 
   ngOnInit() {
     this.providerChange?.subscribe(() => {
@@ -137,7 +137,9 @@ export class SelectInputComponent implements OnInit {
       .subscribe(options => {
         this.options.push(
           ...options.content.filter(option => {
-            return !this.value?.find(selected => selected.key === option.key);
+            return !this.localValue.find(
+              selected => selected.value === option.value,
+            );
           }),
         );
         this.optionsPage = options.pagination.current;

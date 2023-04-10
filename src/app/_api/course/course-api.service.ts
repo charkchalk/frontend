@@ -14,7 +14,7 @@ export class CourseApiService {
   constructor(private _http: HttpClient) {}
 
   getAll(
-    data: QueryItem[],
+    data: QueryItem<unknown>[],
     options?: CanPaginate,
   ): Observable<StandardResponse<RawCourse[]>> {
     const params = new HttpParams({
@@ -24,7 +24,7 @@ export class CourseApiService {
     const body = data.map(item => ({
       key: item.key,
       method: item.method,
-      value: item.value?.map(value => value.key),
+      value: item.value?.map(value => value.value),
     }));
 
     return this._http.post<StandardResponse<RawCourse[]>>(

@@ -22,9 +22,9 @@ export class CourseComponent implements OnInit {
       this.courseQueryService.clearQueries();
       const providers = this.courseQueryService.getProviders();
       const queryParsers = providers.map(displayable => {
-        const provider = this.courseQueryService.getProvider(displayable.key);
+        const provider = this.courseQueryService.getProvider(displayable.value);
         if (!provider) return;
-        const values = params.getAll(displayable.key);
+        const values = params.getAll(displayable.value);
 
         const queryParsers = values.map(async value => {
           this.courseQueryService.addQuery(await provider.parseQuery(value));

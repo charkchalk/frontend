@@ -40,7 +40,7 @@ export class CourseListComponent implements OnInit {
     current: 1,
   };
   courses: RawCourse[] = [];
-  queries: QueryItem[] = [];
+  queries: QueryItem<unknown>[] = [];
 
   constructor(
     private router: Router,
@@ -51,7 +51,7 @@ export class CourseListComponent implements OnInit {
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     const queries = this.courseQueryService.queries.slice(0, -1);
-    this.queries = JSON.parse(JSON.stringify(queries)) as QueryItem[];
+    this.queries = JSON.parse(JSON.stringify(queries)) as QueryItem<unknown>[];
     this.search(this.pagination.current);
   }
 
