@@ -1,14 +1,15 @@
 import { Injectable } from "@angular/core";
-import { firstValueFrom, map, Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 
 import { TimeRangeApiService } from "../../../../_api/time-range/time-range-api.service";
 import { Displayable } from "../../../../_types/displayable";
+import { WeekTimeRange } from "../../../../_types/week-time";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({
   providedIn: "root",
 })
-export class TimeRangeQueryDataProviderService extends QueryDataProvider<string> {
+export class TimeRangeQueryDataProviderService extends QueryDataProvider<WeekTimeRange> {
   valueSeparator = ",";
   type = QueryDataType.timeRange;
 
@@ -54,24 +55,29 @@ export class TimeRangeQueryDataProviderService extends QueryDataProvider<string>
     return null;
   }
 
-  protected serializeValue(value: Displayable<string>): string {
-    return value.value;
+  protected serializeValue(weekTime: Displayable<WeekTimeRange>): string {
+    return `${weekTime.value.start.day}-${weekTime.value.start.time}~${weekTime.value.end.day}-${weekTime.value.end.time}`;
   }
 
   protected async deserializeValues(
     valueStrings: string,
-  ): Promise<Displayable<string>[]> {
-    const values = valueStrings.split(this.valueSeparator).map(async v => {
-      const dateRange = await firstValueFrom(
-        this.timeRangeApiService.get(v).pipe(map(response => response.content)),
-      );
+  ): Promise<Displayable<WeekTimeRange>[]> {
+    return valueStrings.split(this.valueSeparator).map(v => {
+      const [startDay, startTime, endDay, endTime] = v.split(/[-~]/);
 
       return {
-        value: dateRange.uuid,
-        label: `${dateRange.day} ${dateRange.start_time} ~ ${dateRange.end_time}`,
+        value: {
+          start: {
+            day: Number(startDay),
+            time: startTime,
+          },
+          end: {
+            day: Number(endDay),
+            time: endTime,
+          },
+        },
+        label: `${startDay}-${startTime}~${endDay}-${endTime}`,
       };
     });
-
-    return await Promise.all(values);
   }
 }
