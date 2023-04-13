@@ -18,25 +18,12 @@ export class CourseComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe(params => {
-      this.courseQueryService.clearQueries();
-      const providers = this.courseQueryService.getProviders();
-      const queryParsers = providers.map(displayable => {
-        const provider = this.courseQueryService.getProvider(displayable.value);
-        if (!provider) return;
-        const values = params.getAll(displayable.value);
-
-        const queryParsers = values.map(async value => {
-          this.courseQueryService.addQuery(await provider.parseQuery(value));
-          this.searching = true;
-        });
-        return Promise.all(queryParsers);
-      });
-
-      Promise.all(queryParsers).then(() => {
-        this.loading = false;
-        if (this.searching) this.courseQueryService.removeEmptyQueries();
-      });
+    this.route.queryParamMap.subscribe(async params => {
+      this.loading = true;
+      this.searching = false;
+      const queries = await this.courseQueryService.deserializeQueries(params);
+      this.loading = false;
+      if (queries.length > 1) this.searching = true;
     });
   }
 }

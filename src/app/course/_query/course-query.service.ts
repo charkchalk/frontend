@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { ParamMap } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
 
 import { QueryDataProvider } from "./query-data-provider";
@@ -86,7 +87,7 @@ export class CourseQueryService {
     this.queriesSubject.next(this.queries);
   }
 
-  convertToQueryParams(): { [key: string]: string[] } {
+  serializeQueries(): { [key: string]: string[] } {
     const params: { [key: string]: string[] } = {};
     this.queries.forEach(query => {
       if (!query.key || !query.method || !query.value?.length) return;
@@ -97,5 +98,33 @@ export class CourseQueryService {
     });
 
     return params;
+  }
+
+  async deserializeQueries(
+    paramMap: ParamMap,
+    save = true,
+  ): Promise<QueryItem<unknown>[]> {
+    if (save) this.clearQueries();
+
+    const queries: QueryItem<unknown>[] = [];
+    const queryParsers = this.providers.map(displayable => {
+      const provider = this.getProvider(displayable.value);
+      if (!provider) return;
+      const values = paramMap.getAll(displayable.value);
+
+      const queryParsers = values.map(async value => {
+        queries.push(await provider.parseQuery(value));
+      });
+      return Promise.all(queryParsers);
+    });
+
+    await Promise.all(queryParsers).then(() => this.removeEmptyQueries());
+
+    if (save) {
+      this.queries = queries;
+      this.queriesSubject.next(this.queries);
+    }
+
+    return queries;
   }
 }
