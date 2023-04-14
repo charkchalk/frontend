@@ -4,12 +4,11 @@ import { firstValueFrom, map, Observable } from "rxjs";
 import { OrganizationApiService } from "../../../../_api/organization/organization-api.service";
 import { Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
-import { QueryItem } from "../../query-item";
 
 @Injectable({
   providedIn: "root",
 })
-export class OrganizationQueryDataProviderService implements QueryDataProvider {
+export class OrganizationQueryDataProviderService extends QueryDataProvider<string> {
   valueSeparator = ",";
   type = QueryDataType.select;
 
@@ -24,7 +23,9 @@ export class OrganizationQueryDataProviderService implements QueryDataProvider {
     },
   ];
 
-  constructor(private organizationApiService: OrganizationApiService) {}
+  constructor(private organizationApiService: OrganizationApiService) {
+    super();
+  }
 
   value = "organization";
   label = "開課單位";
@@ -65,36 +66,26 @@ export class OrganizationQueryDataProviderService implements QueryDataProvider {
     return null;
   }
 
-  stringifyQuery(query: QueryItem<string>): string {
-    if (!query.method || !query.value?.length) {
-      throw new Error("Invalid query.");
-    }
-
-    return (
-      query.method +
-      ":" +
-      query.value.map(v => v.value).join(this.valueSeparator)
-    );
+  protected serializeValue(value: Displayable<string>): string {
+    return value.value;
   }
 
-  async parseQuery(query: string): Promise<QueryItem<string>> {
-    const [method, ...values] = query.split(":");
-    const value = values
-      .join(":")
-      .split(this.valueSeparator)
-      .map(async v => {
-        const host = await firstValueFrom(
-          this.organizationApiService
-            .get(v)
-            .pipe(map(response => response.content)),
-        );
+  protected async deserializeValues(
+    valueStrings: string,
+  ): Promise<Displayable<string>[]> {
+    const values = valueStrings.split(this.valueSeparator).map(async v => {
+      const host = await firstValueFrom(
+        this.organizationApiService
+          .get(v)
+          .pipe(map(response => response.content)),
+      );
 
-        return {
-          value: host.uuid,
-          label: host.name,
-        };
-      });
+      return {
+        value: host.uuid,
+        label: host.name,
+      };
+    });
 
-    return { key: this.value, method, value: await Promise.all(value) };
+    return await Promise.all(values);
   }
 }

@@ -4,12 +4,11 @@ import { firstValueFrom, map, Observable } from "rxjs";
 import { DateRangeApiService } from "../../../../_api/date-range/date-range-api.service";
 import { Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
-import { QueryItem } from "../../query-item";
 
 @Injectable({
   providedIn: "root",
 })
-export class DateRangeQueryDataProviderService implements QueryDataProvider {
+export class DateRangeQueryDataProviderService extends QueryDataProvider<string> {
   valueSeparator = ",";
   type = QueryDataType.select;
 
@@ -24,7 +23,9 @@ export class DateRangeQueryDataProviderService implements QueryDataProvider {
     },
   ];
 
-  constructor(private dateRangeApiService: DateRangeApiService) {}
+  constructor(private dateRangeApiService: DateRangeApiService) {
+    super();
+  }
 
   value = "dateRange";
   label = "學期別或授課期間";
@@ -53,36 +54,24 @@ export class DateRangeQueryDataProviderService implements QueryDataProvider {
     return null;
   }
 
-  stringifyQuery(query: QueryItem<string>): string {
-    if (!query.method || !query.value?.length) {
-      throw new Error("Invalid query.");
-    }
-
-    return (
-      query.method +
-      ":" +
-      query.value.map(v => v.value).join(this.valueSeparator)
-    );
+  protected serializeValue(value: Displayable<string>): string {
+    return value.value;
   }
 
-  async parseQuery(query: string): Promise<QueryItem<string>> {
-    const [method, ...values] = query.split(":");
-    const value = values
-      .join(":")
-      .split(this.valueSeparator)
-      .map(async v => {
-        const dateRange = await firstValueFrom(
-          this.dateRangeApiService
-            .get(v)
-            .pipe(map(response => response.content)),
-        );
+  protected async deserializeValues(
+    valueStrings: string,
+  ): Promise<Displayable<string>[]> {
+    const values = valueStrings.split(this.valueSeparator).map(async v => {
+      const dateRange = await firstValueFrom(
+        this.dateRangeApiService.get(v).pipe(map(response => response.content)),
+      );
 
-        return {
-          value: dateRange.uuid,
-          label: `${dateRange.name} (${dateRange.description}) [${dateRange.start} ~ ${dateRange.end}]`,
-        };
-      });
+      return {
+        value: dateRange.uuid,
+        label: `${dateRange.name} (${dateRange.description}) [${dateRange.start} ~ ${dateRange.end}]`,
+      };
+    });
 
-    return { key: this.value, method, value: await Promise.all(value) };
+    return await Promise.all(values);
   }
 }
