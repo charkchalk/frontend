@@ -94,7 +94,7 @@ export class CourseQueryService {
       if (!params[query.key]) params[query.key] = [];
       const provider = this.getProvider(query.key);
       if (!provider) return;
-      params[query.key].push(provider.stringifyQuery(query));
+      params[query.key].push(provider.serializeQuery(query));
     });
 
     return params;
@@ -113,7 +113,7 @@ export class CourseQueryService {
       const values = paramMap.getAll(displayable.value);
 
       const queryParsers = values.map(async value => {
-        queries.push(await provider.parseQuery(value));
+        queries.push(await provider.deserializeQuery(value));
       });
       return Promise.all(queryParsers);
     });

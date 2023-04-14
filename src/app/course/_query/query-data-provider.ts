@@ -38,7 +38,7 @@ export abstract class QueryDataProvider<T = unknown>
    * To stringify the query to a string.
    * @param query The query to be stringify
    */
-  stringifyQuery(query: QueryItem<T>): string {
+  serializeQuery(query: QueryItem<T>): string {
     if (!query.method || !query.value?.length) {
       throw new Error("Invalid query.");
     }
@@ -56,7 +56,7 @@ export abstract class QueryDataProvider<T = unknown>
    * To parse the query from a string.
    * @param query The query to be parse
    */
-  async parseQuery(query: string): Promise<QueryItem<T>> {
+  async deserializeQuery(query: string): Promise<QueryItem<T>> {
     const [method, ...values] = query.split(":");
     const value = await this.deserializeValues(values.join(":"));
 
