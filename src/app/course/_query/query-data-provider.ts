@@ -35,6 +35,25 @@ export abstract class QueryDataProvider<T = unknown>
   abstract getValidationResult(value: string): string | null;
 
   /**
+   * To merge a query into serialized query string.
+   * @param serializedQuery The serialized query string
+   * @param query The query to be serialize
+   */
+  appendSerializedQuery(serializedQuery: string, query: QueryItem<T>): string {
+    if (!query.value || !query.value.length) return serializedQuery;
+    const [method, ...remains] = serializedQuery.split(":");
+    if (method !== query.method) throw new Error("Queries does not match!");
+
+    const values = remains.join(":").split(this.valueSeparator);
+    for (const value of query.value) {
+      const valueString = this.serializeValue(value);
+      if (!values.includes(valueString)) values.push(valueString);
+    }
+
+    return method + ":" + values.join(this.valueSeparator);
+  }
+
+  /**
    * To stringify the query to a string.
    * @param query The query to be stringify
    */
