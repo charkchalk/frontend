@@ -112,7 +112,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_DEPLOY_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: charkchalk-dev-pr-${{ github.event.number }}
+          projectName: charkchalk-pr-${{ github.event.number }}
           directory: dist/charkchalk-frontend
           branch: ${{ steps.sha.outputs.substring }}
 
