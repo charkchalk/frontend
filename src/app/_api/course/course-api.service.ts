@@ -21,15 +21,31 @@ export class CourseApiService {
       fromObject: options as Record<string, string>,
     });
 
-    const body = data.map(item => ({
-      key: item.key,
-      method: item.method,
-      value: item.value?.map(value => value.value),
-    }));
+    const conditions: Condition<unknown>[] = [];
+
+    for (const item of data) {
+      if (!item.key || !item.method || !item.value) continue;
+
+      let existingCondition = conditions.find(
+        condition =>
+          condition.key === item.key && condition.method === item.method,
+      );
+
+      if (!existingCondition) {
+        existingCondition = {
+          key: item.key,
+          method: item.method,
+          value: [],
+        };
+        conditions.push(existingCondition);
+      }
+
+      existingCondition.value.push(...item.value.map(value => value.value));
+    }
 
     return this._http.post<StandardResponse<RawCourse[]>>(
       this._uri + "/search",
-      body,
+      conditions,
       {
         responseType: "json",
         params: params,
@@ -39,4 +55,10 @@ export class CourseApiService {
       },
     );
   }
+}
+
+interface Condition<T> {
+  key: string;
+  method: string;
+  value: T[];
 }

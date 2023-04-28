@@ -94,7 +94,20 @@ export class CourseQueryService {
       if (!params[query.key]) params[query.key] = [];
       const provider = this.getProvider(query.key);
       if (!provider) return;
-      params[query.key].push(provider.serializeQuery(query));
+
+      const existingIndex = params[query.key].findIndex(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        value => value.startsWith(query.method!),
+      );
+
+      if (existingIndex > -1) {
+        params[query.key][existingIndex] = provider.appendSerializedQuery(
+          params[query.key][existingIndex],
+          query,
+        );
+      } else {
+        params[query.key].push(provider.serializeQuery(query));
+      }
     });
 
     return params;
