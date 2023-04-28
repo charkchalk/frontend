@@ -43,26 +43,28 @@ export class CourseQueryService {
   }
 
   getProvider(key: string): QueryDataProvider | undefined {
-    return this.providers.find(queryable => queryable.key === key);
+    return this.providers.find(queryable => queryable.value === key);
   }
 
-  queries: QueryItem[] = [{}];
-  private queriesSubject = new BehaviorSubject<QueryItem[]>(this.queries);
+  queries: QueryItem<unknown>[] = [{}];
+  private queriesSubject = new BehaviorSubject<QueryItem<unknown>[]>(
+    this.queries,
+  );
 
-  getQueries(): Observable<QueryItem[]> {
+  getQueries(): Observable<QueryItem<unknown>[]> {
     return this.queriesSubject.asObservable();
   }
 
-  getQuery(index: number): QueryItem {
+  getQuery(index: number): QueryItem<unknown> {
     return this.queriesSubject.value[index];
   }
 
-  addQuery(query: QueryItem = {}) {
+  addQuery(query: QueryItem<unknown> = {}) {
     this.queries.push(query);
     this.queriesSubject.next(this.queries);
   }
 
-  setQuery(index: number, query: QueryItem) {
+  setQuery(index: number, query: QueryItem<unknown>) {
     this.queries[index] = query;
     this.queriesSubject.next(this.queries);
   }
@@ -73,7 +75,7 @@ export class CourseQueryService {
   }
 
   clearQueries() {
-    this.queries = [{}];
+    this.queries = [];
     this.queriesSubject.next(this.queries);
   }
 

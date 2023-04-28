@@ -17,21 +17,21 @@ export class CourseSearchHelperComponent implements OnInit {
   /** Is this query deletable or not, currently only last query can be delete */
   @Input() deletable = true;
   /** All selectable DataProviders in Displayable format for users to select */
-  providers: Displayable[] = [];
+  providers: Displayable<string>[] = [];
   /** QueryItem that saves user inputted data */
-  query: QueryItem = {};
+  query: QueryItem<unknown> = {};
 
   /** Current filtering provider */
   provider?: QueryDataProvider;
   /** All selectable compare methods, will be undefined or null when no provider */
-  methods?: Displayable[];
+  methods?: Displayable<string>[];
 
   constructor(private courseQueryService: CourseQueryService) {}
 
   ngOnInit() {
     this.providers = this.courseQueryService
       .getProviders()
-      .map(provider => ({ key: provider.key, label: provider.label }));
+      .map(provider => ({ value: provider.value, label: provider.label }));
     this.query = this.courseQueryService.getQuery(this.index);
     if (this.query.key) this.setProvider(this.query.key, false);
   }
@@ -67,7 +67,7 @@ export class CourseSearchHelperComponent implements OnInit {
    * Update value after child component emit value updated event
    * @param value emitted value from input sub component
    */
-  valueUpdated(value: Displayable[]) {
+  valueUpdated(value: Displayable<unknown>[]) {
     this.query.value = value;
     this.notifyQueryUpdate();
   }

@@ -12,25 +12,25 @@ export class KeywordQueryDataProviderService implements QueryDataProvider {
   valueSeparator = " ";
   type = QueryDataType.text;
 
-  private methods: Displayable[] = [
+  private methods: Displayable<string>[] = [
     {
-      key: "=",
+      value: "=",
       label: "包含",
     },
     {
-      key: "!=",
+      value: "!=",
       label: "不包含",
     },
   ];
 
-  key = "keyword";
+  value = "keyword";
   label = "關鍵字";
 
-  getMethods(): Displayable[] {
+  getMethods(): Displayable<string>[] {
     return this.methods;
   }
 
-  getOptions(): Observable<StandardResponse<Displayable[]>> {
+  getOptions(): Observable<StandardResponse<Displayable<string>[]>> {
     throw new Error("Method not supported.");
   }
 
@@ -38,23 +38,25 @@ export class KeywordQueryDataProviderService implements QueryDataProvider {
     return null;
   }
 
-  stringifyQuery(query: QueryItem): string {
+  stringifyQuery(query: QueryItem<string>): string {
     if (!query.method || !query.value?.length) {
       throw new Error("Invalid query.");
     }
 
     return (
-      query.method + ":" + query.value.map(v => v.key).join(this.valueSeparator)
+      query.method +
+      ":" +
+      query.value.map(v => v.value).join(this.valueSeparator)
     );
   }
 
-  async parseQuery(query: string): Promise<QueryItem> {
+  async parseQuery(query: string): Promise<QueryItem<string>> {
     const [method, ...values] = query.split(":");
     const value = values
       .join(":")
       .split(this.valueSeparator)
-      .map(v => ({ key: v, label: v }));
+      .map(v => ({ value: v, label: v }));
 
-    return { key: this.key, method, value };
+    return { key: this.value, method, value };
   }
 }

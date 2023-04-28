@@ -13,35 +13,35 @@ export class HostQueryDataProviderService implements QueryDataProvider {
   valueSeparator = ",";
   type = QueryDataType.select;
 
-  private methods: Displayable[] = [
+  private methods: Displayable<string>[] = [
     {
-      key: "=",
+      value: "=",
       label: "等於",
     },
     {
-      key: "!=",
+      value: "!=",
       label: "不等於",
     },
   ];
 
   constructor(private personApiService: PersonApiService) {}
 
-  key = "host";
+  value = "host";
   label = "授課教師";
 
-  getMethods(): Displayable[] {
+  getMethods(): Displayable<string>[] {
     return this.methods;
   }
 
   getOptions(
     options: CanPaginate & { keyword: string },
-  ): Observable<StandardResponse<Displayable[]>> {
+  ): Observable<StandardResponse<Displayable<string>[]>> {
     return this.personApiService.getAll(options).pipe(
       map(response => {
         return {
           pagination: response.pagination,
           content: response.content.map(host => ({
-            key: host.uuid,
+            value: host.uuid,
             label: host.name,
           })),
         };
@@ -53,17 +53,19 @@ export class HostQueryDataProviderService implements QueryDataProvider {
     return null;
   }
 
-  stringifyQuery(query: QueryItem): string {
+  stringifyQuery(query: QueryItem<string>): string {
     if (!query.method || !query.value?.length) {
       throw new Error("Invalid query.");
     }
 
     return (
-      query.method + ":" + query.value.map(v => v.key).join(this.valueSeparator)
+      query.method +
+      ":" +
+      query.value.map(v => v.value).join(this.valueSeparator)
     );
   }
 
-  async parseQuery(query: string): Promise<QueryItem> {
+  async parseQuery(query: string): Promise<QueryItem<string>> {
     const [method, ...values] = query.split(":");
     const value = values
       .join(":")
@@ -74,11 +76,11 @@ export class HostQueryDataProviderService implements QueryDataProvider {
         );
 
         return {
-          key: host.uuid,
+          value: host.uuid,
           label: host.name,
         };
       });
 
-    return { key: this.key, method, value: await Promise.all(value) };
+    return { key: this.value, method, value: await Promise.all(value) };
   }
 }

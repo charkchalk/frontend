@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { Displayable } from "../../_types/displayable";
 import { QueryItem } from "./query-item";
 
-export interface QueryDataProvider extends Displayable {
+export interface QueryDataProvider<T = unknown> extends Displayable<string> {
   /** Separator for values */
   valueSeparator: string;
 
@@ -13,7 +13,7 @@ export interface QueryDataProvider extends Displayable {
   /**
    * To get available comparison methods that could be select by user.
    */
-  getMethods(): Displayable[];
+  getMethods(): Displayable<string>[];
 
   /**
    * To get the options for users to select.
@@ -21,7 +21,7 @@ export interface QueryDataProvider extends Displayable {
    */
   getOptions(
     options?: CanPaginate | Record<string, unknown>,
-  ): Observable<StandardResponse<Displayable[]>>;
+  ): Observable<StandardResponse<Displayable<string>[]>>;
 
   /**
    * To validate the value is a valid value or not, only for text type.
@@ -33,16 +33,17 @@ export interface QueryDataProvider extends Displayable {
    * To stringify the query to a string.
    * @param query The query to be stringify
    */
-  stringifyQuery(query: QueryItem): string;
+  stringifyQuery(query: QueryItem<T>): string;
 
   /**
    * To parse the query from a string.
    * @param query The query to be parse
    */
-  parseQuery(query: string): Promise<QueryItem>;
+  parseQuery(query: string): Promise<QueryItem<T>>;
 }
 
 export enum QueryDataType {
   text = "text",
   select = "select",
+  timeRange = "time-range",
 }

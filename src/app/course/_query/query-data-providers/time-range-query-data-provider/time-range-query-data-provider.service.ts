@@ -9,39 +9,41 @@ import { QueryItem } from "../../query-item";
 @Injectable({
   providedIn: "root",
 })
-export class TimeRangeQueryDataProviderService implements QueryDataProvider {
+export class TimeRangeQueryDataProviderService
+  implements QueryDataProvider<string>
+{
   valueSeparator = ",";
   type = QueryDataType.select;
 
-  private methods: Displayable[] = [
+  private methods: Displayable<string>[] = [
     {
-      key: "=",
+      value: "=",
       label: "包含",
     },
     {
-      key: "!=",
+      value: "!=",
       label: "不包含",
     },
   ];
 
   constructor(private timeRangeApiService: TimeRangeApiService) {}
 
-  key = "timeRange";
+  value = "timeRange";
   label = "上課時間";
 
-  getMethods(): Displayable[] {
+  getMethods(): Displayable<string>[] {
     return this.methods;
   }
 
   getOptions(
     options: CanPaginate & { keyword: string },
-  ): Observable<StandardResponse<Displayable[]>> {
+  ): Observable<StandardResponse<Displayable<string>[]>> {
     return this.timeRangeApiService.getAll(options).pipe(
       map(response => {
         return {
           pagination: response.pagination,
           content: response.content.map(dateRange => ({
-            key: dateRange.uuid,
+            value: dateRange.uuid,
             label: `${dateRange.day} ${dateRange.start_time} ~ ${dateRange.end_time}`,
           })),
         };
@@ -53,17 +55,19 @@ export class TimeRangeQueryDataProviderService implements QueryDataProvider {
     return null;
   }
 
-  stringifyQuery(query: QueryItem): string {
+  stringifyQuery(query: QueryItem<string>): string {
     if (!query.method || !query.value?.length) {
       throw new Error("Invalid query.");
     }
 
     return (
-      query.method + ":" + query.value.map(v => v.key).join(this.valueSeparator)
+      query.method +
+      ":" +
+      query.value.map(v => v.value).join(this.valueSeparator)
     );
   }
 
-  async parseQuery(query: string): Promise<QueryItem> {
+  async parseQuery(query: string): Promise<QueryItem<string>> {
     const [method, ...values] = query.split(":");
     const value = values
       .join(":")
@@ -76,11 +80,11 @@ export class TimeRangeQueryDataProviderService implements QueryDataProvider {
         );
 
         return {
-          key: dateRange.uuid,
+          value: dateRange.uuid,
           label: `${dateRange.day} ${dateRange.start_time} ~ ${dateRange.end_time}`,
         };
       });
 
-    return { key: this.key, method, value: await Promise.all(value) };
+    return { key: this.value, method, value: await Promise.all(value) };
   }
 }

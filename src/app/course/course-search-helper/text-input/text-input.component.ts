@@ -22,13 +22,13 @@ export class TextInputComponent implements OnInit {
   /** An event emitter that emit events when input has been focused */
   @Output() active: EventEmitter<void> = new EventEmitter();
   /** An event emitter that emit events when value has been updated */
-  @Output() updated: EventEmitter<Displayable[]> = new EventEmitter();
+  @Output() updated: EventEmitter<Displayable<string>[]> = new EventEmitter();
   /** Data provider of current filtering condition */
   @Input() provider?: QueryDataProvider;
   /** Value of current filtering condition */
-  @Input() value?: Displayable[] = [];
+  @Input() value?: Displayable<unknown>[] = [];
   /** Writable value */
-  private localValue: Displayable[] = [];
+  protected localValue: Displayable<string>[] = [];
 
   ngOnInit(): void {
     this.inputControl.valueChanges.subscribe(() => this.setInputError(null));
@@ -71,7 +71,7 @@ export class TextInputComponent implements OnInit {
 
     if (!this.localValue) this.localValue = [];
     this.localValue.push({
-      key: event.value.trim(),
+      value: event.value.trim(),
       label: event.value.trim(),
     });
     this.inputControl.setValue("");

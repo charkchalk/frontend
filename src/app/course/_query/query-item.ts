@@ -1,7 +1,7 @@
 import { Displayable } from "../../_types/displayable";
 
-export interface QueryItem {
+export interface QueryItem<T> {
   key?: string;
   method?: string;
-  value?: Displayable[];
+  value?: Displayable<T>[];
 }
