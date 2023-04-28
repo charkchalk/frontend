@@ -4,12 +4,11 @@ import { firstValueFrom, map, Observable } from "rxjs";
 import { PersonApiService } from "../../../../_api/person/person-api.service";
 import { Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
-import { QueryItem } from "../../query-item";
 
 @Injectable({
   providedIn: "root",
 })
-export class HostQueryDataProviderService implements QueryDataProvider {
+export class HostQueryDataProviderService extends QueryDataProvider {
   valueSeparator = ",";
   type = QueryDataType.select;
 
@@ -24,7 +23,9 @@ export class HostQueryDataProviderService implements QueryDataProvider {
     },
   ];
 
-  constructor(private personApiService: PersonApiService) {}
+  constructor(private personApiService: PersonApiService) {
+    super();
+  }
 
   value = "host";
   label = "授課教師";
@@ -53,34 +54,24 @@ export class HostQueryDataProviderService implements QueryDataProvider {
     return null;
   }
 
-  stringifyQuery(query: QueryItem<string>): string {
-    if (!query.method || !query.value?.length) {
-      throw new Error("Invalid query.");
-    }
-
-    return (
-      query.method +
-      ":" +
-      query.value.map(v => v.value).join(this.valueSeparator)
-    );
+  protected serializeValue(value: Displayable<string>): string {
+    return value.value;
   }
 
-  async parseQuery(query: string): Promise<QueryItem<string>> {
-    const [method, ...values] = query.split(":");
-    const value = values
-      .join(":")
-      .split(this.valueSeparator)
-      .map(async v => {
-        const host = await firstValueFrom(
-          this.personApiService.get(v).pipe(map(response => response.content)),
-        );
+  protected async deserializeValues(
+    valueStrings: string,
+  ): Promise<Displayable<string>[]> {
+    const values = valueStrings.split(this.valueSeparator).map(async v => {
+      const host = await firstValueFrom(
+        this.personApiService.get(v).pipe(map(response => response.content)),
+      );
 
-        return {
-          value: host.uuid,
-          label: host.name,
-        };
-      });
+      return {
+        value: host.uuid,
+        label: host.name,
+      };
+    });
 
-    return { key: this.value, method, value: await Promise.all(value) };
+    return await Promise.all(values);
   }
 }

@@ -4,14 +4,11 @@ import { firstValueFrom, map, Observable } from "rxjs";
 import { TimeRangeApiService } from "../../../../_api/time-range/time-range-api.service";
 import { Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
-import { QueryItem } from "../../query-item";
 
 @Injectable({
   providedIn: "root",
 })
-export class TimeRangeQueryDataProviderService
-  implements QueryDataProvider<string>
-{
+export class TimeRangeQueryDataProviderService extends QueryDataProvider<string> {
   valueSeparator = ",";
   type = QueryDataType.select;
 
@@ -26,7 +23,9 @@ export class TimeRangeQueryDataProviderService
     },
   ];
 
-  constructor(private timeRangeApiService: TimeRangeApiService) {}
+  constructor(private timeRangeApiService: TimeRangeApiService) {
+    super();
+  }
 
   value = "timeRange";
   label = "上課時間";
@@ -55,36 +54,24 @@ export class TimeRangeQueryDataProviderService
     return null;
   }
 
-  stringifyQuery(query: QueryItem<string>): string {
-    if (!query.method || !query.value?.length) {
-      throw new Error("Invalid query.");
-    }
-
-    return (
-      query.method +
-      ":" +
-      query.value.map(v => v.value).join(this.valueSeparator)
-    );
+  protected serializeValue(value: Displayable<string>): string {
+    return value.value;
   }
 
-  async parseQuery(query: string): Promise<QueryItem<string>> {
-    const [method, ...values] = query.split(":");
-    const value = values
-      .join(":")
-      .split(this.valueSeparator)
-      .map(async v => {
-        const dateRange = await firstValueFrom(
-          this.timeRangeApiService
-            .get(v)
-            .pipe(map(response => response.content)),
-        );
+  protected async deserializeValues(
+    valueStrings: string,
+  ): Promise<Displayable<string>[]> {
+    const values = valueStrings.split(this.valueSeparator).map(async v => {
+      const dateRange = await firstValueFrom(
+        this.timeRangeApiService.get(v).pipe(map(response => response.content)),
+      );
 
-        return {
-          value: dateRange.uuid,
-          label: `${dateRange.day} ${dateRange.start_time} ~ ${dateRange.end_time}`,
-        };
-      });
+      return {
+        value: dateRange.uuid,
+        label: `${dateRange.day} ${dateRange.start_time} ~ ${dateRange.end_time}`,
+      };
+    });
 
-    return { key: this.value, method, value: await Promise.all(value) };
+    return await Promise.all(values);
   }
 }

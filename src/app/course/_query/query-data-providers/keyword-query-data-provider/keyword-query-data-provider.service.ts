@@ -3,12 +3,11 @@ import { Observable } from "rxjs";
 
 import { Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
-import { QueryItem } from "../../query-item";
 
 @Injectable({
   providedIn: "root",
 })
-export class KeywordQueryDataProviderService implements QueryDataProvider {
+export class KeywordQueryDataProviderService extends QueryDataProvider<string> {
   valueSeparator = " ";
   type = QueryDataType.text;
 
@@ -38,25 +37,17 @@ export class KeywordQueryDataProviderService implements QueryDataProvider {
     return null;
   }
 
-  stringifyQuery(query: QueryItem<string>): string {
-    if (!query.method || !query.value?.length) {
-      throw new Error("Invalid query.");
-    }
-
-    return (
-      query.method +
-      ":" +
-      query.value.map(v => v.value).join(this.valueSeparator)
-    );
+  protected serializeValue(value: Displayable<string>): string {
+    return value.value;
   }
 
-  async parseQuery(query: string): Promise<QueryItem<string>> {
-    const [method, ...values] = query.split(":");
-    const value = values
-      .join(":")
+  protected async deserializeValues(
+    valueStrings: string,
+  ): Promise<Displayable<string>[]> {
+    const values = valueStrings
       .split(this.valueSeparator)
       .map(v => ({ value: v, label: v }));
 
-    return { key: this.value, method, value };
+    return values;
   }
 }
