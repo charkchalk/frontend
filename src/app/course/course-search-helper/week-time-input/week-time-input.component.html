@@ -1,0 +1,23 @@
+<mat-form-field appearance="fill">
+  <mat-label>{{ weekLabel }}</mat-label>
+  <mat-select [(ngModel)]="localValue.day">
+    <mat-option *ngFor="let day of weekdays" [value]="day.value">
+      {{ day.label }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field class="time-picker" appearance="fill" (click)="picker.open()">
+  <mat-label>{{ timeLabel }}</mat-label>
+  <input
+    matInput
+    [ngxMatTimepicker]="picker"
+    [format]="24"
+    [(ngModel)]="localValue.time"
+  />
+  <ngx-mat-timepicker
+    #picker
+    (timeSet)="onTimeSet($event)"
+  ></ngx-mat-timepicker>
+  <mat-icon matSuffix>access_time</mat-icon>
+</mat-form-field>

@@ -9,16 +9,21 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatSelectModule } from "@angular/material/select";
+import { NgxMatTimepickerModule } from "ngx-mat-timepicker";
 
 import { CourseSearchHelperComponent } from "./course-search-helper.component";
 import { SelectInputComponent } from "./select-input/select-input.component";
 import { TextInputComponent } from "./text-input/text-input.component";
+import { WeekTimeInputComponent } from "./week-time-input/week-time-input.component";
+import { WeekTimeRangeInputComponent } from "./week-time-range-input/week-time-range-input.component";
 
 @NgModule({
   declarations: [
     CourseSearchHelperComponent,
     TextInputComponent,
     SelectInputComponent,
+    WeekTimeInputComponent,
+    WeekTimeRangeInputComponent,
   ],
   imports: [
     CommonModule,
@@ -32,6 +37,7 @@ import { TextInputComponent } from "./text-input/text-input.component";
     MatProgressBarModule,
     MatInputModule,
     MatChipsModule,
+    NgxMatTimepickerModule,
   ],
   exports: [CourseSearchHelperComponent],
 })
