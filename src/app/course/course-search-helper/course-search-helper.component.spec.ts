@@ -9,6 +9,8 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { ButtonModule } from "primeng/button";
+import { DropdownModule } from "primeng/dropdown";
 
 import { CourseQueryService } from "../_query/course-query.service";
 import { CourseSearchHelperComponent } from "./course-search-helper.component";
@@ -39,6 +41,8 @@ describe("CourseSearchHelperComponent", () => {
         MatAutocompleteModule,
         MatInputModule,
         MatChipsModule,
+        ButtonModule,
+        DropdownModule,
       ],
       providers: [
         { provide: CourseQueryService, useValue: courseQueryServiceSpy },

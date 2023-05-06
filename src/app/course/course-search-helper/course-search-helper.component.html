@@ -1,64 +1,58 @@
-<div class="flex flex-col items-center lg:flex-row lg:space-x-2">
-  <mat-form-field>
-    <mat-label>過濾項</mat-label>
-    <mat-select [value]="query.key" (valueChange)="setProvider($event)">
-      <mat-option *ngFor="let provider of providers" [value]="provider.value">
-        {{ provider.label }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<span class="p-fluid p-float-label">
+  <p-dropdown
+    inputId="filter-key"
+    [options]="providers"
+    [(ngModel)]="query.key"
+    optionLabel="label"
+    optionValue="value"
+    placeholder="選擇過濾項"
+    (onChange)="setProvider($event.value)"
+    [required]="true"
+  ></p-dropdown>
+  <label for="filter-key">過濾項</label>
+</span>
 
-  <mat-form-field hideRequiredMarker>
-    <mat-label>比對方式</mat-label>
-    <mat-select
-      #methodSelect
-      [(ngModel)]="query.method"
-      [disabled]="!provider"
-      (valueChange)="notifyQueryUpdate()"
-      required
-    >
-      <mat-option *ngFor="let method of methods" [value]="method.value">
-        {{ method.label }}
-      </mat-option>
-    </mat-select>
-    <mat-error>請選擇比對方式</mat-error>
-  </mat-form-field>
+<span class="p-fluid p-float-label">
+  <p-dropdown
+    inputId="filter-method"
+    [options]="methods"
+    [(ngModel)]="query.method"
+    optionLabel="label"
+    optionValue="value"
+    placeholder="選擇比對方式"
+    (onChange)="notifyQueryUpdate()"
+    [required]="true"
+    [disabled]="!provider"
+  ></p-dropdown>
+  <label for="filter-method">比對方式</label>
+</span>
 
+<ng-container [ngSwitch]="provider?.type">
   <app-text-input
-    class="grow"
-    *ngIf="provider?.type === 'text'"
+    *ngSwitchDefault
     [provider]="provider"
     [value]="query.value"
-    (active)="methodSelect._onBlur()"
     (updated)="valueUpdated($event)"
   ></app-text-input>
   <app-select-input
-    class="grow"
-    *ngIf="provider?.type === 'select'"
+    *ngSwitchCase="'select'"
     [provider]="provider"
     [providerChange]="providerChange.asObservable()"
     [value]="query.value"
-    (active)="methodSelect._onBlur()"
     (updated)="valueUpdated($event)"
   ></app-select-input>
   <app-week-time-range-input
-    class="grow"
-    *ngIf="provider?.type === 'time-range'"
+    *ngSwitchCase="'time-range'"
     [provider]="provider"
     [providerChange]="providerChange.asObservable()"
     [value]="query.value"
-    (active)="methodSelect._onBlur()"
     (updated)="valueUpdated($event)"
   ></app-week-time-range-input>
+</ng-container>
 
-  <button
-    mat-icon-button
-    color="warn"
-    class="place-self-center lg:place-self-auto"
-    aria-label="刪除條件"
-    (click)="removeQuery()"
-    [disabled]="!deletable"
-  >
-    <mat-icon>delete_forever</mat-icon>
-  </button>
-</div>
+<p-button
+  icon="pi pi-times"
+  styleClass="p-button-danger"
+  (click)="removeQuery()"
+  [disabled]="!deletable"
+></p-button>

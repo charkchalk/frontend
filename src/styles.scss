@@ -30,3 +30,7 @@ body {
     max-width: $xl;
   }
 }
+
+.p-float-label {
+  margin-top: 1.75rem; // preserve for floating label
+}

@@ -24,7 +24,7 @@ export class CourseSearchHelperComponent implements OnInit {
   /** Current filtering provider */
   provider?: QueryDataProvider;
   /** All selectable compare methods, will be undefined or null when no provider */
-  methods?: Displayable<string>[];
+  methods: Displayable<string>[] = [];
 
   constructor(private courseQueryService: CourseQueryService) {}
 
@@ -49,7 +49,7 @@ export class CourseSearchHelperComponent implements OnInit {
       this.notifyQueryUpdate();
     }
     this.provider = this.courseQueryService.getProvider(providerKey);
-    this.methods = this.provider?.getMethods();
+    this.methods = this.provider?.getMethods() || [];
     this.providerChange.next();
   }
 

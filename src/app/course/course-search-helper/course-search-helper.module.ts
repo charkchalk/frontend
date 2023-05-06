@@ -10,6 +10,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatSelectModule } from "@angular/material/select";
 import { NgxMatTimepickerModule } from "ngx-mat-timepicker";
+import { ButtonModule } from "primeng/button";
+import { DropdownModule } from "primeng/dropdown";
 
 import { CourseSearchHelperComponent } from "./course-search-helper.component";
 import { SelectInputComponent } from "./select-input/select-input.component";
@@ -38,6 +40,8 @@ import { WeekTimeRangeInputComponent } from "./week-time-range-input/week-time-r
     MatInputModule,
     MatChipsModule,
     NgxMatTimepickerModule,
+    ButtonModule,
+    DropdownModule,
   ],
   exports: [CourseSearchHelperComponent],
 })
