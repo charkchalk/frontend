@@ -9,7 +9,7 @@ import { QueryItem } from "../_query/query-item";
 @Component({
   selector: "app-course-search-helper",
   templateUrl: "./course-search-helper.component.html",
-  styleUrls: ["./course-search-helper.component.css"],
+  styleUrls: ["./course-search-helper.component.scss"],
 })
 export class CourseSearchHelperComponent implements OnInit {
   /** Index of current query in queries list */

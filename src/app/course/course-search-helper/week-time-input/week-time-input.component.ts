@@ -6,7 +6,7 @@ import { WeekTime } from "../../../_types/week-time";
 @Component({
   selector: "app-week-time-input",
   templateUrl: "./week-time-input.component.html",
-  styleUrls: ["./week-time-input.component.css"],
+  styleUrls: ["./week-time-input.component.scss"],
 })
 export class WeekTimeInputComponent implements OnInit {
   @Input() weekLabel = "星期";

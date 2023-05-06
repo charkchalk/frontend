@@ -30,7 +30,7 @@ export class MyCustomPaginatorIntl implements MatPaginatorIntl {
 @Component({
   selector: "app-course-list",
   templateUrl: "./course-list.component.html",
-  styleUrls: ["./course-list.component.css"],
+  styleUrls: ["./course-list.component.scss"],
   providers: [{ provide: MatPaginatorIntl, useClass: MyCustomPaginatorIntl }],
 })
 export class CourseListComponent implements OnInit {

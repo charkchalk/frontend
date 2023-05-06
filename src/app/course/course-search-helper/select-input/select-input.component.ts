@@ -17,7 +17,7 @@ import { QueryDataProvider } from "../../_query/query-data-provider";
 @Component({
   selector: "app-select-input",
   templateUrl: "./select-input.component.html",
-  styleUrls: ["./select-input.component.css"],
+  styleUrls: ["./select-input.component.scss"],
 })
 export class SelectInputComponent implements OnInit {
   /** An event emitter that emit events when input has been focused */

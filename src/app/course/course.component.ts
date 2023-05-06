@@ -6,7 +6,7 @@ import { CourseQueryService } from "./_query/course-query.service";
 @Component({
   selector: "app-course",
   templateUrl: "./course.component.html",
-  styleUrls: ["./course.component.css"],
+  styleUrls: ["./course.component.scss"],
 })
 export class CourseComponent implements OnInit {
   loading = true;

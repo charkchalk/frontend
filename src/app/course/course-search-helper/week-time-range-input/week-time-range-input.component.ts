@@ -8,7 +8,7 @@ import { QueryDataProvider } from "../../_query/query-data-provider";
 @Component({
   selector: "app-week-time-range-input",
   templateUrl: "./week-time-range-input.component.html",
-  styleUrls: ["./week-time-range-input.component.css"],
+  styleUrls: ["./week-time-range-input.component.scss"],
 })
 export class WeekTimeRangeInputComponent implements OnInit {
   /** An event emitter that emit events when input has been focused */
