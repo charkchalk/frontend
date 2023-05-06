@@ -1,19 +1,14 @@
-<div class="container space-y-4 lg:space-y-0">
-  <app-course-search-helper
-    class="block"
-    *ngFor="let query of queries; let index = index"
-    [index]="index"
-    [deletable]="index !== queries.length - 1"
-  ></app-course-search-helper>
-
-  <div class="text-center">
-    <a
-      mat-flat-button
-      color="primary"
-      class="mx-auto"
-      routerLink="/courses"
-      [queryParams]="queryParams"
-      >Charkchalk!</a
-    >
-  </div>
+<app-course-search-helper
+  *ngFor="let query of queries; let index = index"
+  [index]="index"
+  [deletable]="index !== queries.length - 1"
+></app-course-search-helper>
+<br />
+<div class="text-center">
+  <p-button
+    class="mx-auto"
+    label="Charkchalk!"
+    styleClass="p-button-primary"
+    (onClick)="onSubmit()"
+  ></p-button>
 </div>

@@ -1,0 +1,12 @@
+@import "primeflex/src/_variables.scss";
+
+:host {
+  // Space between the elements
+  > *:not(:first-child) {
+    margin-left: 16px;
+
+    @media (min-width: $lg) {
+      margin-left: 0;
+    }
+  }
+}
