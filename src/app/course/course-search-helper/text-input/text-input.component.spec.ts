@@ -19,10 +19,10 @@ describe("TextInputComponent", () => {
         NoopAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
+        MatChipsModule,
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
-        MatChipsModule,
       ],
     }).compileComponents();
 

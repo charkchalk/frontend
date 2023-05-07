@@ -21,9 +21,9 @@ describe("WeekTimeInputComponent", () => {
         FormsModule,
         ReactiveFormsModule,
         MatFormFieldModule,
-        MatSelectModule,
         MatIconModule,
         MatInputModule,
+        MatSelectModule,
         NgxMatTimepickerModule,
       ],
     }).compileComponents();

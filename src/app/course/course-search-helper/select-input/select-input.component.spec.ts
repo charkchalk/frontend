@@ -5,6 +5,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatSelectModule } from "@angular/material/select";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 
@@ -21,12 +22,13 @@ describe("SelectInputComponent", () => {
         NoopAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatIconModule,
         MatAutocompleteModule,
-        MatInputModule,
         MatChipsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatProgressBarModule,
+        MatSelectModule,
       ],
     }).compileComponents();
 

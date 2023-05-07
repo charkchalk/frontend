@@ -1,19 +1,15 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { MatButtonModule } from "@angular/material/button";
-import { MatChipsModule } from "@angular/material/chips";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
-import { MatSelectModule } from "@angular/material/select";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { ButtonModule } from "primeng/button";
 import { DropdownModule } from "primeng/dropdown";
 
 import { CourseQueryService } from "../_query/course-query.service";
 import { CourseSearchHelperComponent } from "./course-search-helper.component";
+import { SelectInputModule } from "./select-input/select-input.module";
+import { TextInputModule } from "./text-input/text-input.module";
+import { WeekTimeRangeInputModule } from "./week-time-range-input/week-time-range-input.module";
 
 describe("CourseSearchHelperComponent", () => {
   let component: CourseSearchHelperComponent;
@@ -34,15 +30,11 @@ describe("CourseSearchHelperComponent", () => {
         NoopAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatButtonModule,
-        MatIconModule,
-        MatAutocompleteModule,
-        MatInputModule,
-        MatChipsModule,
         ButtonModule,
         DropdownModule,
+        TextInputModule,
+        SelectInputModule,
+        WeekTimeRangeInputModule,
       ],
       providers: [
         { provide: CourseQueryService, useValue: courseQueryServiceSpy },
