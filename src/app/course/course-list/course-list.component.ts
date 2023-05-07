@@ -1,40 +1,19 @@
-import { Component, Injectable, OnInit } from "@angular/core";
-import { MatPaginatorIntl, PageEvent } from "@angular/material/paginator";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { Subject } from "rxjs";
+import { Subscription } from "rxjs";
 
 import { CourseApiService } from "../../_api/course/course-api.service";
 import { CourseQueryService } from "../_query/course-query.service";
 import { QueryItem } from "../_query/query-item";
 
-@Injectable()
-export class MyCustomPaginatorIntl implements MatPaginatorIntl {
-  changes = new Subject<void>();
-
-  firstPageLabel = `First page`;
-  itemsPerPageLabel = `Items per page:`;
-  lastPageLabel = `Last page`;
-
-  nextPageLabel = "Next page";
-  previousPageLabel = "Previous page";
-
-  getRangeLabel(page: number, pageSize: number, length: number): string {
-    if (length === 0) {
-      return `Page 1 of 1`;
-    }
-    const amountPages = Math.ceil(length / pageSize);
-    return `Page ${page + 1} of ${amountPages}`;
-  }
-}
-
 @Component({
   selector: "app-course-list",
   templateUrl: "./course-list.component.html",
   styleUrls: ["./course-list.component.scss"],
-  providers: [{ provide: MatPaginatorIntl, useClass: MyCustomPaginatorIntl }],
 })
 export class CourseListComponent implements OnInit {
   loading = true;
+  pageSize = 20;
   pagination: PaginationStat = {
     total: 1,
     current: 1,
@@ -55,9 +34,12 @@ export class CourseListComponent implements OnInit {
     this.search(this.pagination.current);
   }
 
+  lastQuerySubscription?: Subscription;
+
   search(page: number): void {
-    this.courseApiService
-      .getAll(this.queries, { page, size: 20 })
+    this.lastQuerySubscription?.unsubscribe();
+    this.lastQuerySubscription = this.courseApiService
+      .getAll(this.queries, { page, size: this.pageSize })
       .subscribe(courses => {
         this.pagination = courses.pagination;
         this.courses = courses.content;
@@ -65,9 +47,13 @@ export class CourseListComponent implements OnInit {
       });
   }
 
-  handlePageEvent(event: PageEvent) {
+  handlePageEvent(event: PPaginatorPageEvent) {
+    if (this.pageSize !== event.rows) {
+      this.pageSize = event.rows;
+      this.pagination.total = 1;
+    }
     this.courses = [];
     this.loading = true;
-    this.search(event.pageIndex + 1);
+    this.search(event.page + 1);
   }
 }

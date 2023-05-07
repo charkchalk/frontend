@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { MatPaginatorModule } from "@angular/material/paginator";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { PaginatorModule } from "primeng/paginator";
+import { ProgressSpinnerModule } from "primeng/progressspinner";
 
 import { CourseListItemModule } from "../course-list-item/course-list-item.module";
 import { CourseListComponent } from "./course-list.component";
@@ -16,8 +16,8 @@ describe("CourseListComponent", () => {
       imports: [
         CourseListItemModule,
         HttpClientTestingModule,
-        MatProgressSpinnerModule,
-        MatPaginatorModule,
+        ProgressSpinnerModule,
+        PaginatorModule,
       ],
     }).compileComponents();
 

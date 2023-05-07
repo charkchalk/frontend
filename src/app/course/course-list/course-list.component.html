@@ -1,18 +1,19 @@
-<div class="columns-xs gap-6 px-10">
+<div id="coursesContainer" #coursesContainer>
   <app-course-list-item
     *ngFor="let course of courses"
     [course]="course"
-    class="m-2 break-before-all break-inside-avoid"
   ></app-course-list-item>
 </div>
-<mat-spinner *ngIf="loading" class="my-2 mx-auto"></mat-spinner>
-<mat-paginator
-  [pageSize]="1"
-  [length]="pagination.total"
-  [pageIndex]="pagination.current - 1"
-  [hidePageSize]="true"
-  aria-label="切換頁面"
-  (page)="handlePageEvent($event)"
-  [disabled]="loading"
->
-</mat-paginator>
+
+<p-progressSpinner
+  *ngIf="loading"
+  class="mx-auto block w-min"
+></p-progressSpinner>
+
+<p-paginator
+  (onPageChange)="handlePageEvent($event)"
+  [first]="(pagination.current - 1) * pageSize"
+  [rows]="pageSize"
+  [totalRecords]="pageSize * pagination.total"
+  [rowsPerPageOptions]="[20, 50, 100]"
+></p-paginator>
