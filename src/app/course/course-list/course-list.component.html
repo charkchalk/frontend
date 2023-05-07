@@ -2,6 +2,7 @@
   <app-course-list-item
     *ngFor="let course of courses"
     [course]="course"
+    (copied)="onCopied($event)"
   ></app-course-list-item>
 </div>
 
@@ -17,3 +18,5 @@
   [totalRecords]="pageSize * pagination.total"
   [rowsPerPageOptions]="[20, 50, 100]"
 ></p-paginator>
+
+<p-toast></p-toast>

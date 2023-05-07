@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { PaginatorModule } from "primeng/paginator";
 import { ProgressSpinnerModule } from "primeng/progressspinner";
+import { ToastModule } from "primeng/toast";
 
 import { CourseListItemModule } from "../course-list-item/course-list-item.module";
 import { CourseListComponent } from "./course-list.component";
@@ -13,6 +14,7 @@ import { CourseListComponent } from "./course-list.component";
     CourseListItemModule,
     ProgressSpinnerModule,
     PaginatorModule,
+    ToastModule,
   ],
   exports: [CourseListComponent],
 })

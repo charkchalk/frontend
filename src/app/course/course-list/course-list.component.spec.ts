@@ -1,7 +1,9 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { MessageService } from "primeng/api";
 import { PaginatorModule } from "primeng/paginator";
 import { ProgressSpinnerModule } from "primeng/progressspinner";
+import { ToastModule } from "primeng/toast";
 
 import { CourseListItemModule } from "../course-list-item/course-list-item.module";
 import { CourseListComponent } from "./course-list.component";
@@ -18,6 +20,12 @@ describe("CourseListComponent", () => {
         HttpClientTestingModule,
         ProgressSpinnerModule,
         PaginatorModule,
+        ToastModule,
+      ],
+      providers: [
+        {
+          provide: MessageService,
+        },
       ],
     }).compileComponents();
 

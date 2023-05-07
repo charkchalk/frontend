@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { MessageService } from "primeng/api";
 import { Subscription } from "rxjs";
 
 import { CourseApiService } from "../../_api/course/course-api.service";
@@ -10,6 +11,11 @@ import { QueryItem } from "../_query/query-item";
   selector: "app-course-list",
   templateUrl: "./course-list.component.html",
   styleUrls: ["./course-list.component.scss"],
+  providers: [
+    {
+      provide: MessageService,
+    },
+  ],
 })
 export class CourseListComponent implements OnInit {
   loading = true;
@@ -25,6 +31,7 @@ export class CourseListComponent implements OnInit {
     private router: Router,
     private courseApiService: CourseApiService,
     private courseQueryService: CourseQueryService,
+    private messageService: MessageService,
   ) {}
 
   ngOnInit(): void {
@@ -55,5 +62,13 @@ export class CourseListComponent implements OnInit {
     this.courses = [];
     this.loading = true;
     this.search(event.page + 1);
+  }
+
+  onCopied(message: string) {
+    this.messageService.add({
+      severity: "success",
+      summary: "複製成功！",
+      detail: message ?? "已經複製到剪貼簿囉～",
+    });
   }
 }
