@@ -1,15 +1,5 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { MatChipGrid } from "@angular/material/chips";
-import { interval, Observable, Subscription, take } from "rxjs";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Observable, Subscription } from "rxjs";
 
 import { Displayable } from "../../../_types/displayable";
 import { QueryDataProvider } from "../../_query/query-data-provider";
@@ -34,59 +24,35 @@ export class SelectInputComponent implements OnInit {
   @Input() providerChange?: Observable<void>;
   /** Selectable options */
   options: Displayable<string>[] = [];
+  /**
+   * Get options without selected options
+   * @returns Array of selectable options
+   */
+  filteredOptions(): Displayable<string>[] {
+    return this.options.filter(option => {
+      return !this.localValue.find(selected => selected.value === option.value);
+    });
+  }
 
   ngOnInit() {
     this.providerChange?.subscribe(() => {
       this.optionsPage = 0;
       this.options = [];
     });
-
-    // listen to value change to filter selectable options
-    this.inputControl.valueChanges.subscribe(() =>
-      this.inputValueChangeHandler(),
-    );
+    this.localValue = (this.value as Displayable<string>[]) ?? [];
   }
-
-  /** Subscription of user idle detector */
-  whenIdleSubscription?: Subscription;
 
   /**
-   * Handler when input value changed, will trigger option fetch when user stop typing for 500ms
+   * On selected options changed
    */
-  inputValueChangeHandler(): void {
-    this.setInputError(null);
-
-    this.whenIdleSubscription?.unsubscribe();
-    this.whenIdleSubscription = interval(500)
-      .pipe(take(1))
-      .subscribe(() => {
-        this.whenIdleSubscription?.unsubscribe();
-        this.whenIdleSubscription = undefined;
-        this.optionsPage = 0;
-        this.options = [];
-        this.getOptions(this.inputControl.value ?? "");
-      });
-  }
-
-  notifyQueryUpdate() {
+  onChange() {
     this.updated.emit(this.localValue);
   }
 
-  /** Input of value */
-  inputControl = new FormControl("");
-
-  @ViewChild("chipGrid") chipGrid!: MatChipGrid;
-  error: string | null = null;
-
-  /**
-   * Set input error to display or clear error
-   * @param error error message to set, if null, will clear error
-   */
-  setInputError(error: string | null) {
-    this.chipGrid.errorState = !!error;
-    this.error = error;
-  }
-
+  /** Current page of options, needs to be reset when searching context changed */
+  optionsPage = 0;
+  /** Last query request, used to cancel last request when new request is triggered */
+  lastQueryRequest?: Subscription;
   /** Is waiting for server respond options or not */
   isLoadingOptions = false;
   /** Visibility detector, used to additional loading options */
@@ -100,17 +66,24 @@ export class SelectInputComponent implements OnInit {
       this.isLoadingOptions = true;
       // Stop observing while loading options
       this.intersectionObserver.disconnect();
-      this.getOptions(this.inputControl.value ?? "");
+      this.getOptions(this.query);
     },
-    { threshold: 1 },
+    { threshold: 0.1 },
   );
 
   /**
-   * Bind intersection observer to element that is preserved in options menu
+   * Bind intersection observer to last option element to trigger load more options
    */
-  bindLoadingTrigger(): void {
+  async bindLoadingTrigger(): Promise<void> {
+    await this.waitForElement(
+      "ul.p-autocomplete-items",
+      "ul.p-autocomplete-items li:last-child",
+      element =>
+        element.textContent === this.options[this.options.length - 1].label,
+    );
+    console.log("bind loading trigger", this.options[this.options.length - 1]);
     const target = document.querySelector(
-      ".mat-mdc-autocomplete-panel .loading-trigger",
+      "ul.p-autocomplete-items li:last-child",
     );
     if (!target) return;
     this.intersectionObserver.disconnect();
@@ -118,10 +91,41 @@ export class SelectInputComponent implements OnInit {
     this.intersectionObserver.observe(target);
   }
 
-  /** Current page of options, needs to be reset when searching context changed */
-  optionsPage = 0;
-  /** Last query request, used to cancel last request when new request is triggered */
-  lastQueryRequest?: Subscription;
+  /**
+   * Wait for element to be rendered
+   * @param parent parent element selector, if null, will use documentElement
+   * @param target target element selector
+   * @param validator validator to check if target element is valid, default to true
+   * @returns
+   */
+  waitForElement(
+    parent: string | null,
+    target: string,
+    validator: (element: Element) => boolean = () => true,
+  ): Promise<Element> {
+    return new Promise(resolve => {
+      const element = document.querySelector(target);
+      if (element && validator(element)) return resolve(element);
+
+      const observer = new MutationObserver(() => {
+        const element = document.querySelector(target);
+        if (element && validator(element)) {
+          observer.disconnect();
+          resolve(element);
+        }
+      });
+
+      const parentElement = document.querySelector(parent ?? "");
+
+      observer.observe(parentElement ?? document.documentElement, {
+        childList: true,
+        subtree: true,
+      });
+    });
+  }
+
+  /** last query string */
+  query = "";
 
   /**
    * Get options from server
@@ -135,13 +139,7 @@ export class SelectInputComponent implements OnInit {
         keyword: value.trim(),
       })
       .subscribe(options => {
-        this.options.push(
-          ...options.content.filter(option => {
-            return !this.localValue.find(
-              selected => selected.value === option.value,
-            );
-          }),
-        );
+        this.options = this.options.concat(...options.content);
         this.optionsPage = options.pagination.current;
         this.isLoadingOptions = false;
         if (options.pagination.current >= options.pagination.total) {
@@ -153,22 +151,18 @@ export class SelectInputComponent implements OnInit {
   }
 
   /**
-   * Select an option into query value and remove it from options list
-   * @param event event of option selected
+   * Handle user input event
+   * @param event event from autocomplete event
    */
-  selectOption(event: MatAutocompleteSelectedEvent): void {
-    this.localValue?.push(event.option.value);
-    this.options.splice(this.options.indexOf(event.option.value), 1);
-    this.inputControl.setValue("");
-    this.notifyQueryUpdate();
-  }
+  onCompleteInput(event: PAutoCompleteCompleteEvent): void {
+    console.log("User input: ", event);
 
-  /**
-   * Remove selected option from query value
-   * @param index index of selected option to remove
-   */
-  removeSelectedOption(index: number): void {
-    this.localValue?.splice(index, 1);
-    this.notifyQueryUpdate();
+    if (this.query !== event.query) {
+      this.optionsPage = 0;
+      this.options = [];
+      this.query = event.query;
+    }
+    if (this.optionsPage < 0) return;
+    this.getOptions(this.query);
   }
 }

@@ -1,49 +1,29 @@
-<mat-form-field>
-  <mat-label>比對內容</mat-label>
-
-  <mat-chip-grid
-    #chipGrid
-    aria-label="Content Selection"
+<div class="p-fluid p-float-label">
+  <p-autoComplete
+    [(ngModel)]="localValue"
+    (ngModelChange)="onChange()"
+    [suggestions]="filteredOptions()"
+    field="label"
+    dataKey="value"
+    [autoHighlight]="true"
+    (completeMethod)="onCompleteInput($event)"
+    [completeOnFocus]="true"
+    [forceSelection]="true"
+    [multiple]="true"
+    [lazy]="true"
+    [required]="true"
     [disabled]="!provider"
   >
-    <ng-container *ngFor="let selected of value; let index = index">
-      <span class="inline-block self-center" *ngIf="index > 0">或</span>
-      <mat-chip-row (removed)="removeSelectedOption(index)">
-        {{ selected.label }}
-        <button matChipRemove [attr.aria-label]="'remove ' + selected">
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </mat-chip-row>
-    </ng-container>
-  </mat-chip-grid>
-
-  <input
-    matInput
-    type="text"
-    placeholder="輸入來過濾或選擇"
-    (focus)="active.emit()"
-    [matAutocomplete]="auto"
-    [matAutocompleteDisabled]="provider?.type !== 'select'"
-    [matChipInputFor]="chipGrid"
-    [formControl]="inputControl"
-    [value]="inputControl.value"
-  />
-  <mat-error>{{ error }}</mat-error>
-
-  <mat-autocomplete
-    #auto="matAutocomplete"
-    autoActiveFirstOption
-    autoSelectActiveOption
-    (opened)="bindLoadingTrigger()"
-    (optionSelected)="selectOption($event)"
-  >
-    <mat-option *ngFor="let option of options" [value]="option">
-      {{ option.label }}
-    </mat-option>
-    <mat-progress-bar
-      mode="indeterminate"
-      *ngIf="isLoadingOptions"
-    ></mat-progress-bar>
-    <mat-option class="loading-trigger" disabled></mat-option>
-  </mat-autocomplete>
-</mat-form-field>
+    <ng-template pTemplate="footer">
+      <p-progressBar
+        *ngIf="isLoadingOptions; else endOfOptions"
+        mode="indeterminate"
+        [style]="{ height: '6px' }"
+      ></p-progressBar>
+      <ng-template #endOfOptions>
+        <div class="text-center text-color-secondary">沒有更多選項囉～</div>
+      </ng-template>
+    </ng-template>
+  </p-autoComplete>
+  <label for="content">比對內容</label>
+</div>
