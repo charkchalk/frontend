@@ -16,6 +16,12 @@ export class CourseListItemComponent {
     this.copied.emit();
   }
 
+  inspectCourse() {
+    if (!this.course?.code) return;
+
+    window.open(this.course.link, "_blank");
+  }
+
   copyCourseText() {
     const courseText = [
       `我在看選課代號是 ${this.course?.code}，`,
