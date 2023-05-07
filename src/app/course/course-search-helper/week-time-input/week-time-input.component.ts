@@ -24,21 +24,11 @@ export class WeekTimeInputComponent implements OnInit {
   /** An event emitter that emit events when value has been updated */
   @Output() updated: EventEmitter<WeekTime> = new EventEmitter();
 
-  @Input() value: WeekTime = { day: 0, time: "" };
+  @Input() value: WeekTime = {};
   protected localValue!: WeekTime;
 
   ngOnInit() {
     this.localValue = this.value;
-  }
-
-  onWeekSet(weekday: Displayable<number>) {
-    this.localValue.day = weekday.value;
-    this.notifyQueryUpdate();
-  }
-
-  onTimeSet(time: string) {
-    this.localValue.time = time;
-    this.notifyQueryUpdate();
   }
 
   notifyQueryUpdate() {

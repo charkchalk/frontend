@@ -1,11 +1,9 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
-import { MatSelectModule } from "@angular/material/select";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-import { NgxMatTimepickerModule } from "ngx-mat-timepicker";
+import { CalendarModule } from "primeng/calendar";
+import { DividerModule } from "primeng/divider";
+import { DropdownModule } from "primeng/dropdown";
 
 import { WeekTimeInputComponent } from "./week-time-input.component";
 
@@ -20,11 +18,9 @@ describe("WeekTimeInputComponent", () => {
         NoopAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatSelectModule,
-        NgxMatTimepickerModule,
+        CalendarModule,
+        DividerModule,
+        DropdownModule,
       ],
     }).compileComponents();
 

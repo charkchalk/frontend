@@ -1,11 +1,31 @@
+@import "primeflex/src/_variables.scss";
+
+.range-input {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  span {
+    margin-top: 1.75rem;
+  }
+
+  @media (min-width: $lg) {
+    flex-direction: row;
+  }
+}
+
+:host::ng-deep .p-divider-content {
+  background-color: transparent;
+}
+
 app-week-time-input {
-  @apply flex w-full grow lg:w-fit;
-}
+  display: flex;
+  width: 100%;
+  flex: 1 1 auto;
 
-:host ::ng-deep mat-form-field:nth-child(1) .mat-mdc-text-field-wrapper {
-  @apply rounded-tr-none;
-}
-
-:host ::ng-deep mat-form-field:nth-child(2) .mat-mdc-text-field-wrapper {
-  @apply rounded-tl-none;
+  @media (min-width: $lg) {
+    width: fit-content;
+  }
 }

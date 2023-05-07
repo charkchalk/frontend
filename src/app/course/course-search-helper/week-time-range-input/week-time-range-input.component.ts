@@ -34,10 +34,7 @@ export class WeekTimeRangeInputComponent implements OnInit {
 
   addEmptyRange() {
     const emptyRange: Displayable<WeekTimeRange> = {
-      value: {
-        start: { day: 0, time: "" },
-        end: { day: 0, time: "" },
-      },
+      value: { start: {}, end: {} },
       label: "",
     };
     this.localValue.push(emptyRange);

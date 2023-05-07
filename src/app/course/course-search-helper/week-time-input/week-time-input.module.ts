@@ -1,11 +1,9 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
-import { MatSelectModule } from "@angular/material/select";
-import { NgxMatTimepickerModule } from "ngx-mat-timepicker";
+import { CalendarModule } from "primeng/calendar";
+import { DividerModule } from "primeng/divider";
+import { DropdownModule } from "primeng/dropdown";
 
 import { WeekTimeInputComponent } from "./week-time-input.component";
 
@@ -15,11 +13,9 @@ import { WeekTimeInputComponent } from "./week-time-input.component";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatSelectModule,
-    NgxMatTimepickerModule,
+    CalendarModule,
+    DividerModule,
+    DropdownModule,
   ],
   exports: [WeekTimeInputComponent],
 })

@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { DividerModule } from "primeng/divider";
 
-import { WeekTimeInputComponent } from "../week-time-input/week-time-input.component";
+import { WeekTimeInputModule } from "../week-time-input/week-time-input.module";
 import { WeekTimeRangeInputComponent } from "./week-time-range-input.component";
 
 describe("WeekTimeRangeInputComponent", () => {
@@ -11,7 +12,7 @@ describe("WeekTimeRangeInputComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [WeekTimeRangeInputComponent],
-      imports: [NoopAnimationsModule, WeekTimeInputComponent],
+      imports: [NoopAnimationsModule, WeekTimeInputModule, DividerModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(WeekTimeRangeInputComponent);

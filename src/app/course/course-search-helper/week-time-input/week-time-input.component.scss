@@ -1,20 +1,3 @@
-mat-form-field {
-  @apply grow;
-}
-
-:host ::ng-deep .mat-mdc-form-field-infix {
-  @apply w-24;
-}
-
-:host ::ng-deep mat-form-field.time-picker .mat-mdc-text-field-wrapper {
-  padding-right: 16px;
-}
-
-:host ::ng-deep mat-form-field.time-picker .mat-mdc-form-field-icon-suffix {
-  position: absolute;
-  right: 0;
-}
-
-:host ::ng-deep mat-form-field.time-picker .mdc-floating-label {
-  max-width: calc(100% - 18px);
+:host > * {
+  width: 50%;
 }
