@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { AbstractControl, FormGroup } from "@angular/forms";
 import { Observable } from "rxjs";
 
 import { Displayable } from "../../../_types/displayable";
@@ -26,8 +27,16 @@ export class WeekTimeRangeInputComponent implements OnInit {
     label: "",
   };
 
+  @Output() controlSet = new EventEmitter<AbstractControl>();
+  formGroup!: FormGroup;
+
   ngOnInit() {
     if (this.value) this.localValue = this.value as Displayable<WeekTimeRange>;
+
+    this.formGroup = new FormGroup({
+      start: new FormGroup({}),
+      end: new FormGroup({}),
+    });
   }
 
   onStartSet(weekTime: WeekTime) {
@@ -38,6 +47,16 @@ export class WeekTimeRangeInputComponent implements OnInit {
   onEndSet(weekTime: WeekTime) {
     this.localValue.value.end = weekTime;
     this.notifyQueryUpdate();
+  }
+
+  onStartControlSet(control: AbstractControl) {
+    this.formGroup.setControl("start", control);
+    this.controlSet.emit(control);
+  }
+
+  onEndControlSet(control: AbstractControl) {
+    this.formGroup.setControl("end", control);
+    this.controlSet.emit(control);
   }
 
   notifyQueryUpdate() {

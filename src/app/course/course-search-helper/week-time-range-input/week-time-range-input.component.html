@@ -3,6 +3,7 @@
   timeLabel="開始時間"
   [value]="localValue.value.start"
   (updated)="onStartSet($event)"
+  (controlSet)="onStartControlSet($event)"
 ></app-week-time-input>
 <span class="mx-2 text-center">到</span>
 <app-week-time-input
@@ -10,4 +11,5 @@
   timeLabel="結束時間"
   [value]="localValue.value.end"
   (updated)="onEndSet($event)"
+  (controlSet)="onEndControlSet($event)"
 ></app-week-time-input>
