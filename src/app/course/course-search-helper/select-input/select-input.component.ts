@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { AbstractControl, FormControl, Validators } from "@angular/forms";
 import { Observable, Subscription } from "rxjs";
 
 import { Displayable } from "../../../_types/displayable";
@@ -18,10 +19,35 @@ export class SelectInputComponent implements OnInit {
   @Input() provider?: QueryDataProvider;
   /** Value of current filtering condition */
   @Input() value?: Displayable<unknown>[] = [];
-  /** Writable value */
-  protected localValue: Displayable<string>[] = [];
   /** An event emitter that receive event from parent when provider changed */
   @Input() providerChange?: Observable<void>;
+
+  /** Emit control to parent after control initialized */
+  @Output() controlSet = new EventEmitter<AbstractControl>();
+  /** Control of current filtering condition */
+  control = new FormControl<Displayable<string>[]>([], Validators.required);
+
+  ngOnInit() {
+    this.providerChange?.subscribe(() => {
+      this.optionsPage = 0;
+      this.options = [];
+    });
+
+    const values = (this.value as Displayable<string>[]) ?? [];
+    this.control.setValue(values);
+    this.controlSet.emit(this.control);
+    if (!this.provider) this.control.disable();
+    this.providerChange?.subscribe(() => this.control.enable());
+    this.control.valueChanges.subscribe(() => this.onValueChange());
+  }
+
+  /**
+   * On selected options changed
+   */
+  onValueChange() {
+    this.updated.emit(this.control.value as Displayable<string>[]);
+  }
+
   /** Selectable options */
   options: Displayable<string>[] = [];
   /**
@@ -30,25 +56,11 @@ export class SelectInputComponent implements OnInit {
    */
   filteredOptions(): Displayable<string>[] {
     return this.options.filter(option => {
-      return !this.localValue.find(selected => selected.value === option.value);
+      return !this.control.value?.find(
+        selected => selected.value === option.value,
+      );
     });
   }
-
-  ngOnInit() {
-    this.providerChange?.subscribe(() => {
-      this.optionsPage = 0;
-      this.options = [];
-    });
-    this.localValue = (this.value as Displayable<string>[]) ?? [];
-  }
-
-  /**
-   * On selected options changed
-   */
-  onChange() {
-    this.updated.emit(this.localValue);
-  }
-
   /** Current page of options, needs to be reset when searching context changed */
   optionsPage = 0;
   /** Last query request, used to cancel last request when new request is triggered */
@@ -81,7 +93,6 @@ export class SelectInputComponent implements OnInit {
       element =>
         element.textContent === this.options[this.options.length - 1].label,
     );
-    console.log("bind loading trigger", this.options[this.options.length - 1]);
     const target = document.querySelector(
       "ul.p-autocomplete-items li:last-child",
     );
@@ -155,8 +166,6 @@ export class SelectInputComponent implements OnInit {
    * @param event event from autocomplete event
    */
   onCompleteInput(event: PAutoCompleteCompleteEvent): void {
-    console.log("User input: ", event);
-
     if (this.query !== event.query) {
       this.optionsPage = 0;
       this.options = [];
