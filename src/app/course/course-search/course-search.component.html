@@ -2,6 +2,8 @@
   *ngFor="let query of queries; let index = index"
   [index]="index"
   [deletable]="index !== queries.length - 1"
+  (controlSet)="onChildControlSet(index, $event)"
+  (removed)="onChildControlRemove(index)"
 ></app-course-search-helper>
 <br />
 <div class="text-center">

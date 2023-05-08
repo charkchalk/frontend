@@ -8,7 +8,7 @@ import { CourseSearchComponent } from "./course-search.component";
 
 @NgModule({
   declarations: [CourseSearchComponent],
-  imports: [CommonModule, RouterModule, CourseSearchHelperModule, ButtonModule],
+  imports: [CommonModule, RouterModule, ButtonModule, CourseSearchHelperModule],
   exports: [CourseSearchComponent],
 })
 export class CourseSearchModule {}
