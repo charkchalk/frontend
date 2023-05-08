@@ -1,4 +1,10 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { Subject } from "rxjs";
 
 import { Displayable } from "../../_types/displayable";
@@ -26,6 +32,11 @@ export class CourseSearchHelperComponent implements OnInit {
   /** All selectable compare methods, will be undefined or null when no provider */
   methods: Displayable<string>[] = [];
 
+  @Output() controlSet: EventEmitter<AbstractControl> =
+    new EventEmitter<AbstractControl>();
+  formGroup: FormGroup = new FormGroup({});
+  @Output() removed: EventEmitter<number> = new EventEmitter<number>();
+
   constructor(private courseQueryService: CourseQueryService) {}
 
   ngOnInit() {
@@ -33,6 +44,16 @@ export class CourseSearchHelperComponent implements OnInit {
       .getProviders()
       .map(provider => ({ value: provider.value, label: provider.label }));
     this.query = this.courseQueryService.getQuery(this.index);
+    this.formGroup = new FormGroup({
+      key: new FormControl<string | undefined>(
+        this.query.key,
+        Validators.required,
+      ),
+      method: new FormControl<string | undefined>(
+        { value: this.query.method, disabled: !this.provider },
+        Validators.required,
+      ),
+    });
     if (this.query.key) this.setProvider(this.query.key, false);
   }
 
@@ -48,15 +69,22 @@ export class CourseSearchHelperComponent implements OnInit {
       this.query.value = undefined;
       this.notifyQueryUpdate();
     }
+    this.controlSet.emit(this.formGroup);
+    this.formGroup.controls["method"].enable();
     this.provider = this.courseQueryService.getProvider(providerKey);
     this.methods = this.provider?.getMethods() || [];
     this.providerChange.next();
+  }
+
+  onControlSet(control: AbstractControl) {
+    this.formGroup.controls["content"] = control;
   }
 
   /**
    * To trigger queries change notification that query has been updated
    */
   notifyQueryUpdate() {
+    this.formGroup.updateValueAndValidity();
     this.courseQueryService.setQuery(this.index, this.query);
   }
 
@@ -76,6 +104,7 @@ export class CourseSearchHelperComponent implements OnInit {
    * Remove this whole query from queries list
    */
   removeQuery() {
+    this.removed.emit(this.index);
     this.courseQueryService.removeQuery(this.index);
   }
 }

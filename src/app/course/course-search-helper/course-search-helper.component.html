@@ -1,58 +1,61 @@
-<span class="p-fluid p-float-label">
-  <p-dropdown
-    inputId="filter-key"
-    [options]="providers"
-    [(ngModel)]="query.key"
-    optionLabel="label"
-    optionValue="value"
-    placeholder="選擇過濾項"
-    (onChange)="setProvider($event.value)"
-    [required]="true"
-  ></p-dropdown>
-  <label for="filter-key">過濾項</label>
-</span>
+<ng-container [formGroup]="formGroup">
+  <span class="p-fluid p-float-label">
+    <p-dropdown
+      formControlName="key"
+      inputId="filter-key"
+      [options]="providers"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="選擇過濾項"
+      (onChange)="setProvider($event.value)"
+    ></p-dropdown>
+    <label for="filter-key">過濾項</label>
+  </span>
 
-<span class="p-fluid p-float-label">
-  <p-dropdown
-    inputId="filter-method"
-    [options]="methods"
-    [(ngModel)]="query.method"
-    optionLabel="label"
-    optionValue="value"
-    placeholder="選擇比對方式"
-    (onChange)="notifyQueryUpdate()"
-    [required]="true"
-    [disabled]="!provider"
-  ></p-dropdown>
-  <label for="filter-method">比對方式</label>
-</span>
+  <span class="p-fluid p-float-label">
+    <p-dropdown
+      formControlName="method"
+      inputId="filter-method"
+      [options]="methods"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="選擇比對方式"
+      (onChange)="query.method = $event.value; notifyQueryUpdate()"
+    ></p-dropdown>
+    <label for="filter-method">比對方式</label>
+  </span>
 
-<ng-container [ngSwitch]="provider?.type">
-  <app-text-input
-    *ngSwitchDefault
-    [provider]="provider"
-    [value]="query.value"
-    (updated)="valueUpdated($event)"
-  ></app-text-input>
-  <app-select-input
-    *ngSwitchCase="'select'"
-    [provider]="provider"
-    [providerChange]="providerChange.asObservable()"
-    [value]="query.value"
-    (updated)="valueUpdated($event)"
-  ></app-select-input>
-  <app-week-time-range-input-list
-    *ngSwitchCase="'time-range'"
-    [provider]="provider"
-    [providerChange]="providerChange.asObservable()"
-    [value]="query.value"
-    (updated)="valueUpdated($event)"
-  ></app-week-time-range-input-list>
+  <ng-container [ngSwitch]="provider?.type">
+    <app-text-input
+      *ngSwitchDefault
+      [provider]="provider"
+      [providerChange]="providerChange.asObservable()"
+      [value]="query.value"
+      (updated)="valueUpdated($event)"
+      (controlSet)="onControlSet($event)"
+    ></app-text-input>
+    <app-select-input
+      *ngSwitchCase="'select'"
+      [provider]="provider"
+      [providerChange]="providerChange.asObservable()"
+      [value]="query.value"
+      (updated)="valueUpdated($event)"
+      (controlSet)="onControlSet($event)"
+    ></app-select-input>
+    <app-week-time-range-input-list
+      *ngSwitchCase="'time-range'"
+      [provider]="provider"
+      [providerChange]="providerChange.asObservable()"
+      [value]="query.value"
+      (updated)="valueUpdated($event)"
+      (controlSet)="onControlSet($event)"
+    ></app-week-time-range-input-list>
+  </ng-container>
+
+  <p-button
+    icon="pi pi-times"
+    styleClass="p-button-danger"
+    (click)="removeQuery()"
+    [disabled]="!deletable"
+  ></p-button>
 </ng-container>
-
-<p-button
-  icon="pi pi-times"
-  styleClass="p-button-danger"
-  (click)="removeQuery()"
-  [disabled]="!deletable"
-></p-button>
