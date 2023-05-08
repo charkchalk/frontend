@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { AbstractControl, FormArray } from "@angular/forms";
 import { Observable } from "rxjs";
 
 import { Displayable } from "../../../_types/displayable";
@@ -23,6 +24,9 @@ export class WeekTimeRangeInputListComponent implements OnInit {
   /** Writable value */
   protected weekTimeRanges: Displayable<WeekTimeRange>[] = [];
 
+  @Output() controlSet = new EventEmitter<AbstractControl>();
+  formArray: FormArray = new FormArray<AbstractControl>([]);
+
   ngOnInit() {
     this.weekTimeRanges = this.value as Displayable<WeekTimeRange>[];
     if (!this.value) this.weekTimeRanges = [];
@@ -44,6 +48,11 @@ export class WeekTimeRangeInputListComponent implements OnInit {
   ) {
     this.weekTimeRanges[index] = weekTimeRange;
     this.notifyQueryUpdate();
+  }
+
+  onWeekTimeRangeControlSet(index: number, control: AbstractControl) {
+    this.formArray.setControl(index, control);
+    this.controlSet.emit(this.formArray);
   }
 
   notifyQueryUpdate() {
