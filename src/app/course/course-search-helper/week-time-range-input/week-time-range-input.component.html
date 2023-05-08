@@ -1,18 +1,13 @@
-<ng-container *ngFor="let weekTime of localValue; let index = index">
-  <p-divider align="center" *ngIf="index > 0" styleClass="mb-0">或</p-divider>
-  <div class="range-input">
-    <app-week-time-input
-      weekLabel="開始星期"
-      timeLabel="開始時間"
-      [value]="weekTime.value.start"
-      (updated)="onStartSet(index, $event)"
-    ></app-week-time-input>
-    <span class="mx-2 text-center">到</span>
-    <app-week-time-input
-      weekLabel="結束星期"
-      timeLabel="結束時間"
-      [value]="weekTime.value.end"
-      (updated)="onEndSet(index, $event)"
-    ></app-week-time-input>
-  </div>
-</ng-container>
+<app-week-time-input
+  weekLabel="開始星期"
+  timeLabel="開始時間"
+  [value]="localValue.value.start"
+  (updated)="onStartSet($event)"
+></app-week-time-input>
+<span class="mx-2 text-center">到</span>
+<app-week-time-input
+  weekLabel="結束星期"
+  timeLabel="結束時間"
+  [value]="localValue.value.end"
+  (updated)="onEndSet($event)"
+></app-week-time-input>

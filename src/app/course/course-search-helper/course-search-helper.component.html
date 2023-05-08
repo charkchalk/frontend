@@ -41,13 +41,13 @@
     [value]="query.value"
     (updated)="valueUpdated($event)"
   ></app-select-input>
-  <app-week-time-range-input
+  <app-week-time-range-input-list
     *ngSwitchCase="'time-range'"
     [provider]="provider"
     [providerChange]="providerChange.asObservable()"
     [value]="query.value"
     (updated)="valueUpdated($event)"
-  ></app-week-time-range-input>
+  ></app-week-time-range-input-list>
 </ng-container>
 
 <p-button

@@ -7,7 +7,7 @@ import { DropdownModule } from "primeng/dropdown";
 import { CourseSearchHelperComponent } from "./course-search-helper.component";
 import { SelectInputModule } from "./select-input/select-input.module";
 import { TextInputModule } from "./text-input/text-input.module";
-import { WeekTimeRangeInputModule } from "./week-time-range-input/week-time-range-input.module";
+import { WeekTimeRangeInputListModule } from "./week-time-range-input-list/week-time-range-input-list.module";
 
 @NgModule({
   declarations: [CourseSearchHelperComponent],
@@ -19,7 +19,7 @@ import { WeekTimeRangeInputModule } from "./week-time-range-input/week-time-rang
     DropdownModule,
     TextInputModule,
     SelectInputModule,
-    WeekTimeRangeInputModule,
+    WeekTimeRangeInputListModule,
   ],
   exports: [CourseSearchHelperComponent],
 })

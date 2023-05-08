@@ -11,42 +11,32 @@ import { QueryDataProvider } from "../../_query/query-data-provider";
   styleUrls: ["./week-time-range-input.component.scss"],
 })
 export class WeekTimeRangeInputComponent implements OnInit {
-  /** An event emitter that emit events when input has been focused */
-  @Output() active: EventEmitter<void> = new EventEmitter();
   /** An event emitter that emit events when value has been updated */
-  @Output() updated: EventEmitter<Displayable<WeekTimeRange>[]> =
+  @Output() updated: EventEmitter<Displayable<WeekTimeRange>> =
     new EventEmitter();
   /** Data provider of current filtering condition */
   @Input() provider?: QueryDataProvider;
   /** An event emitter that receive event from parent when provider changed */
   @Input() providerChange?: Observable<void>;
   /** Value of current filtering condition */
-  @Input() value?: Displayable<unknown>[] = [];
+  @Input() value?: Displayable<unknown>;
   /** Writable value */
-  protected localValue: Displayable<WeekTimeRange>[] = [];
+  protected localValue: Displayable<WeekTimeRange> = {
+    value: { start: {}, end: {} },
+    label: "",
+  };
 
   ngOnInit() {
-    this.localValue = this.value as Displayable<WeekTimeRange>[];
-    if (!this.value) this.localValue = [];
-
-    if (this.localValue.length === 0) this.addEmptyRange();
+    if (this.value) this.localValue = this.value as Displayable<WeekTimeRange>;
   }
 
-  addEmptyRange() {
-    const emptyRange: Displayable<WeekTimeRange> = {
-      value: { start: {}, end: {} },
-      label: "",
-    };
-    this.localValue.push(emptyRange);
-  }
-
-  onStartSet(index: number, weekTime: WeekTime) {
-    this.localValue[index].value.start = weekTime;
+  onStartSet(weekTime: WeekTime) {
+    this.localValue.value.start = weekTime;
     this.notifyQueryUpdate();
   }
 
-  onEndSet(index: number, weekTime: WeekTime) {
-    this.localValue[index].value.end = weekTime;
+  onEndSet(weekTime: WeekTime) {
+    this.localValue.value.end = weekTime;
     this.notifyQueryUpdate();
   }
 
