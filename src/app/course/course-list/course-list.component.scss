@@ -1,0 +1,34 @@
+@import "primeflex/src/_variables.scss";
+
+#coursesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  app-course-list-item {
+    margin: 10px;
+    break-inside: avoid;
+
+    width: 100%;
+
+    @media (min-width: $sm) {
+      width: calc(100% - 20px);
+    }
+
+    @media (min-width: $md) {
+      width: calc(100% / 2 - 20px);
+    }
+
+    @media (min-width: $lg) {
+      width: calc(100% / 3 - 20px);
+    }
+
+    @media (min-width: $xl) {
+      width: calc(100% / 4 - 20px);
+    }
+
+    @media (min-width: 1600px) {
+      width: calc(100% / 5 - 20px);
+    }
+  }
+}

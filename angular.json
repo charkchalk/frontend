@@ -10,7 +10,11 @@
   "projects": {
     "charkchalk-frontend": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -28,10 +32,7 @@
               "src/assets",
               "src/manifest.webmanifest"
             ],
-            "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css"
-            ],
+            "styles": ["src/styles.scss"],
             "scripts": [],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"
@@ -91,10 +92,7 @@
               "src/assets",
               "src/manifest.webmanifest"
             ],
-            "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css"
-            ],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         },

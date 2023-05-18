@@ -1,23 +1,27 @@
-<mat-form-field appearance="fill">
-  <mat-label>{{ weekLabel }}</mat-label>
-  <mat-select [(ngModel)]="localValue.day">
-    <mat-option *ngFor="let day of weekdays" [value]="day.value">
-      {{ day.label }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<div class="p-fluid p-float-label">
+  <p-dropdown
+    inputId="weekday"
+    [options]="weekdays"
+    [(ngModel)]="localValue.day"
+    (ngModelChange)="notifyQueryUpdate()"
+    optionLabel="label"
+    optionValue="value"
+    [placeholder]="weekLabel"
+    [required]="true"
+  ></p-dropdown>
+  <label for="weekday">{{ weekLabel }}</label>
+</div>
 
-<mat-form-field class="time-picker" appearance="fill" (click)="picker.open()">
-  <mat-label>{{ timeLabel }}</mat-label>
-  <input
-    matInput
-    [ngxMatTimepicker]="picker"
-    [format]="24"
+<div class="p-fluid p-float-label">
+  <p-calendar
+    class="h-full"
+    styleClass="h-full"
+    inputId="time"
+    [showTime]="true"
+    [timeOnly]="true"
+    dataType="string"
     [(ngModel)]="localValue.time"
-  />
-  <ngx-mat-timepicker
-    #picker
-    (timeSet)="onTimeSet($event)"
-  ></ngx-mat-timepicker>
-  <mat-icon matSuffix>access_time</mat-icon>
-</mat-form-field>
+    [required]="true"
+  ></p-calendar>
+  <label for="time">{{ timeLabel }}</label>
+</div>

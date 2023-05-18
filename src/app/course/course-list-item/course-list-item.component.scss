@@ -1,0 +1,23 @@
+@import "primeflex/src/_variables.scss";
+
+:host::ng-deep .p-fieldset-content {
+  padding: 0.5rem;
+}
+
+:host::ng-deep .p-fieldset-legend {
+  padding: 0.75rem 1.25rem 0.75rem 1.25rem;
+}
+
+table {
+  border-spacing: 0.5rem;
+}
+
+th {
+  vertical-align: top;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.material-icons {
+  padding-right: 0.25rem;
+}

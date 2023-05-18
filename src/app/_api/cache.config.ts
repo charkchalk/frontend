@@ -1,5 +1,9 @@
 import { HttpRequest } from "@angular/common/http";
-import { NgHttpCachingConfig, NgHttpCachingStrategy } from "ng-http-caching";
+import {
+  NgHttpCachingConfig,
+  NgHttpCachingSessionStorage,
+  NgHttpCachingStrategy,
+} from "ng-http-caching";
 import * as objectHash from "object-hash";
 
 const hashOptions: objectHash.NormalOption = {
@@ -8,6 +12,7 @@ const hashOptions: objectHash.NormalOption = {
 };
 
 export const ngHttpCachingConfig: NgHttpCachingConfig = {
+  store: new NgHttpCachingSessionStorage(),
   cacheStrategy: NgHttpCachingStrategy.DISALLOW_ALL,
   allowedMethod: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   getKey: (req: HttpRequest<unknown>): string | undefined => {

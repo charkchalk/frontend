@@ -1,0 +1,31 @@
+@import "primeflex/src/_variables.scss";
+
+.range-input {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  span {
+    margin-top: 1.75rem;
+  }
+
+  @media (min-width: $lg) {
+    flex-direction: row;
+  }
+}
+
+:host::ng-deep .p-divider-content {
+  background-color: transparent;
+}
+
+app-week-time-input {
+  display: flex;
+  width: 100%;
+  flex: 1 1 auto;
+
+  @media (min-width: $lg) {
+    width: fit-content;
+  }
+}

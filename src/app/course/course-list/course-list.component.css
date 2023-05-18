@@ -1,7 +1,0 @@
-mat-paginator {
-  background: none;
-}
-
-:host::ng-deep .mat-mdc-paginator-range-actions {
-  @apply mx-auto rounded-full bg-white;
-}

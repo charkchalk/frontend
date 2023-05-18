@@ -1,11 +1,9 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { MatButtonModule } from "@angular/material/button";
-import { MatCardModule } from "@angular/material/card";
-import { MatIconModule } from "@angular/material/icon";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { MatTooltipModule } from "@angular/material/tooltip";
 import { RouterModule } from "@angular/router";
+import { ButtonModule } from "primeng/button";
+import { FieldsetModule } from "primeng/fieldset";
+import { TooltipModule } from "primeng/tooltip";
 
 import { CourseListItemComponent } from "./course-list-item.component";
 
@@ -13,12 +11,10 @@ import { CourseListItemComponent } from "./course-list-item.component";
   declarations: [CourseListItemComponent],
   imports: [
     CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSnackBarModule,
-    MatTooltipModule,
     RouterModule,
+    ButtonModule,
+    FieldsetModule,
+    TooltipModule,
   ],
   exports: [CourseListItemComponent],
 })

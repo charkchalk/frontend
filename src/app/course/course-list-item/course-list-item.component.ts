@@ -1,27 +1,25 @@
-import { Clipboard } from "@angular/cdk/clipboard";
-import { Component, Input } from "@angular/core";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 @Component({
   selector: "app-course-list-item",
   templateUrl: "./course-list-item.component.html",
-  styleUrls: ["./course-list-item.component.css"],
+  styleUrls: ["./course-list-item.component.scss"],
 })
 export class CourseListItemComponent {
   @Input() course?: RawCourse;
-
-  constructor(private _snackBar: MatSnackBar, private _clipboard: Clipboard) {}
+  @Output() copied = new EventEmitter<string>();
 
   copyCourseCode() {
     if (!this.course?.code) return;
 
-    this._clipboard.copy(this.course.code);
+    this.copyContent(this.course.code);
+    this.copied.emit();
+  }
 
-    this._snackBar.open("已經複製到剪貼簿囉～", "關閉", {
-      duration: 1000,
-      horizontalPosition: "center",
-      verticalPosition: "top",
-    });
+  inspectCourse() {
+    if (!this.course?.code) return;
+
+    window.open(this.course.link, "_blank");
   }
 
   copyCourseText() {
@@ -43,12 +41,16 @@ export class CourseListItemComponent {
       ` 上課。`,
     ].join("");
 
-    this._clipboard.copy(courseText);
+    this.copyContent(courseText);
+    this.copied.emit();
+  }
 
-    this._snackBar.open("已經複製到剪貼簿囉～", "關閉", {
-      duration: 1000,
-      horizontalPosition: "center",
-      verticalPosition: "top",
-    });
+  async copyContent(text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      console.log("Content copied to clipboard");
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
   }
 }

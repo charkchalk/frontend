@@ -1,8 +1,0 @@
-mat-icon + *:empty::before {
-  color: lightgray;
-  content: "沒有資料 ><";
-}
-
-.separate-children * + *::before {
-  content: " & ";
-}

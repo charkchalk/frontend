@@ -4,6 +4,6 @@ export interface WeekTimeRange {
 }
 
 export interface WeekTime {
-  day: number;
-  time: string;
+  day?: number;
+  time?: string;
 }
