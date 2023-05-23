@@ -29,7 +29,7 @@ export class CreditQueryDataProviderService extends QueryDataProvider<string> {
     return this.methods;
   }
 
-  getOptions(): Observable<StandardResponse<Displayable<string>[]>> {
+  getOptions(): Observable<Paginated<Displayable<string>[]>> {
     throw new Error("Method not supported.");
   }
 

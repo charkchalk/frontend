@@ -36,7 +36,7 @@ export class PlaceQueryDataProviderService extends QueryDataProvider<string> {
 
   getOptions(
     options: CanPaginate & { keyword: string },
-  ): Observable<StandardResponse<Displayable<string>[]>> {
+  ): Observable<Paginated<Displayable<string>[]>> {
     return this.placeApiService.getAll(options).pipe(
       map(response => {
         return {
@@ -74,9 +74,7 @@ export class PlaceQueryDataProviderService extends QueryDataProvider<string> {
     valueStrings: string,
   ): Promise<Displayable<string>[]> {
     const values = valueStrings.split(this.valueSeparator).map(async v => {
-      const host = await firstValueFrom(
-        this.placeApiService.get(v).pipe(map(response => response.content)),
-      );
+      const host = await firstValueFrom(this.placeApiService.get(v));
 
       return {
         value: host.uuid,

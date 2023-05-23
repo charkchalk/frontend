@@ -13,12 +13,12 @@ export class DateRangeApiService {
 
   getAll(
     options?: CanPaginate | { keyword: string },
-  ): Observable<StandardResponse<RawDateRange[]>> {
+  ): Observable<Paginated<RawDateRange[]>> {
     const params = new HttpParams({
       fromObject: options as Record<string, string>,
     });
 
-    return this._http.get<StandardResponse<RawDateRange[]>>(this._uri, {
+    return this._http.get<Paginated<RawDateRange[]>>(this._uri, {
       responseType: "json",
       params: params,
       headers: {
@@ -27,15 +27,12 @@ export class DateRangeApiService {
     });
   }
 
-  get(id: string): Observable<StandardResponse<RawDateRange>> {
-    return this._http.get<StandardResponse<RawDateRange>>(
-      this._uri + "/" + id,
-      {
-        responseType: "json",
-        headers: {
-          [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
-        },
+  get(id: string): Observable<RawDateRange> {
+    return this._http.get<RawDateRange>(this._uri + "/" + id, {
+      responseType: "json",
+      headers: {
+        [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
       },
-    );
+    });
   }
 }

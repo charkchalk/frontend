@@ -16,7 +16,7 @@ export class CourseApiService {
   getAll(
     data: QueryItem<unknown>[],
     options?: CanPaginate,
-  ): Observable<StandardResponse<RawCourse[]>> {
+  ): Observable<Paginated<RawCourse[]>> {
     const params = new HttpParams({
       fromObject: options as Record<string, string>,
     });
@@ -43,7 +43,7 @@ export class CourseApiService {
       existingCondition.value.push(...item.value.map(value => value.value));
     }
 
-    return this._http.post<StandardResponse<RawCourse[]>>(
+    return this._http.post<Paginated<RawCourse[]>>(
       this._uri + "/search",
       conditions,
       {

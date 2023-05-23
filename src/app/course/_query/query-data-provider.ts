@@ -26,7 +26,7 @@ export abstract class QueryDataProvider<T = unknown>
    */
   abstract getOptions(
     options?: CanPaginate | Record<string, unknown>,
-  ): Observable<StandardResponse<Displayable<string>[]>>;
+  ): Observable<Paginated<Displayable<string>[]>>;
 
   /**
    * To validate the value is a valid value or not, only for text type.

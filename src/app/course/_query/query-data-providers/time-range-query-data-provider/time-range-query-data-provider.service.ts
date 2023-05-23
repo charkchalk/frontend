@@ -37,7 +37,7 @@ export class TimeRangeQueryDataProviderService extends QueryDataProvider<WeekTim
 
   getOptions(
     options: CanPaginate & { keyword: string },
-  ): Observable<StandardResponse<Displayable<string>[]>> {
+  ): Observable<Paginated<Displayable<string>[]>> {
     return this.timeRangeApiService.getAll(options).pipe(
       map(response => {
         return {

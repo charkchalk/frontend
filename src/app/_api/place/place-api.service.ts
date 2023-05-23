@@ -13,12 +13,12 @@ export class PlaceApiService {
 
   getAll(
     options?: CanPaginate | { keyword: string },
-  ): Observable<StandardResponse<RawPlace[]>> {
+  ): Observable<Paginated<RawPlace[]>> {
     const params = new HttpParams({
       fromObject: options as Record<string, string>,
     });
 
-    return this._http.get<StandardResponse<RawPlace[]>>(this._uri, {
+    return this._http.get<Paginated<RawPlace[]>>(this._uri, {
       responseType: "json",
       params: params,
       headers: {
@@ -27,8 +27,8 @@ export class PlaceApiService {
     });
   }
 
-  get(id: string): Observable<StandardResponse<RawPlace>> {
-    return this._http.get<StandardResponse<RawPlace>>(this._uri + "/" + id, {
+  get(id: string): Observable<RawPlace> {
+    return this._http.get<RawPlace>(this._uri + "/" + id, {
       responseType: "json",
       headers: {
         [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
