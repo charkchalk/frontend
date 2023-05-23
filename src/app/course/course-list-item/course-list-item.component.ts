@@ -33,7 +33,7 @@ export class CourseListItemComponent {
       this.course?.timeRanges
         .map(
           timeRange =>
-            `${timeRange.day} ${timeRange.start_time} ~ ${timeRange.end_time}`,
+            `${timeRange.weekday} ${timeRange.startTime} ~ ${timeRange.endTime}`,
         )
         .join(", "),
       ` 在 `,

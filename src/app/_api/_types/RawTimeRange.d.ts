@@ -2,9 +2,9 @@ interface RawTimeRange {
   /** 系統流水號 */
   uuid: string;
   /** 星期 */
-  day: Weekday;
+  weekday: Weekday;
   /** 開始時間 */
-  start_time: string;
+  startTime: string;
   /** 結束時間 */
-  end_time: string;
+  endTime: string;
 }

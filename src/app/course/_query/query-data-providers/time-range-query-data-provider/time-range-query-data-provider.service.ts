@@ -44,7 +44,7 @@ export class TimeRangeQueryDataProviderService extends QueryDataProvider<WeekTim
           pagination: response.pagination,
           content: response.content.map(dateRange => ({
             value: dateRange.uuid,
-            label: `${dateRange.day} ${dateRange.start_time} ~ ${dateRange.end_time}`,
+            label: `${dateRange.weekday} ${dateRange.startTime} ~ ${dateRange.endTime}`,
           })),
         };
       }),

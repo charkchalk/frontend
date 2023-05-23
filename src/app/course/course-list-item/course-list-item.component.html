@@ -64,7 +64,16 @@
           >
             <ng-container *ngIf="index > 0">、</ng-container>
             <span>
-              {{ time.day }} {{ time.start_time }} ~ {{ time.end_time }}
+              <ng-container [ngSwitch]="time.weekday">
+                <ng-container *ngSwitchCase="'MONDAY'">週一</ng-container>
+                <ng-container *ngSwitchCase="'TUESDAY'">週二</ng-container>
+                <ng-container *ngSwitchCase="'WEDNESDAY'">週三</ng-container>
+                <ng-container *ngSwitchCase="'THURSDAY'">週四</ng-container>
+                <ng-container *ngSwitchCase="'FRIDAY'">週五</ng-container>
+                <ng-container *ngSwitchCase="'SATURDAY'">週六</ng-container>
+                <ng-container *ngSwitchCase="'SUNDAY'">週日</ng-container>
+              </ng-container>
+              {{ time.startTime }} ~ {{ time.endTime }}
             </span>
           </ng-container>
         </div>
