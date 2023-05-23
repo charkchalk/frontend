@@ -17,7 +17,11 @@
   <table width="100%">
     <tr>
       <th width="25%">修別</th>
-      <td width="25%">{{ course?.type?.name }}</td>
+      <td width="25%">
+        <ng-container *ngFor="let tag of course?.tags">{{
+          tag.name
+        }}</ng-container>
+      </td>
       <th width="25%">學分數</th>
       <td width="25%">{{ course?.credit }}</td>
     </tr>
