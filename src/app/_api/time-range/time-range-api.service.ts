@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { NgHttpCachingHeaders } from "ng-http-caching";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -18,13 +18,25 @@ export class TimeRangeApiService {
       fromObject: options as Record<string, string>,
     });
 
-    return this._http.get<Paginated<RawTimeRange[]>>(this._uri, {
-      responseType: "json",
-      params: params,
-      headers: {
-        [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
-      },
-    });
+    return this._http
+      .get<PaginatedResponse<RawTimeRange[]>>(this._uri, {
+        responseType: "json",
+        params: params,
+        headers: {
+          [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
+        },
+      })
+      .pipe(
+        map(response => {
+          return {
+            pagination: {
+              total: response.totalPages,
+              current: response.currentPage,
+            },
+            content: response.content,
+          };
+        }),
+      );
   }
 
   get(id: string): Observable<RawTimeRange> {

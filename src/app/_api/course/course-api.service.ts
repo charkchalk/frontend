@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { NgHttpCachingHeaders } from "ng-http-caching";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 
 import { QueryItem } from "../../course/_query/query-item";
 
@@ -43,17 +43,25 @@ export class CourseApiService {
       existingCondition.value.push(...item.value.map(value => value.value));
     }
 
-    return this._http.post<Paginated<RawCourse[]>>(
-      this._uri + "/search",
-      conditions,
-      {
+    return this._http
+      .post<PaginatedResponse<RawCourse[]>>(this._uri + "/search", conditions, {
         responseType: "json",
         params: params,
         headers: {
           [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
         },
-      },
-    );
+      })
+      .pipe(
+        map(response => {
+          return {
+            pagination: {
+              total: response.totalPages,
+              current: response.currentPage,
+            },
+            content: response.content,
+          };
+        }),
+      );
   }
 }
 
