@@ -43,7 +43,7 @@ export class DateRangeQueryDataProviderService extends QueryDataProvider<string>
           pagination: response.pagination,
           content: response.content.map(dateRange => ({
             value: dateRange.uuid,
-            label: `${dateRange.name} (${dateRange.description}) [${dateRange.start} ~ ${dateRange.end}]`,
+            label: `${dateRange.name} (${dateRange.description}) [${dateRange.startDate} ~ ${dateRange.endDate}]`,
           })),
         };
       }),
@@ -66,7 +66,7 @@ export class DateRangeQueryDataProviderService extends QueryDataProvider<string>
 
       return {
         value: dateRange.uuid,
-        label: `${dateRange.name} (${dateRange.description}) [${dateRange.start} ~ ${dateRange.end}]`,
+        label: `${dateRange.name} (${dateRange.description}) [${dateRange.startDate} ~ ${dateRange.endDate}]`,
       };
     });
 
