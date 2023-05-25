@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1684403339872,
+  "timestamp": 1685027104394,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -11,13 +11,13 @@
         "ignoreVary": true
       },
       "urls": [
-        "/642.67edcd466d5eb43b.js",
+        "/15.f0689f8e02cc12f4.js",
         "/favicon.ico",
         "/index.html",
-        "/main.eb4c1898a46429e7.js",
+        "/main.23b6f776c11d1caa.js",
         "/manifest.webmanifest",
         "/polyfills.caabf7e5ba76fe38.js",
-        "/runtime.0569337f9587023a.js",
+        "/runtime.188f00266643ea11.js",
         "/styles.5d7d7f8ffc697069.css"
       ],
       "patterns": []
@@ -50,7 +50,7 @@
   ],
   "dataGroups": [],
   "hashTable": {
-    "/642.67edcd466d5eb43b.js": "ca282dece25b15867cad1ed45e28fd3acafd1a06",
+    "/15.f0689f8e02cc12f4.js": "6cf81abfde0671641c68fc0e337f38bf28a07dbf",
     "/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
     "/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
     "/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
@@ -62,15 +62,15 @@
     "/color.dae87a04d07ca92b.png": "ff4c4bcb2207891b292f544edb4da9d2df5d45cf",
     "/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
     "/hue.8b1818380241e6ac.png": "f81ae627637a684614aa726e206c73ce099a01fd",
-    "/index.html": "a28a7d0f148aea7d23a2d2942030bdbac438a5a5",
-    "/main.eb4c1898a46429e7.js": "2b629370ab31135eb8cb2f75aed7af5e934d12e4",
+    "/index.html": "11b67d2b5301b1178b3936a219e540a71f466ce0",
+    "/main.23b6f776c11d1caa.js": "4de1ace70a87d0ccd5514989fbb92537129337d5",
     "/manifest.webmanifest": "043e03f724b197c6b4b012715637b63d30b00d83",
     "/polyfills.caabf7e5ba76fe38.js": "e8aac04ce5c6dcb94f0d1e3fb51048c80b80d75e",
     "/primeicons.0112589c5695a9ed.ttf": "ceeb46d594fde5cc507cdf8b70e38e78fe47653c",
     "/primeicons.943ab24c43224d29.svg": "d3332a45242b8f6edbf3f3c7176a280e7edcd961",
     "/primeicons.ba3f916dfb64be8c.woff2": "55a4b2a5f02e362405d8d874903af0b5f6a6c15d",
     "/primeicons.f8b9e8a4e401b603.woff": "b1648b50be13350fde8b5d9a6fe78354ddcc43e4",
-    "/runtime.0569337f9587023a.js": "6ff02b01ded5a616b8629670b284fca29285623b",
+    "/runtime.188f00266643ea11.js": "194530db070b1b5dff0b71b572c042718fe60936",
     "/styles.5d7d7f8ffc697069.css": "7e573db28665b093d3bc791db8b5b5da8df7358f"
   },
   "navigationUrls": [
