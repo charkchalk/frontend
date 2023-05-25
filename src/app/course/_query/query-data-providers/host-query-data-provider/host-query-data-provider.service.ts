@@ -36,7 +36,7 @@ export class HostQueryDataProviderService extends QueryDataProvider {
 
   getOptions(
     options: CanPaginate & { keyword: string },
-  ): Observable<StandardResponse<Displayable<string>[]>> {
+  ): Observable<Paginated<Displayable<string>[]>> {
     return this.personApiService.getAll(options).pipe(
       map(response => {
         return {
@@ -62,9 +62,7 @@ export class HostQueryDataProviderService extends QueryDataProvider {
     valueStrings: string,
   ): Promise<Displayable<string>[]> {
     const values = valueStrings.split(this.valueSeparator).map(async v => {
-      const host = await firstValueFrom(
-        this.personApiService.get(v).pipe(map(response => response.content)),
-      );
+      const host = await firstValueFrom(this.personApiService.get(v));
 
       return {
         value: host.uuid,

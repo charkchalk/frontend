@@ -28,12 +28,14 @@ export class CourseListItemComponent {
       `由 `,
       this.course?.hosts.map(host => host.name).join(" 跟 "),
       ` 開給 ${this.course?.organization?.name} 的「${this.course?.name}」。\n`,
-      `${this.course?.type?.name} ${this.course?.credit} 學分，`,
+      `${this.course?.tags.map(tag => tag.name).join("、")} ${
+        this.course?.credit
+      } 學分，`,
       `每週 `,
       this.course?.timeRanges
         .map(
           timeRange =>
-            `${timeRange.day} ${timeRange.start_time} ~ ${timeRange.end_time}`,
+            `${timeRange.weekday} ${timeRange.startTime} ~ ${timeRange.endTime}`,
         )
         .join(", "),
       ` 在 `,

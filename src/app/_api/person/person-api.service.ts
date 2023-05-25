@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { NgHttpCachingHeaders } from "ng-http-caching";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -13,22 +13,34 @@ export class PersonApiService {
 
   getAll(
     options?: CanPaginate | { keyword: string },
-  ): Observable<StandardResponse<RawPerson[]>> {
+  ): Observable<Paginated<RawPerson[]>> {
     const params = new HttpParams({
       fromObject: options as Record<string, string>,
     });
 
-    return this._http.get<StandardResponse<RawPerson[]>>(this._uri, {
-      responseType: "json",
-      params: params,
-      headers: {
-        [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
-      },
-    });
+    return this._http
+      .get<PaginatedResponse<RawPerson[]>>(this._uri, {
+        responseType: "json",
+        params: params,
+        headers: {
+          [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
+        },
+      })
+      .pipe(
+        map(response => {
+          return {
+            pagination: {
+              total: response.totalPages,
+              current: response.currentPage,
+            },
+            content: response.content,
+          };
+        }),
+      );
   }
 
-  get(id: string): Observable<StandardResponse<RawPerson>> {
-    return this._http.get<StandardResponse<RawPerson>>(this._uri + "/" + id, {
+  get(id: string): Observable<RawPerson> {
+    return this._http.get<RawPerson>(this._uri + "/" + id, {
       responseType: "json",
       headers: {
         [NgHttpCachingHeaders.ALLOW_CACHE]: "1",

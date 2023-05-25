@@ -37,14 +37,14 @@ export class TimeRangeQueryDataProviderService extends QueryDataProvider<WeekTim
 
   getOptions(
     options: CanPaginate & { keyword: string },
-  ): Observable<StandardResponse<Displayable<string>[]>> {
+  ): Observable<Paginated<Displayable<string>[]>> {
     return this.timeRangeApiService.getAll(options).pipe(
       map(response => {
         return {
           pagination: response.pagination,
           content: response.content.map(dateRange => ({
             value: dateRange.uuid,
-            label: `${dateRange.day} ${dateRange.start_time} ~ ${dateRange.end_time}`,
+            label: `${dateRange.weekday} ${dateRange.startTime} ~ ${dateRange.endTime}`,
           })),
         };
       }),
