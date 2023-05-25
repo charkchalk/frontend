@@ -1,7 +1,6 @@
 <div class="p-fluid p-float-label">
   <p-autoComplete
-    [(ngModel)]="localValue"
-    (ngModelChange)="onChange()"
+    [formControl]="control"
     [suggestions]="filteredOptions()"
     field="label"
     dataKey="value"
@@ -11,8 +10,6 @@
     [forceSelection]="true"
     [multiple]="true"
     [lazy]="true"
-    [required]="true"
-    [disabled]="!provider"
   >
     <ng-template pTemplate="footer">
       <p-progressBar

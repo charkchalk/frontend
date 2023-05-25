@@ -1,4 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 
 import { Displayable } from "../../../_types/displayable";
 import { WeekTime } from "../../../_types/week-time";
@@ -25,13 +31,23 @@ export class WeekTimeInputComponent implements OnInit {
   @Output() updated: EventEmitter<WeekTime> = new EventEmitter();
 
   @Input() value: WeekTime = {};
-  protected localValue!: WeekTime;
+
+  @Output() controlSet = new EventEmitter<AbstractControl>();
+  formGroup!: FormGroup;
 
   ngOnInit() {
-    this.localValue = this.value;
+    this.formGroup = new FormGroup({
+      weekday: new FormControl(this.value?.day, Validators.required),
+      time: new FormControl(this.value?.time, Validators.required),
+    });
+    this.controlSet.emit(this.formGroup);
+    this.formGroup.valueChanges.subscribe(() => this.notifyQueryUpdate());
   }
 
   notifyQueryUpdate() {
-    this.updated.emit(this.localValue);
+    this.updated.emit({
+      day: this.formGroup.get("weekday")?.value,
+      time: this.formGroup.get("time")?.value,
+    });
   }
 }

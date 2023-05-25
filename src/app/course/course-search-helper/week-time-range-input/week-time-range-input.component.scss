@@ -1,6 +1,6 @@
 @import "primeflex/src/_variables.scss";
 
-.range-input {
+:host {
   display: flex;
   flex-grow: 1;
   align-items: center;
@@ -14,10 +14,6 @@
   @media (min-width: $lg) {
     flex-direction: row;
   }
-}
-
-:host::ng-deep .p-divider-content {
-  background-color: transparent;
 }
 
 app-week-time-input {

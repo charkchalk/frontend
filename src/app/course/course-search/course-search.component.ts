@@ -1,4 +1,10 @@
 import { Component, OnInit } from "@angular/core";
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+} from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { CourseQueryService } from "../_query/course-query.service";
@@ -12,6 +18,7 @@ import { QueryItem } from "../_query/query-item";
 export class CourseSearchComponent implements OnInit {
   queries: QueryItem<unknown>[] = [];
   queryParams: { [key: string]: string[] } = {};
+  formArray: FormArray = new FormArray<FormGroup>([]);
 
   constructor(
     private courseQueryManagerService: CourseQueryService,
@@ -28,7 +35,30 @@ export class CourseSearchComponent implements OnInit {
   }
 
   onSubmit() {
+    this.formArray.controls
+      .flatMap(function flatChildren(control): FormControl[] {
+        if (control instanceof FormGroup || control instanceof FormArray) {
+          return Object.values(control.controls)
+            .map((control: AbstractControl): FormControl[] =>
+              flatChildren.call(this, control),
+            )
+            .flatMap(control => control);
+        }
+        return [control as FormControl];
+      })
+      .forEach(control => control.markAsDirty());
+
+    if (this.formArray.invalid) return;
+
     this.queryParams = this.courseQueryManagerService.serializeQueries();
     this.router.navigate(["/courses"], { queryParams: this.queryParams });
+  }
+
+  onChildControlSet(index: number, childControl: AbstractControl) {
+    this.formArray.setControl(index, childControl);
+  }
+
+  onChildControlRemove(index: number) {
+    this.formArray.removeAt(index);
   }
 }
