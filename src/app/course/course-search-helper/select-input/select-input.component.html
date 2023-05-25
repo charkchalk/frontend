@@ -1,7 +1,7 @@
 <div class="p-fluid p-float-label">
   <p-autoComplete
     [formControl]="control"
-    [suggestions]="filteredOptions()"
+    [suggestions]="(optionsSubject | async) || options"
     field="label"
     dataKey="value"
     [autoHighlight]="true"

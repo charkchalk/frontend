@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormControl, Validators } from "@angular/forms";
-import { Observable, Subscription } from "rxjs";
+import { BehaviorSubject, Observable, Subscription } from "rxjs";
 
 import { Displayable } from "../../../_types/displayable";
 import { QueryDataProvider } from "../../_query/query-data-provider";
@@ -50,6 +50,7 @@ export class SelectInputComponent implements OnInit {
 
   /** Selectable options */
   options: Displayable<string>[] = [];
+  optionsSubject = new BehaviorSubject<Displayable<string>[]>([]);
   /**
    * Get options without selected options
    * @returns Array of selectable options
@@ -80,7 +81,7 @@ export class SelectInputComponent implements OnInit {
       this.intersectionObserver.disconnect();
       this.getOptions(this.query);
     },
-    { threshold: 0.1 },
+    { threshold: 1 },
   );
 
   /**
@@ -151,6 +152,7 @@ export class SelectInputComponent implements OnInit {
       })
       .subscribe(options => {
         this.options = this.options.concat(...options.content);
+        this.optionsSubject.next(this.filteredOptions());
         this.optionsPage = options.pagination.current;
         this.isLoadingOptions = false;
         if (options.pagination.current >= options.pagination.total) {
@@ -171,6 +173,8 @@ export class SelectInputComponent implements OnInit {
       this.options = [];
       this.query = event.query;
     }
+    if (this.options.length) this.optionsSubject.next(this.filteredOptions());
+
     if (this.optionsPage < 0) return;
     this.getOptions(this.query);
   }
