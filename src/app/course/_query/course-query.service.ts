@@ -10,6 +10,7 @@ import { HostQueryDataProviderService } from "./query-data-providers/host-query-
 import { KeywordQueryDataProviderService } from "./query-data-providers/keyword-query-data-provider/keyword-query-data-provider.service";
 import { OrganizationQueryDataProviderService } from "./query-data-providers/organization-query-data-provider/organization-query-data-provider.service";
 import { PlaceQueryDataProviderService } from "./query-data-providers/place-query-data-provider/place-query-data-provider.service";
+import { TagQueryDataProviderService } from "./query-data-providers/tag-query-data-provider/tag-query-data-provider.service";
 import { TimeRangeQueryDataProviderService } from "./query-data-providers/time-range-query-data-provider/time-range-query-data-provider.service";
 import { QueryItem } from "./query-item";
 
@@ -26,6 +27,7 @@ export class CourseQueryService {
     codeQueryDataProviderService: CodeQueryDataProviderService,
     organizationQueryDataProviderService: OrganizationQueryDataProviderService,
     placeQueryDataProviderService: PlaceQueryDataProviderService,
+    tagQueryDataProviderService: TagQueryDataProviderService,
     dateRangeQueryDataProviderService: DateRangeQueryDataProviderService,
     timeRangeQueryDataProviderService: TimeRangeQueryDataProviderService,
   ) {
@@ -35,6 +37,7 @@ export class CourseQueryService {
     this.providers.push(codeQueryDataProviderService);
     this.providers.push(organizationQueryDataProviderService);
     this.providers.push(placeQueryDataProviderService);
+    this.providers.push(tagQueryDataProviderService);
     this.providers.push(dateRangeQueryDataProviderService);
     this.providers.push(timeRangeQueryDataProviderService);
   }
