@@ -1,0 +1,50 @@
+name: "CI: On main Pushed"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  bump-version-and-sync:
+    name: Auto Version Bumping and Sync Back to develop
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Git from action context
+        run: |
+          git config --global user.name "Charkchalk GitHub Actions"
+          git config --global user.email "contact@charkchalk.io"
+
+      - name: Get semantically bumped version
+        id: semantic_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: true
+
+      - name: Replace version in package.json
+        run: npm version ${{ steps.semantic_version.outputs.new_tag }} --no-git-tag-version
+
+      - name: Commit & Push Bumped Version
+        run: |
+          git commit -a -m "chore: auto bump version to ${{ steps.semantic_version.outputs.new_version }}"
+          git log -5
+          git tag ${{ steps.semantic_version.outputs.new_tag }} -a -m "${{ steps.semantic_version.outputs.changelog }}"
+          git push
+          git push --tags
+
+      - uses: actions/checkout@v3
+        with:
+          ref: refs/heads/develop
+          fetch-depth: 0
+
+      - name: Sync main to develop
+        run: |
+          git merge origin/main
+          git push

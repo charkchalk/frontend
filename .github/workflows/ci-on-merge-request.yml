@@ -1,69 +1,49 @@
-name: Continuous Integration
+name: "CI: On Merge Request"
 
 on: pull_request
 
 jobs:
-  lint:
-    name: Lint Code
+  lint-and-test:
+    name: Lint Code and Unit Test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v3
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Setup node and cache dependencies
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "yarn"
 
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: ESLint Check
-        run: yarn eslint .
+        run: pnpm eslint .
 
       - name: Prettier Check
-        run: yarn prettier --check --ignore-unknown .
-
-  unit-test:
-    name: Unit Test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v3
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Setup node and cache dependencies
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: "yarn"
-
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm prettier --check --ignore-unknown .
 
       - name: Create .env file
         uses: ozaytsev86/create-env-file-action@v1
@@ -71,7 +51,7 @@ jobs:
           ENV_NG_APP_API_ENDPOINT: ${{ vars.API_ENDPOINT }}
 
       - name: Unit Test
-        run: yarn test --no-watch --no-progress --code-coverage --browsers=ChromeHeadless
+        run: pnpm test:cli --no-watch
 
   deploy-preview:
     name: Deploy Preview to Cloudflare Pages
@@ -83,14 +63,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup node and cache dependencies
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "yarn"
 
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Create .env file
         uses: ozaytsev86/create-env-file-action@v1
@@ -98,7 +98,7 @@ jobs:
           ENV_NG_APP_API_ENDPOINT: ${{ vars.API_ENDPOINT }}
 
       - name: Build
-        run: yarn ng build
+        run: pnpm build
 
       - uses: bhowell2/github-substring-action@v1.0.0
         id: sha

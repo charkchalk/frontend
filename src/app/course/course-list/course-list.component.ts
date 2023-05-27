@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { MessageService } from "primeng/api";
+import { PaginatorState } from "primeng/paginator";
 import { Subscription } from "rxjs";
 
 import { CourseApiService } from "../../_api/course/course-api.service";
@@ -54,14 +55,14 @@ export class CourseListComponent implements OnInit {
       });
   }
 
-  handlePageEvent(event: PPaginatorPageEvent) {
+  handlePageEvent(event: PaginatorState) {
     if (this.pageSize !== event.rows) {
-      this.pageSize = event.rows;
+      this.pageSize = event.rows ?? 25;
       this.pagination.total = 1;
     }
     this.courses = [];
     this.loading = true;
-    this.search(event.page + 1);
+    this.search((event.page ?? 0) + 1);
   }
 
   onCopied(message: string) {
