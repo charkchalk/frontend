@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormControl, Validators } from "@angular/forms";
+import { AutoCompleteCompleteEvent } from "primeng/autocomplete";
 import { BehaviorSubject, Observable, Subscription } from "rxjs";
 
 import { Displayable } from "../../../_types/displayable";
@@ -167,7 +168,7 @@ export class SelectInputComponent implements OnInit {
    * Handle user input event
    * @param event event from autocomplete event
    */
-  onCompleteInput(event: PAutoCompleteCompleteEvent): void {
+  onCompleteInput(event: AutoCompleteCompleteEvent): void {
     if (this.query !== event.query) {
       this.optionsPage = 0;
       this.options = [];
