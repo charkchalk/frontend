@@ -50,4 +50,4 @@ jobs:
       - name: Deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm ng -- deploy --no-silent --cname=charkchalk.io --name="Charkchalk" --email=contact@charkchalk.io
+        run: pnpm ng deploy --no-silent --cname=charkchalk.io --name="Charkchalk GitHub Action" --email=contact@charkchalk.io
