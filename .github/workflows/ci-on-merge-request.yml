@@ -1,10 +1,10 @@
-name: Continuous Integration
+name: "CI: On Merge Request"
 
 on: pull_request
 
 jobs:
   lint-and-test:
-    name: Lint Code adn Unit Test
+    name: Lint Code and Unit Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
