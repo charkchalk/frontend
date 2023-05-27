@@ -1,0 +1,12 @@
+<div class="p-fluid p-float-label">
+  <p-chips
+    inputId="content"
+    [formControl]="control"
+    [separator]="separatorExp.source"
+    placeholder="輸入後按下 enter, 逗號或頓號新增條件"
+    [addOnBlur]="true"
+    [allowDuplicate]="false"
+  ></p-chips>
+  <label for="content">比對內容</label>
+  <div *ngIf="error">{{ error }}</div>
+</div>

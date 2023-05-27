@@ -65,5 +65,71 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Create .env file
+        uses: ozaytsev86/create-env-file-action@v1
+        with:
+          ENV_NG_APP_API_ENDPOINT: ${{ vars.API_ENDPOINT }}
+
       - name: Unit Test
         run: yarn test --no-watch --no-progress --code-coverage --browsers=ChromeHeadless
+
+  deploy-preview:
+    name: Deploy Preview to Cloudflare Pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup node and cache dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "yarn"
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Create .env file
+        uses: ozaytsev86/create-env-file-action@v1
+        with:
+          ENV_NG_APP_API_ENDPOINT: ${{ vars.API_ENDPOINT }}
+
+      - name: Build
+        run: yarn ng build
+
+      - uses: bhowell2/github-substring-action@v1.0.0
+        id: sha
+        with:
+          value: ${{ github.sha }}
+          length_from_start: 7
+
+      - name: Create Cloudflare Pages Project
+        run: |
+          curl --request POST \
+            --url https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/pages/projects \
+            --header 'Content-Type: application/json' \
+            --header 'Authorization: Bearer ${{ secrets.CLOUDFLARE_PAGES_DEPLOY_TOKEN }}' \
+            --data '{
+              "name": "charkchalk-pr-${{ github.event.number }}",
+              "production_branch": "main"
+            }'
+
+      - name: Deploy Preview to Cloudflare Pages
+        id: deployment
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_PAGES_DEPLOY_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: charkchalk-pr-${{ github.event.number }}
+          directory: dist/charkchalk-frontend
+          branch: ${{ steps.sha.outputs.substring }}
+
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Preview ${{ steps.sha.outputs.substring }} at: ${{ steps.deployment.outputs.url }}

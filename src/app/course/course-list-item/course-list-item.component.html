@@ -1,0 +1,111 @@
+<p-fieldset>
+  <ng-template pTemplate="header">
+    <div>{{ course?.name }}</div>
+    <div
+      *ngIf="course?.code; else emptyPlaceholder"
+      (click)="copyCourseCode()"
+      class="cursor-pointer"
+      pTooltip="點擊複製選課代號至剪貼簿"
+    >
+      <span class="text-sm font-light">{{ course?.code }}</span>
+      <i class="pi pi-copy text-xs pl-1"></i>
+    </div>
+    <ng-template #emptyPlaceholder>
+      <div class="text-sm font-light">-</div>
+    </ng-template>
+  </ng-template>
+  <table width="100%">
+    <tr>
+      <th width="25%">修別</th>
+      <td width="25%">
+        <ng-container *ngFor="let tag of course?.tags">{{
+          tag.name
+        }}</ng-container>
+      </td>
+      <th width="25%">學分數</th>
+      <td width="25%">{{ course?.credit }}</td>
+    </tr>
+  </table>
+  <table width="100%">
+    <tr>
+      <th pTooltip="授課教師">
+        <i class="material-icons">person_pin</i>
+      </th>
+      <td>
+        <div class="flex flex-row flex-wrap">
+          <ng-container *ngFor="let host of course?.hosts; let index = index">
+            <ng-container *ngIf="index > 0">、</ng-container>
+            <span>
+              {{ host.name }}
+            </span>
+          </ng-container>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th pTooltip="上課地點">
+        <i class="material-icons">location_on</i>
+      </th>
+      <td>
+        <div class="flex flex-row flex-wrap">
+          <ng-container *ngFor="let place of course?.places; let index = index">
+            <ng-container *ngIf="index > 0">、</ng-container>
+            <span>
+              {{ place.name }}
+            </span>
+          </ng-container>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th pTooltip="上課時間">
+        <i class="material-icons">schedule</i>
+      </th>
+      <td>
+        <div class="flex flex-row flex-wrap">
+          <ng-container
+            *ngFor="let time of course?.timeRanges; let index = index"
+          >
+            <ng-container *ngIf="index > 0">、</ng-container>
+            <span>
+              <ng-container [ngSwitch]="time.weekday">
+                <ng-container *ngSwitchCase="'MONDAY'">週一</ng-container>
+                <ng-container *ngSwitchCase="'TUESDAY'">週二</ng-container>
+                <ng-container *ngSwitchCase="'WEDNESDAY'">週三</ng-container>
+                <ng-container *ngSwitchCase="'THURSDAY'">週四</ng-container>
+                <ng-container *ngSwitchCase="'FRIDAY'">週五</ng-container>
+                <ng-container *ngSwitchCase="'SATURDAY'">週六</ng-container>
+                <ng-container *ngSwitchCase="'SUNDAY'">週日</ng-container>
+              </ng-container>
+              {{ time.startTime }} ~ {{ time.endTime }}
+            </span>
+          </ng-container>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th pTooltip="開課單位">
+        <i class="material-icons">groups</i>
+      </th>
+      <td>{{ course?.organization?.name }}</td>
+    </tr>
+  </table>
+  <div class="p-buttonset flex shadow-1">
+    <button
+      pButton
+      class="p-button-sm p-button-text flex-grow-1"
+      [ngClass]="{ 'p-button-secondary': !course?.link }"
+      label="查看資訊"
+      icon="pi pi-info"
+      (click)="inspectCourse()"
+      [disabled]="!course?.link"
+    ></button>
+    <button
+      pButton
+      class="p-button-sm p-button-text flex-grow-1"
+      label="複製資訊"
+      icon="pi pi-copy"
+      (click)="copyCourseText()"
+    ></button>
+  </div>
+</p-fieldset>

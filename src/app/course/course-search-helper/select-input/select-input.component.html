@@ -1,0 +1,26 @@
+<div class="p-fluid p-float-label">
+  <p-autoComplete
+    [formControl]="control"
+    [suggestions]="(optionsSubject | async) || options"
+    field="label"
+    dataKey="value"
+    [autoHighlight]="true"
+    (completeMethod)="onCompleteInput($event)"
+    [completeOnFocus]="true"
+    [forceSelection]="true"
+    [multiple]="true"
+    [lazy]="true"
+  >
+    <ng-template pTemplate="footer">
+      <p-progressBar
+        *ngIf="isLoadingOptions; else endOfOptions"
+        mode="indeterminate"
+        [style]="{ height: '6px' }"
+      ></p-progressBar>
+      <ng-template #endOfOptions>
+        <div class="text-center text-color-secondary">沒有更多選項囉～</div>
+      </ng-template>
+    </ng-template>
+  </p-autoComplete>
+  <label for="content">比對內容</label>
+</div>

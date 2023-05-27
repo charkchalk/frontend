@@ -1,0 +1,16 @@
+<app-course-search-helper
+  *ngFor="let query of queries; let index = index"
+  [index]="index"
+  [deletable]="index !== queries.length - 1"
+  (controlSet)="onChildControlSet(index, $event)"
+  (removed)="onChildControlRemove(index)"
+></app-course-search-helper>
+<br />
+<div class="text-center">
+  <p-button
+    class="mx-auto"
+    label="Charkchalk!"
+    styleClass="p-button-primary"
+    (onClick)="onSubmit()"
+  ></p-button>
+</div>

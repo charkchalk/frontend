@@ -1,0 +1,10 @@
+<app-course-search
+  class="container"
+  [ngClass]="{ searching: !searching }"
+></app-course-search>
+<app-course-list *ngIf="!loading && searching"></app-course-list>
+
+<div *ngIf="loading" class="loading-wrapper">
+  <p-progressSpinner></p-progressSpinner>
+  <div>載入參數中...</div>
+</div>

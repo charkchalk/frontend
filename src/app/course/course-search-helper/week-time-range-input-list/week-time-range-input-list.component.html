@@ -1,0 +1,10 @@
+<ng-container *ngFor="let weekTimeRange of weekTimeRanges; let index = index">
+  <p-divider align="center" *ngIf="index > 0" styleClass="mb-0">或</p-divider>
+  <app-week-time-range-input
+    [provider]="provider"
+    [providerChange]="providerChange"
+    [value]="weekTimeRange"
+    (updated)="onWeekTimeRangeUpdated(index, $event)"
+    (controlSet)="onWeekTimeRangeControlSet(index, $event)"
+  ></app-week-time-range-input>
+</ng-container>

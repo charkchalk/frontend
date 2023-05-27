@@ -1,0 +1,36 @@
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+@import "primeflex/primeflex.scss";
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--surface-ground);
+}
+
+@import "primeflex/src/_variables.scss";
+
+.container {
+  width: 100%;
+
+  @media (min-width: $sm) {
+    max-width: $sm;
+  }
+
+  @media (min-width: $md) {
+    max-width: $md;
+  }
+
+  @media (min-width: $lg) {
+    max-width: $lg;
+  }
+
+  @media (min-width: $xl) {
+    max-width: $xl;
+  }
+}
+
+.p-float-label {
+  margin-top: 1.75rem; // preserve for floating label
+}

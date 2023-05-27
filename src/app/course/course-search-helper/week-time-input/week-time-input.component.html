@@ -1,0 +1,26 @@
+<ng-container [formGroup]="formGroup">
+  <div class="p-fluid p-float-label">
+    <p-dropdown
+      inputId="weekday"
+      formControlName="weekday"
+      [options]="weekdays"
+      optionLabel="label"
+      optionValue="value"
+      [placeholder]="weekLabel"
+    ></p-dropdown>
+    <label for="weekday">{{ weekLabel }}</label>
+  </div>
+
+  <div class="p-fluid p-float-label">
+    <p-calendar
+      formControlName="time"
+      class="h-full"
+      styleClass="h-full"
+      inputId="time"
+      [showTime]="true"
+      [timeOnly]="true"
+      dataType="string"
+    ></p-calendar>
+    <label for="time">{{ timeLabel }}</label>
+  </div>
+</ng-container>

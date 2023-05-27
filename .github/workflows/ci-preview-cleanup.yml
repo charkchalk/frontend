@@ -1,0 +1,18 @@
+name: Continuous Integration Preview Cleanup
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  revoke-preview-deploy:
+    name: Revoke Cloudflare Pages Preview Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revoke Preview Deployment
+        run: |
+          curl --fail --request DELETE \
+            --url https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/pages/projects/charkchalk-pr-${{ github.event.number }} \
+            --header 'Content-Type: application/json' \
+            --header 'Authorization: Bearer ${{ secrets.CLOUDFLARE_PAGES_DEPLOY_TOKEN }}'

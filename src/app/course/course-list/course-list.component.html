@@ -1,0 +1,22 @@
+<div id="coursesContainer" #coursesContainer>
+  <app-course-list-item
+    *ngFor="let course of courses"
+    [course]="course"
+    (copied)="onCopied($event)"
+  ></app-course-list-item>
+</div>
+
+<p-progressSpinner
+  *ngIf="loading"
+  class="mx-auto block w-min"
+></p-progressSpinner>
+
+<p-paginator
+  (onPageChange)="handlePageEvent($event)"
+  [first]="(pagination.current - 1) * pageSize"
+  [rows]="pageSize"
+  [totalRecords]="pageSize * pagination.total"
+  [rowsPerPageOptions]="[20, 50, 100]"
+></p-paginator>
+
+<p-toast></p-toast>

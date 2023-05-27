@@ -1,0 +1,40 @@
+@import "primeflex/src/_variables.scss";
+
+:host {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+
+  @media (min-width: $lg) {
+    flex-direction: row;
+  }
+
+  // Space between the elements
+  > *:not(:first-child) {
+    @media (min-width: $lg) {
+      margin-left: 0.5rem;
+    }
+  }
+
+  > *:not(:last-child) {
+    min-width: 20%;
+    width: 100%; // max width display when mobile view
+
+    @media (min-width: $lg) {
+      width: max-content; // max content width display when desktop view
+    }
+  }
+
+  > *:nth-child(3) {
+    flex-grow: 1;
+  }
+}
+
+p-button {
+  margin-top: 1.75rem;
+  align-self: center;
+
+  @media (min-width: $lg) {
+    align-self: flex-start;
+  }
+}
