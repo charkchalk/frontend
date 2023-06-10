@@ -9,12 +9,14 @@
   "plugins": ["simple-import-sort", "import"],
   "overrides": [
     {
+      "plugins": ["typescript-sort-keys"],
       "files": ["*.ts"],
       "extends": [
         "eslint:all",
         "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:typescript-sort-keys/recommended",
         "prettier"
       ],
       "rules": {
