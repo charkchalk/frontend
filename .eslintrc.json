@@ -11,13 +11,23 @@
     {
       "files": ["*.ts"],
       "extends": [
-        "eslint:recommended",
+        "eslint:all",
         "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates",
         "prettier"
       ],
       "rules": {
+        "no-console": "off",
+        "no-useless-constructor": "off",
+        "new-cap": "off",
+        "no-underscore-dangle": "off",
+        "one-var": "off",
+        "no-continue": "off",
+        "class-methods-use-this": "off",
+        "require-await": "off",
+        "no-magic-numbers": "off", // This will wrongly detect a number passed to a function as a magic number
+        "max-params": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {
@@ -34,11 +44,18 @@
             "style": "kebab-case"
           }
         ],
+        "sort-imports": "off",
         "simple-import-sort/imports": "error",
         "simple-import-sort/exports": "error",
         "import/first": "error",
         "import/newline-after-import": "error",
         "import/no-duplicates": "error"
+      }
+    },
+    {
+      "files": ["*.spec.ts"],
+      "rules": {
+        "init-declarations": "off"
       }
     },
     {
