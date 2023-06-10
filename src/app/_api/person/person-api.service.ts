@@ -20,31 +20,29 @@ export class PersonApiService {
 
     return this._http
       .get<PaginatedResponse<RawPerson[]>>(this._uri, {
-        responseType: "json",
-        params: params,
         headers: {
           [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
         },
+        params,
+        responseType: "json",
       })
       .pipe(
-        map(response => {
-          return {
-            pagination: {
-              total: response.totalPages,
-              current: response.currentPage,
-            },
-            content: response.content,
-          };
-        }),
+        map(response => ({
+          content: response.content,
+          pagination: {
+            current: response.currentPage,
+            total: response.totalPages,
+          },
+        })),
       );
   }
 
   get(id: string): Observable<RawPerson> {
-    return this._http.get<RawPerson>(this._uri + "/" + id, {
-      responseType: "json",
+    return this._http.get<RawPerson>(`${this._uri}/${id}`, {
       headers: {
         [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
       },
+      responseType: "json",
     });
   }
 }

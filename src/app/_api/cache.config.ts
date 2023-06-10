@@ -12,20 +12,20 @@ const hashOptions: objectHash.NormalOption = {
 };
 
 export const ngHttpCachingConfig: NgHttpCachingConfig = {
-  store: new NgHttpCachingSessionStorage(),
-  cacheStrategy: NgHttpCachingStrategy.DISALLOW_ALL,
   allowedMethod: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  cacheStrategy: NgHttpCachingStrategy.DISALLOW_ALL,
   getKey: (req: HttpRequest<unknown>): string | undefined => {
     const coreRequest = {
-      method: req.method,
-      url: req.url,
+      body: req.body,
       headers: req.headers
         .keys()
         .map(key => ({ [key]: req.headers.getAll(key) })),
+      method: req.method,
       params: req.params.keys().map(key => ({ [key]: req.params.getAll(key) })),
-      body: req.body,
+      url: req.url,
     };
 
     return objectHash(coreRequest, hashOptions);
   },
+  store: new NgHttpCachingSessionStorage(),
 };

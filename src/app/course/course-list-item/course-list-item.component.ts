@@ -2,11 +2,12 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 @Component({
   selector: "app-course-list-item",
-  templateUrl: "./course-list-item.component.html",
   styleUrls: ["./course-list-item.component.scss"],
+  templateUrl: "./course-list-item.component.html",
 })
 export class CourseListItemComponent {
   @Input() course?: RawCourse;
+
   @Output() copied = new EventEmitter<string>();
 
   copyCourseCode() {

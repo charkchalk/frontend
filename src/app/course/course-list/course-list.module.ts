@@ -9,6 +9,7 @@ import { CourseListComponent } from "./course-list.component";
 
 @NgModule({
   declarations: [CourseListComponent],
+  exports: [CourseListComponent],
   imports: [
     CommonModule,
     CourseListItemModule,
@@ -16,6 +17,5 @@ import { CourseListComponent } from "./course-list.component";
     PaginatorModule,
     ToastModule,
   ],
-  exports: [CourseListComponent],
 })
 export class CourseListModule {}

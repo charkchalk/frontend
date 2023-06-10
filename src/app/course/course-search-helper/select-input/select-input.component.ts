@@ -8,23 +8,28 @@ import { QueryDataProvider } from "../../_query/query-data-provider";
 
 @Component({
   selector: "app-select-input",
-  templateUrl: "./select-input.component.html",
   styleUrls: ["./select-input.component.scss"],
+  templateUrl: "./select-input.component.html",
 })
 export class SelectInputComponent implements OnInit {
   /** An event emitter that emit events when input has been focused */
   @Output() active: EventEmitter<void> = new EventEmitter();
+
   /** An event emitter that emit events when value has been updated */
   @Output() updated: EventEmitter<Displayable<string>[]> = new EventEmitter();
+
   /** Data provider of current filtering condition */
   @Input() provider?: QueryDataProvider;
+
   /** Value of current filtering condition */
   @Input() value?: Displayable<unknown>[] = [];
+
   /** An event emitter that receive event from parent when provider changed */
   @Input() providerChange?: Observable<void>;
 
   /** Emit control to parent after control initialized */
   @Output() controlSet = new EventEmitter<AbstractControl>();
+
   /** Control of current filtering condition */
   control = new FormControl<Displayable<string>[]>([], Validators.required);
 
@@ -51,29 +56,36 @@ export class SelectInputComponent implements OnInit {
 
   /** Selectable options */
   options: Displayable<string>[] = [];
+
   optionsSubject = new BehaviorSubject<Displayable<string>[]>([]);
+
   /**
    * Get options without selected options
    * @returns Array of selectable options
    */
   filteredOptions(): Displayable<string>[] {
-    return this.options.filter(option => {
-      return !this.control.value?.find(
-        selected => selected.value === option.value,
-      );
-    });
+    return this.options.filter(
+      option =>
+        !this.control.value?.find(selected => selected.value === option.value),
+    );
   }
+
   /** Current page of options, needs to be reset when searching context changed */
   optionsPage = 0;
+
   /** Last query request, used to cancel last request when new request is triggered */
   lastQueryRequest?: Subscription;
+
   /** Is waiting for server respond options or not */
   isLoadingOptions = false;
+
   /** Visibility detector, used to additional loading options */
   intersectionObserver = new IntersectionObserver(
     entries => {
-      // observer will be triggered when target is going to visible or invisible
-      // so we have to ignore invisible event
+      /*
+       * Observer will be triggered when target is going to visible or invisible
+       * so we have to ignore invisible event
+       */
       if (!entries[0].isIntersecting) return;
       if (this.optionsPage < 0) return;
 
@@ -118,14 +130,17 @@ export class SelectInputComponent implements OnInit {
   ): Promise<Element> {
     return new Promise(resolve => {
       const element = document.querySelector(target);
-      if (element && validator(element)) return resolve(element);
+      if (element && validator(element)) {
+        resolve(element);
+        return;
+      }
 
       const observer = new MutationObserver(() => {
-        const element = document.querySelector(target);
-        if (element && validator(element)) {
-          observer.disconnect();
-          resolve(element);
-        }
+        const listening = document.querySelector(target);
+        if (!listening || !validator(listening)) return;
+
+        observer.disconnect();
+        resolve(listening);
       });
 
       const parentElement = document.querySelector(parent ?? "");
@@ -137,7 +152,7 @@ export class SelectInputComponent implements OnInit {
     });
   }
 
-  /** last query string */
+  /** Last query string */
   query = "";
 
   /**
@@ -148,8 +163,8 @@ export class SelectInputComponent implements OnInit {
     this.lastQueryRequest?.unsubscribe();
     this.lastQueryRequest = this.provider
       ?.getOptions({
-        page: this.optionsPage + 1,
         keyword: value.trim(),
+        page: this.optionsPage + 1,
       })
       .subscribe(options => {
         this.options = this.options.concat(...options.content);

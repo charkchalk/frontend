@@ -9,6 +9,7 @@ import { CourseListItemComponent } from "./course-list-item.component";
 
 @NgModule({
   declarations: [CourseListItemComponent],
+  exports: [CourseListItemComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -16,6 +17,5 @@ import { CourseListItemComponent } from "./course-list-item.component";
     FieldsetModule,
     TooltipModule,
   ],
-  exports: [CourseListItemComponent],
 })
 export class CourseListItemModule {}

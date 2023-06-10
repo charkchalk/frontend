@@ -10,16 +10,17 @@ import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 })
 export class PlaceQueryDataProviderService extends QueryDataProvider<string> {
   valueSeparator = ",";
+
   type = QueryDataType.select;
 
   private methods: Displayable<string>[] = [
     {
-      value: "=",
       label: "等於",
+      value: "=",
     },
     {
-      value: "!=",
       label: "不等於",
+      value: "!=",
     },
   ];
 
@@ -28,6 +29,7 @@ export class PlaceQueryDataProviderService extends QueryDataProvider<string> {
   }
 
   value = "place";
+
   label = "上課地點";
 
   getMethods(): Displayable<string>[] {
@@ -38,27 +40,24 @@ export class PlaceQueryDataProviderService extends QueryDataProvider<string> {
     options: CanPaginate & { keyword: string },
   ): Observable<Paginated<Displayable<string>[]>> {
     return this.placeApiService.getAll(options).pipe(
-      map(response => {
-        return {
-          pagination: response.pagination,
-          content: response.content.map(place => {
-            const parents = [];
-            let currentParent = place.parent;
-            while (currentParent) {
-              parents.push(currentParent.name);
-              currentParent = currentParent.parent;
-            }
-            let label = place.name;
-            if (parents.length)
-              label += " (" + parents.reverse().join(" > ") + ")";
+      map(response => ({
+        content: response.content.map(place => {
+          const parents = [];
+          let currentParent = place.parent;
+          while (currentParent) {
+            parents.push(currentParent.name);
+            currentParent = currentParent.parent;
+          }
+          let label = place.name;
+          if (parents.length) label += ` (${parents.reverse().join(" > ")})`;
 
-            return {
-              value: place.uuid,
-              label,
-            };
-          }),
-        };
-      }),
+          return {
+            label,
+            value: place.uuid,
+          };
+        }),
+        pagination: response.pagination,
+      })),
     );
   }
 
@@ -73,15 +72,15 @@ export class PlaceQueryDataProviderService extends QueryDataProvider<string> {
   protected async deserializeValues(
     valueStrings: string,
   ): Promise<Displayable<string>[]> {
-    const values = valueStrings.split(this.valueSeparator).map(async v => {
-      const host = await firstValueFrom(this.placeApiService.get(v));
+    const values = valueStrings.split(this.valueSeparator).map(async value => {
+      const host = await firstValueFrom(this.placeApiService.get(value));
 
       return {
-        value: host.uuid,
         label: host.name,
+        value: host.uuid,
       };
     });
 
-    return await Promise.all(values);
+    return Promise.all(values);
   }
 }

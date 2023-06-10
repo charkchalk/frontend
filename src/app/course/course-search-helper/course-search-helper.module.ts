@@ -11,6 +11,7 @@ import { WeekTimeRangeInputListModule } from "./week-time-range-input-list/week-
 
 @NgModule({
   declarations: [CourseSearchHelperComponent],
+  exports: [CourseSearchHelperComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -21,6 +22,5 @@ import { WeekTimeRangeInputListModule } from "./week-time-range-input-list/week-
     SelectInputModule,
     WeekTimeRangeInputListModule,
   ],
-  exports: [CourseSearchHelperComponent],
 })
 export class CourseSearchHelperModule {}

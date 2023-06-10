@@ -5,14 +5,14 @@ import { CourseComponent } from "./course.component";
 
 const routes: Routes = [
   {
+    component: CourseComponent,
     path: "",
     pathMatch: "full",
-    component: CourseComponent,
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
+  imports: [RouterModule.forChild(routes)],
 })
 export class CourseRoutingModule {}

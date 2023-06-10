@@ -7,27 +7,33 @@ import { QueryDataProvider } from "../../_query/query-data-provider";
 
 @Component({
   selector: "app-text-input",
-  templateUrl: "./text-input.component.html",
   styleUrls: ["./text-input.component.scss"],
+  templateUrl: "./text-input.component.html",
 })
 export class TextInputComponent implements OnInit {
   /** An event emitter that emit events when input has been focused */
   @Output() active: EventEmitter<void> = new EventEmitter();
+
   /** An event emitter that emit events when value has been updated */
   @Output() updated: EventEmitter<Displayable<string>[]> = new EventEmitter();
+
   /** Data provider of current filtering condition */
   @Input() provider?: QueryDataProvider;
+
   /** An event emitter that receive event from parent when provider changed */
   @Input() providerChange?: Observable<void>;
+
   /** Value of current filtering condition */
   @Input() value?: Displayable<unknown>[] = [];
 
   /** Key codes that is be used to separate words in text input chips mode */
-  separatorExp = /[,，、\s\t]/;
+  separatorExp = /[,，、\s\t]/u;
+
   error: string | null = null;
 
   /** Emit control to parent after control initialized */
   @Output() controlSet = new EventEmitter<AbstractControl>();
+
   /** Control of current filtering condition */
   control = new FormControl<string[]>([], Validators.required);
 
@@ -44,15 +50,15 @@ export class TextInputComponent implements OnInit {
   onValueChanged() {
     const values = this.control.value
       ?.map(value => {
-        value = value.trim();
+        const trimed = value.trim();
 
-        const error = this.provider?.getValidationResult(value);
+        const error = this.provider?.getValidationResult(trimed);
         if (error) {
           this.error = error;
           return null;
         }
 
-        return { value, label: value };
+        return { label: trimed, value: trimed };
       })
       .filter(value => value !== null) as Displayable<string>[];
     this.updated.emit(values);

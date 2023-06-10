@@ -9,20 +9,22 @@ import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 })
 export class CodeQueryDataProviderService extends QueryDataProvider {
   valueSeparator = ",";
+
   type = QueryDataType.text;
 
   private methods: Displayable<string>[] = [
     {
-      value: "=",
       label: "等於",
+      value: "=",
     },
     {
-      value: "!=",
       label: "不等於",
+      value: "!=",
     },
   ];
 
   value = "code";
+
   label = "選課代號";
 
   getMethods(): Displayable<string>[] {
@@ -46,7 +48,7 @@ export class CodeQueryDataProviderService extends QueryDataProvider {
   ): Promise<Displayable<string>[]> {
     const values = valueStrings
       .split(this.valueSeparator)
-      .map(v => ({ value: v, label: v }));
+      .map(value => ({ label: value, value }));
 
     return values;
   }

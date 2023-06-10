@@ -20,31 +20,29 @@ export class TimeRangeApiService {
 
     return this._http
       .get<PaginatedResponse<RawTimeRange[]>>(this._uri, {
-        responseType: "json",
-        params: params,
         headers: {
           [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
         },
+        params,
+        responseType: "json",
       })
       .pipe(
-        map(response => {
-          return {
-            pagination: {
-              total: response.totalPages,
-              current: response.currentPage,
-            },
-            content: response.content,
-          };
-        }),
+        map(response => ({
+          content: response.content,
+          pagination: {
+            current: response.currentPage,
+            total: response.totalPages,
+          },
+        })),
       );
   }
 
   get(id: string): Observable<RawTimeRange> {
-    return this._http.get<RawTimeRange>(this._uri + "/" + id, {
-      responseType: "json",
+    return this._http.get<RawTimeRange>(`${this._uri}/${id}`, {
       headers: {
         [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
       },
+      responseType: "json",
     });
   }
 }

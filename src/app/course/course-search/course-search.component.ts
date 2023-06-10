@@ -12,12 +12,14 @@ import { QueryItem } from "../_query/query-item";
 
 @Component({
   selector: "app-course-search",
-  templateUrl: "./course-search.component.html",
   styleUrls: ["./course-search.component.scss"],
+  templateUrl: "./course-search.component.html",
 })
 export class CourseSearchComponent implements OnInit {
   queries: QueryItem<unknown>[] = [];
+
   queryParams: { [key: string]: string[] } = {};
+
   formArray: FormArray = new FormArray<FormGroup>([]);
 
   constructor(
@@ -39,10 +41,11 @@ export class CourseSearchComponent implements OnInit {
       .flatMap(function flatChildren(control): FormControl[] {
         if (control instanceof FormGroup || control instanceof FormArray) {
           return Object.values(control.controls)
-            .map((control: AbstractControl): FormControl[] =>
-              flatChildren.call(this, control),
+            .map((subControl: AbstractControl): FormControl[] =>
+              // eslint-disable-next-line no-invalid-this
+              flatChildren.call(this, subControl),
             )
-            .flatMap(control => control);
+            .flatMap(subControl => subControl);
         }
         return [control as FormControl];
       })

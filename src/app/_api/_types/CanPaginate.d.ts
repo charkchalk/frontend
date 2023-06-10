@@ -1,6 +1,6 @@
 interface CanPaginate {
-  /** which page */
+  /** Which page */
   page?: number;
-  /** size of single page */
+  /** Size of single page */
   size?: number;
 }

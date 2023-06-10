@@ -9,20 +9,22 @@ import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 })
 export class CreditQueryDataProviderService extends QueryDataProvider<string> {
   valueSeparator = ",";
+
   type = QueryDataType.text;
 
   private methods: Displayable<string>[] = [
     {
-      value: "=",
       label: "等於",
+      value: "=",
     },
     {
-      value: "!=",
       label: "不等於",
+      value: "!=",
     },
   ];
 
   value = "credit";
+
   label = "學分數";
 
   getMethods(): Displayable<string>[] {
@@ -34,7 +36,7 @@ export class CreditQueryDataProviderService extends QueryDataProvider<string> {
   }
 
   getValidationResult(value: string): string | null {
-    const valid = /^\d+$/.test(value);
+    const valid = /^\d+$/u.test(value);
     if (valid) return null;
 
     return "只能輸入數字";
@@ -49,7 +51,7 @@ export class CreditQueryDataProviderService extends QueryDataProvider<string> {
   ): Promise<Displayable<string>[]> {
     const values = valueStrings
       .split(this.valueSeparator)
-      .map(v => ({ value: v, label: v }));
+      .map(value => ({ label: value, value }));
 
     return values;
   }

@@ -5,6 +5,12 @@ import { map, Observable } from "rxjs";
 
 import { QueryItem } from "../../course/_query/query-item";
 
+interface Condition<T> {
+  key: string;
+  method: string;
+  value: T[];
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -44,29 +50,21 @@ export class CourseApiService {
     }
 
     return this._http
-      .post<PaginatedResponse<RawCourse[]>>(this._uri + "/search", conditions, {
-        responseType: "json",
-        params: params,
+      .post<PaginatedResponse<RawCourse[]>>(`${this._uri}/search`, conditions, {
         headers: {
           [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
         },
+        params,
+        responseType: "json",
       })
       .pipe(
-        map(response => {
-          return {
-            pagination: {
-              total: response.totalPages,
-              current: response.currentPage,
-            },
-            content: response.content,
-          };
-        }),
+        map(response => ({
+          content: response.content,
+          pagination: {
+            current: response.currentPage,
+            total: response.totalPages,
+          },
+        })),
       );
   }
-}
-
-interface Condition<T> {
-  key: string;
-  method: string;
-  value: T[];
 }

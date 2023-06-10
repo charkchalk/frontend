@@ -5,11 +5,12 @@ import { CourseQueryService } from "./_query/course-query.service";
 
 @Component({
   selector: "app-course",
-  templateUrl: "./course.component.html",
   styleUrls: ["./course.component.scss"],
+  templateUrl: "./course.component.html",
 })
 export class CourseComponent implements OnInit {
   loading = true;
+
   searching = false;
 
   constructor(

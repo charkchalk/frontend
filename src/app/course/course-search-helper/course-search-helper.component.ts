@@ -14,27 +14,33 @@ import { QueryItem } from "../_query/query-item";
 
 @Component({
   selector: "app-course-search-helper",
-  templateUrl: "./course-search-helper.component.html",
   styleUrls: ["./course-search-helper.component.scss"],
+  templateUrl: "./course-search-helper.component.html",
 })
 export class CourseSearchHelperComponent implements OnInit {
   /** Index of current query in queries list */
   @Input() index!: number;
+
   /** Is this query deletable or not, currently only last query can be delete */
   @Input() deletable = true;
+
   /** All selectable DataProviders in Displayable format for users to select */
   providers: Displayable<string>[] = [];
+
   /** QueryItem that saves user inputted data */
   query: QueryItem<unknown> = {};
 
   /** Current filtering provider */
   provider?: QueryDataProvider;
+
   /** All selectable compare methods, will be undefined or null when no provider */
   methods: Displayable<string>[] = [];
 
   @Output() controlSet: EventEmitter<AbstractControl> =
     new EventEmitter<AbstractControl>();
+
   formGroup: FormGroup = new FormGroup({});
+
   @Output() removed: EventEmitter<number> = new EventEmitter<number>();
 
   constructor(private courseQueryService: CourseQueryService) {}
@@ -42,7 +48,7 @@ export class CourseSearchHelperComponent implements OnInit {
   ngOnInit() {
     this.providers = this.courseQueryService
       .getProviders()
-      .map(provider => ({ value: provider.value, label: provider.label }));
+      .map(provider => ({ label: provider.label, value: provider.value }));
     this.query = this.courseQueryService.getQuery(this.index);
     this.formGroup = new FormGroup({
       key: new FormControl<string | undefined>(
@@ -50,7 +56,7 @@ export class CourseSearchHelperComponent implements OnInit {
         Validators.required,
       ),
       method: new FormControl<string | undefined>(
-        { value: this.query.method, disabled: !this.provider },
+        { disabled: !this.provider, value: this.query.method },
         Validators.required,
       ),
     });
@@ -65,19 +71,21 @@ export class CourseSearchHelperComponent implements OnInit {
   setProvider(providerKey: string, reset = true) {
     if (reset) {
       this.query.key = providerKey;
+      // eslint-disable-next-line no-undefined
       this.query.method = undefined;
+      // eslint-disable-next-line no-undefined
       this.query.value = undefined;
       this.notifyQueryUpdate();
     }
     this.controlSet.emit(this.formGroup);
-    this.formGroup.controls["method"].enable();
+    this.formGroup.controls.method.enable();
     this.provider = this.courseQueryService.getProvider(providerKey);
     this.methods = this.provider?.getMethods() || [];
     this.providerChange.next();
   }
 
   onControlSet(control: AbstractControl) {
-    this.formGroup.controls["content"] = control;
+    this.formGroup.controls.content = control;
   }
 
   /**
@@ -88,7 +96,7 @@ export class CourseSearchHelperComponent implements OnInit {
     this.courseQueryService.setQuery(this.index, this.query);
   }
 
-  /** notify child components that provider has changed */
+  /** Notify child components that provider has changed */
   providerChange: Subject<void> = new Subject<void>();
 
   /**

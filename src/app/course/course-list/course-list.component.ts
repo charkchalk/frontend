@@ -9,23 +9,27 @@ import { CourseQueryService } from "../_query/course-query.service";
 import { QueryItem } from "../_query/query-item";
 
 @Component({
-  selector: "app-course-list",
-  templateUrl: "./course-list.component.html",
-  styleUrls: ["./course-list.component.scss"],
   providers: [
     {
       provide: MessageService,
     },
   ],
+  selector: "app-course-list",
+  styleUrls: ["./course-list.component.scss"],
+  templateUrl: "./course-list.component.html",
 })
 export class CourseListComponent implements OnInit {
   loading = true;
+
   pageSize = 20;
+
   pagination: PaginationStat = {
-    total: 1,
     current: 1,
+    total: 1,
   };
+
   courses: RawCourse[] = [];
+
   queries: QueryItem<unknown>[] = [];
 
   constructor(
@@ -67,9 +71,9 @@ export class CourseListComponent implements OnInit {
 
   onCopied(message: string) {
     this.messageService.add({
+      detail: message ?? "已經複製到剪貼簿囉～",
       severity: "success",
       summary: "複製成功！",
-      detail: message ?? "已經複製到剪貼簿囉～",
     });
   }
 }

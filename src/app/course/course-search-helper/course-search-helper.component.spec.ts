@@ -42,6 +42,7 @@ describe("CourseSearchHelperComponent", () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(CourseSearchHelperComponent);
+    // eslint-disable-next-line require-atomic-updates
     courseQueryServiceSpy = TestBed.inject(
       CourseQueryService,
     ) as jasmine.SpyObj<CourseQueryService>;

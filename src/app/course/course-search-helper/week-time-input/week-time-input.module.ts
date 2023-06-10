@@ -9,6 +9,7 @@ import { WeekTimeInputComponent } from "./week-time-input.component";
 
 @NgModule({
   declarations: [WeekTimeInputComponent],
+  exports: [WeekTimeInputComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -17,6 +18,5 @@ import { WeekTimeInputComponent } from "./week-time-input.component";
     DividerModule,
     DropdownModule,
   ],
-  exports: [WeekTimeInputComponent],
 })
 export class WeekTimeInputModule {}

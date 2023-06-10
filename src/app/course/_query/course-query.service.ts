@@ -51,6 +51,7 @@ export class CourseQueryService {
   }
 
   queries: QueryItem<unknown>[] = [{}];
+
   private queriesSubject = new BehaviorSubject<QueryItem<unknown>[]>(
     this.queries,
   );
@@ -84,9 +85,9 @@ export class CourseQueryService {
   }
 
   removeEmptyQueries() {
-    this.queries = this.queries.filter(query => {
-      return query.key && query.method && query.value?.length;
-    });
+    this.queries = this.queries.filter(
+      query => query.key && query.method && query.value?.length,
+    );
     this.queriesSubject.next(this.queries);
   }
 
@@ -123,9 +124,9 @@ export class CourseQueryService {
     if (save) this.clearQueries();
 
     const queries: QueryItem<unknown>[] = [];
-    const queryParsers = this.providers.map(displayable => {
+    const providers = this.providers.map(displayable => {
       const provider = this.getProvider(displayable.value);
-      if (!provider) return;
+      if (!provider) return null;
       const values = paramMap.getAll(displayable.value);
 
       const queryParsers = values.map(async value => {
@@ -134,7 +135,7 @@ export class CourseQueryService {
       return Promise.all(queryParsers);
     });
 
-    await Promise.all(queryParsers).then(() => this.removeEmptyQueries());
+    await Promise.all(providers).then(() => this.removeEmptyQueries());
 
     if (save) {
       this.queries = queries;

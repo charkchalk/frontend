@@ -9,20 +9,22 @@ import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 })
 export class KeywordQueryDataProviderService extends QueryDataProvider<string> {
   valueSeparator = " ";
+
   type = QueryDataType.text;
 
   private methods: Displayable<string>[] = [
     {
-      value: "=",
       label: "包含",
+      value: "=",
     },
     {
-      value: "!=",
       label: "不包含",
+      value: "!=",
     },
   ];
 
   value = "keyword";
+
   label = "關鍵字";
 
   getMethods(): Displayable<string>[] {
@@ -46,7 +48,7 @@ export class KeywordQueryDataProviderService extends QueryDataProvider<string> {
   ): Promise<Displayable<string>[]> {
     const values = valueStrings
       .split(this.valueSeparator)
-      .map(v => ({ value: v, label: v }));
+      .map(value => ({ label: value, value }));
 
     return values;
   }
