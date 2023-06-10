@@ -5,8 +5,8 @@ import { QueryItem } from "./query-item";
 
 // eslint-disable-next-line no-shadow
 export enum QueryDataType {
-  text = "text",
   select = "select",
+  text = "text",
   timeRange = "time-range",
 }
 
