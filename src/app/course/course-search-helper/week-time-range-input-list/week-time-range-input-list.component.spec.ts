@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { DividerModule } from "primeng/divider";
 
 import { WeekTimeRangeInputModule } from "../week-time-range-input/week-time-range-input.module";
@@ -13,6 +13,7 @@ describe("WeekTimeRangeInputListComponent", () => {
       declarations: [WeekTimeRangeInputListComponent],
       imports: [DividerModule, WeekTimeRangeInputModule],
     });
+
     fixture = TestBed.createComponent(WeekTimeRangeInputListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

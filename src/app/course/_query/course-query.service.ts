@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import { Injectable } from "@angular/core";
-import { ParamMap } from "@angular/router";
-import { BehaviorSubject, Observable } from "rxjs";
+import { type ParamMap } from "@angular/router";
+import { BehaviorSubject, type Observable } from "rxjs";
 
 import { QueryDataProvider } from "./query-data-provider";
 import { CodeQueryDataProviderService } from "./query-data-providers/code-query-data-provider/code-query-data-provider.service";
@@ -88,15 +89,18 @@ export class CourseQueryService {
     this.queries = this.queries.filter(
       query => query.key && query.method && query.value?.length,
     );
+
     this.queriesSubject.next(this.queries);
   }
 
   serializeQueries(): { [key: string]: string[] } {
     const params: { [key: string]: string[] } = {};
+
     this.queries.forEach(query => {
       if (!query.key || !query.method || !query.value?.length) return;
       if (!params[query.key]) params[query.key] = [];
       const provider = this.getProvider(query.key);
+
       if (!provider) return;
 
       const existingIndex = params[query.key].findIndex(
@@ -126,12 +130,14 @@ export class CourseQueryService {
     const queries: QueryItem<unknown>[] = [];
     const providers = this.providers.map(displayable => {
       const provider = this.getProvider(displayable.value);
+
       if (!provider) return null;
       const values = paramMap.getAll(displayable.value);
 
       const queryParsers = values.map(async value => {
         queries.push(await provider.deserializeQuery(value));
       });
+
       return Promise.all(queryParsers);
     });
 

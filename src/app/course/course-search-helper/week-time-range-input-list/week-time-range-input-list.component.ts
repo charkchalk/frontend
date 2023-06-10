@@ -1,10 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { AbstractControl, FormArray } from "@angular/forms";
-import { Observable } from "rxjs";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  type OnInit,
+  Output,
+} from "@angular/core";
+import { type AbstractControl, FormArray } from "@angular/forms";
+import { type Observable } from "rxjs";
 
-import { Displayable } from "../../../_types/displayable";
-import { WeekTimeRange } from "../../../_types/week-time";
-import { QueryDataProvider } from "../../_query/query-data-provider";
+import { type Displayable } from "../../../_types/displayable";
+import { type WeekTimeRange } from "../../../_types/week-time";
+import { type QueryDataProvider } from "../../_query/query-data-provider";
 
 @Component({
   selector: "app-week-time-range-input-list",
@@ -44,6 +50,7 @@ export class WeekTimeRangeInputListComponent implements OnInit {
       label: "",
       value: { end: {}, start: {} },
     };
+
     this.weekTimeRanges.push(emptyRange);
   }
 

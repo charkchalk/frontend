@@ -10,6 +10,7 @@ describe("OrganizationQueryDataProviderService", () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
+
     service = TestBed.inject(OrganizationQueryDataProviderService);
   });
 

@@ -1,9 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { NgHttpCachingHeaders } from "ng-http-caching";
-import { map, Observable } from "rxjs";
+import { map, type Observable } from "rxjs";
 
-import { QueryItem } from "../../course/_query/query-item";
+import { type QueryItem } from "../../course/_query/query-item";
 
 interface Condition<T> {
   key: string;
@@ -15,9 +16,9 @@ interface Condition<T> {
   providedIn: "root",
 })
 export class CourseApiService {
-  private _uri = "/course";
+  private uri = "/course";
 
-  constructor(private _http: HttpClient) {}
+  constructor(private httpClient: HttpClient) {}
 
   getAll(
     data: QueryItem<unknown>[],
@@ -43,14 +44,15 @@ export class CourseApiService {
           method: item.method,
           value: [],
         };
+
         conditions.push(existingCondition);
       }
 
       existingCondition.value.push(...item.value.map(value => value.value));
     }
 
-    return this._http
-      .post<PaginatedResponse<RawCourse[]>>(`${this._uri}/search`, conditions, {
+    return this.httpClient
+      .post<PaginatedResponse<RawCourse[]>>(`${this.uri}/search`, conditions, {
         headers: {
           [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
         },

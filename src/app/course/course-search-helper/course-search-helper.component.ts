@@ -1,16 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import {
-  AbstractControl,
+  Component,
+  EventEmitter,
+  Input,
+  type OnInit,
+  Output,
+} from "@angular/core";
+import {
+  type AbstractControl,
   FormControl,
   FormGroup,
   Validators,
 } from "@angular/forms";
 import { Subject } from "rxjs";
 
-import { Displayable } from "../../_types/displayable";
+import { type Displayable } from "../../_types/displayable";
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { CourseQueryService } from "../_query/course-query.service";
-import { QueryDataProvider } from "../_query/query-data-provider";
-import { QueryItem } from "../_query/query-item";
+import { type QueryDataProvider } from "../_query/query-data-provider";
+import { type QueryItem } from "../_query/query-item";
 
 @Component({
   selector: "app-course-search-helper",
@@ -49,6 +56,7 @@ export class CourseSearchHelperComponent implements OnInit {
     this.providers = this.courseQueryService
       .getProviders()
       .map(provider => ({ label: provider.label, value: provider.value }));
+
     this.query = this.courseQueryService.getQuery(this.index);
     this.formGroup = new FormGroup({
       key: new FormControl<string | undefined>(
@@ -60,6 +68,7 @@ export class CourseSearchHelperComponent implements OnInit {
         Validators.required,
       ),
     });
+
     if (this.query.key) this.setProvider(this.query.key, false);
   }
 

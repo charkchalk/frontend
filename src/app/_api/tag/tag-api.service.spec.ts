@@ -10,6 +10,7 @@ describe("TagApiService", () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
+
     service = TestBed.inject(TagApiService);
   });
 

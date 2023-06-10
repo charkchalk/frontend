@@ -1,12 +1,15 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, type OnInit } from "@angular/core";
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { Router } from "@angular/router";
 import { MessageService } from "primeng/api";
-import { PaginatorState } from "primeng/paginator";
-import { Subscription } from "rxjs";
+import { type PaginatorState } from "primeng/paginator";
+import { type Subscription } from "rxjs";
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { CourseApiService } from "../../_api/course/course-api.service";
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { CourseQueryService } from "../_query/course-query.service";
-import { QueryItem } from "../_query/query-item";
+import { type QueryItem } from "../_query/query-item";
 
 @Component({
   providers: [
@@ -42,6 +45,7 @@ export class CourseListComponent implements OnInit {
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     const queries = this.courseQueryService.queries.slice(0, -1);
+
     this.queries = JSON.parse(JSON.stringify(queries)) as QueryItem<unknown>[];
     this.search(this.pagination.current);
   }

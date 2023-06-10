@@ -1,6 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, type OnInit } from "@angular/core";
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { ActivatedRoute } from "@angular/router";
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { CourseQueryService } from "./_query/course-query.service";
 
 @Component({
@@ -23,6 +25,7 @@ export class CourseComponent implements OnInit {
       this.loading = true;
       this.searching = false;
       const queries = await this.courseQueryService.deserializeQueries(params);
+
       this.loading = false;
       if (queries.length > 1) this.searching = true;
     });

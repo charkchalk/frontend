@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { type Observable } from "rxjs";
 
-import { Displayable } from "../../../../_types/displayable";
+import { type Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({

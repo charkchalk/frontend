@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { ButtonModule } from "primeng/button";
@@ -23,6 +23,7 @@ describe("CourseSearchHelperComponent", () => {
       "getProvider",
       "removeQuery",
     ]);
+
     await TestBed.configureTestingModule({
       declarations: [CourseSearchHelperComponent],
       imports: [
@@ -46,6 +47,7 @@ describe("CourseSearchHelperComponent", () => {
     courseQueryServiceSpy = TestBed.inject(
       CourseQueryService,
     ) as jasmine.SpyObj<CourseQueryService>;
+
     component = fixture.componentInstance;
     component.index = 0;
     courseQueryServiceSpy.getProviders.and.returnValue([]);

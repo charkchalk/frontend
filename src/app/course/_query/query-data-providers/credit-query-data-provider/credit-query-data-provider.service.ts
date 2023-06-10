@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { type Observable } from "rxjs";
 
-import { Displayable } from "../../../../_types/displayable";
+import { type Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({
@@ -37,6 +37,7 @@ export class CreditQueryDataProviderService extends QueryDataProvider<string> {
 
   getValidationResult(value: string): string | null {
     const valid = /^\d+$/u.test(value);
+
     if (valid) return null;
 
     return "只能輸入數字";

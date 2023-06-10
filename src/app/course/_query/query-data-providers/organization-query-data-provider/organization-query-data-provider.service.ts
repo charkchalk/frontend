@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import { firstValueFrom, map, Observable } from "rxjs";
+import { firstValueFrom, map, type Observable } from "rxjs";
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { OrganizationApiService } from "../../../../_api/organization/organization-api.service";
-import { Displayable } from "../../../../_types/displayable";
+import { type Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({
@@ -44,11 +45,13 @@ export class OrganizationQueryDataProviderService extends QueryDataProvider<stri
         content: response.content.map(organization => {
           const parents = [];
           let currentParent = organization.parent;
+
           while (currentParent) {
             parents.push(currentParent.name);
             currentParent = currentParent.parent;
           }
           let label = organization.name;
+
           if (parents.length) label += ` (${parents.reverse().join(" > ")})`;
 
           return {

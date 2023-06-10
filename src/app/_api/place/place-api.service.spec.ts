@@ -10,6 +10,7 @@ describe("PlaceApiService", () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
+
     service = TestBed.inject(PlaceApiService);
   });
 

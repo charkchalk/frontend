@@ -1,6 +1,6 @@
-import { HttpRequest } from "@angular/common/http";
+import type { HttpRequest } from "@angular/common/http";
 import {
-  NgHttpCachingConfig,
+  type NgHttpCachingConfig,
   NgHttpCachingSessionStorage,
   NgHttpCachingStrategy,
 } from "ng-http-caching";

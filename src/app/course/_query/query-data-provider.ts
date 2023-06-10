@@ -1,7 +1,7 @@
-import { Observable } from "rxjs";
+import { type Observable } from "rxjs";
 
-import { Displayable } from "../../_types/displayable";
-import { QueryItem } from "./query-item";
+import { type Displayable } from "../../_types/displayable";
+import { type QueryItem } from "./query-item";
 
 // eslint-disable-next-line no-shadow
 export enum QueryDataType {
@@ -50,11 +50,14 @@ export abstract class QueryDataProvider<T = unknown>
   appendSerializedQuery(serializedQuery: string, query: QueryItem<T>): string {
     if (!query.value || !query.value.length) return serializedQuery;
     const [method, ...remains] = serializedQuery.split(":");
+
     if (method !== query.method) throw new Error("Queries does not match!");
 
     const values = remains.join(":").split(this.valueSeparator);
+
     for (const value of query.value) {
       const valueString = this.serializeValue(value);
+
       if (!values.includes(valueString)) values.push(valueString);
     }
 

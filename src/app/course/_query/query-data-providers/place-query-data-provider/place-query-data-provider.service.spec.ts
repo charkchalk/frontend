@@ -10,6 +10,7 @@ describe("PlaceQueryDataProviderService", () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
+
     service = TestBed.inject(PlaceQueryDataProviderService);
   });
 

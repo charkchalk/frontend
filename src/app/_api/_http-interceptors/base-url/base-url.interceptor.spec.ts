@@ -11,6 +11,7 @@ describe("BaseUrlInterceptor", () => {
 
   it("should be created", () => {
     const interceptor: BaseUrlInterceptor = TestBed.inject(BaseUrlInterceptor);
+
     expect(interceptor).toBeTruthy();
   });
 });

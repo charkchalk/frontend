@@ -1,9 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { AbstractControl, FormControl, Validators } from "@angular/forms";
-import { Observable } from "rxjs";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  type OnInit,
+  Output,
+} from "@angular/core";
+import { type AbstractControl, FormControl, Validators } from "@angular/forms";
+import { type Observable } from "rxjs";
 
-import { Displayable } from "../../../_types/displayable";
-import { QueryDataProvider } from "../../_query/query-data-provider";
+import { type Displayable } from "../../../_types/displayable";
+import { type QueryDataProvider } from "../../_query/query-data-provider";
 
 @Component({
   selector: "app-text-input",
@@ -39,6 +45,7 @@ export class TextInputComponent implements OnInit {
 
   ngOnInit(): void {
     const values = (this.value as Displayable<string>[]) || [];
+
     this.control.setValue(values.map(value => value.value as string));
     this.controlSet.emit(this.control);
     if (!this.provider) this.control.disable();
@@ -53,14 +60,17 @@ export class TextInputComponent implements OnInit {
         const trimed = value.trim();
 
         const error = this.provider?.getValidationResult(trimed);
+
         if (error) {
           this.error = error;
+
           return null;
         }
 
         return { label: trimed, value: trimed };
       })
       .filter(value => value !== null) as Displayable<string>[];
+
     this.updated.emit(values);
   }
 }

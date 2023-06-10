@@ -1,14 +1,16 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, type OnInit } from "@angular/core";
 import {
-  AbstractControl,
+  type AbstractControl,
   FormArray,
-  FormControl,
+  type FormControl,
   FormGroup,
 } from "@angular/forms";
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { Router } from "@angular/router";
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { CourseQueryService } from "../_query/course-query.service";
-import { QueryItem } from "../_query/query-item";
+import { type QueryItem } from "../_query/query-item";
 
 @Component({
   selector: "app-course-search",
@@ -47,6 +49,7 @@ export class CourseSearchComponent implements OnInit {
             )
             .flatMap(subControl => subControl);
         }
+
         return [control as FormControl];
       })
       .forEach(control => control.markAsDirty());

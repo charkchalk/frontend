@@ -1,15 +1,16 @@
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { NgHttpCachingHeaders } from "ng-http-caching";
-import { map, Observable } from "rxjs";
+import { map, type Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class DateRangeApiService {
-  private _uri = "/range/date";
+  private uri = "/range/date";
 
-  constructor(private _http: HttpClient) {}
+  constructor(private httpClient: HttpClient) {}
 
   getAll(
     options?: CanPaginate | { keyword: string },
@@ -18,8 +19,8 @@ export class DateRangeApiService {
       fromObject: options as Record<string, string>,
     });
 
-    return this._http
-      .get<PaginatedResponse<RawDateRange[]>>(this._uri, {
+    return this.httpClient
+      .get<PaginatedResponse<RawDateRange[]>>(this.uri, {
         headers: {
           [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
         },
@@ -38,7 +39,7 @@ export class DateRangeApiService {
   }
 
   get(id: string): Observable<RawDateRange> {
-    return this._http.get<RawDateRange>(`${this._uri}/${id}`, {
+    return this.httpClient.get<RawDateRange>(`${this.uri}/${id}`, {
       headers: {
         [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
       },

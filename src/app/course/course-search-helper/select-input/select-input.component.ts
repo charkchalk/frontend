@@ -1,10 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { AbstractControl, FormControl, Validators } from "@angular/forms";
-import { AutoCompleteCompleteEvent } from "primeng/autocomplete";
-import { BehaviorSubject, Observable, Subscription } from "rxjs";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  type OnInit,
+  Output,
+} from "@angular/core";
+import { type AbstractControl, FormControl, Validators } from "@angular/forms";
+import { type AutoCompleteCompleteEvent } from "primeng/autocomplete";
+import { BehaviorSubject, type Observable, type Subscription } from "rxjs";
 
-import { Displayable } from "../../../_types/displayable";
-import { QueryDataProvider } from "../../_query/query-data-provider";
+import { type Displayable } from "../../../_types/displayable";
+import { type QueryDataProvider } from "../../_query/query-data-provider";
 
 @Component({
   selector: "app-select-input",
@@ -40,6 +46,7 @@ export class SelectInputComponent implements OnInit {
     });
 
     const values = (this.value as Displayable<string>[]) ?? [];
+
     this.control.setValue(values);
     this.controlSet.emit(this.control);
     if (!this.provider) this.control.disable();
@@ -107,9 +114,11 @@ export class SelectInputComponent implements OnInit {
       element =>
         element.textContent === this.options[this.options.length - 1].label,
     );
+
     const target = document.querySelector(
       "ul.p-autocomplete-items li:last-child",
     );
+
     if (!target) return;
     this.intersectionObserver.disconnect();
     this.intersectionObserver.unobserve(target);
@@ -130,13 +139,16 @@ export class SelectInputComponent implements OnInit {
   ): Promise<Element> {
     return new Promise(resolve => {
       const element = document.querySelector(target);
+
       if (element && validator(element)) {
         resolve(element);
+
         return;
       }
 
       const observer = new MutationObserver(() => {
         const listening = document.querySelector(target);
+
         if (!listening || !validator(listening)) return;
 
         observer.disconnect();
@@ -173,6 +185,7 @@ export class SelectInputComponent implements OnInit {
         this.isLoadingOptions = false;
         if (options.pagination.current >= options.pagination.total) {
           this.optionsPage = -1;
+
           return;
         }
         this.bindLoadingTrigger();

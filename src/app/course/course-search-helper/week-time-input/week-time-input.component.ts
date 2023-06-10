@@ -1,13 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import {
-  AbstractControl,
+  Component,
+  EventEmitter,
+  Input,
+  type OnInit,
+  Output,
+} from "@angular/core";
+import {
+  type AbstractControl,
   FormControl,
   FormGroup,
   Validators,
 } from "@angular/forms";
 
-import { Displayable } from "../../../_types/displayable";
-import { WeekTime } from "../../../_types/week-time";
+import { type Displayable } from "../../../_types/displayable";
+import { type WeekTime } from "../../../_types/week-time";
 
 @Component({
   selector: "app-week-time-input",
@@ -43,6 +49,7 @@ export class WeekTimeInputComponent implements OnInit {
       time: new FormControl(this.value?.time, Validators.required),
       weekday: new FormControl(this.value?.day, Validators.required),
     });
+
     this.controlSet.emit(this.formGroup);
     this.formGroup.valueChanges.subscribe(() => this.notifyQueryUpdate());
   }

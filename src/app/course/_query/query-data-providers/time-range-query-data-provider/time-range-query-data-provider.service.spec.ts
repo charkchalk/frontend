@@ -10,6 +10,7 @@ describe("TimeRangeQueryDataProviderService", () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
+
     service = TestBed.inject(TimeRangeQueryDataProviderService);
   });
 

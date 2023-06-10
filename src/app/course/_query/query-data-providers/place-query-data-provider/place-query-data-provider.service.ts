@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import { firstValueFrom, map, Observable } from "rxjs";
+import { firstValueFrom, map, type Observable } from "rxjs";
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { PlaceApiService } from "../../../../_api/place/place-api.service";
-import { Displayable } from "../../../../_types/displayable";
+import { type Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({
@@ -44,11 +45,13 @@ export class PlaceQueryDataProviderService extends QueryDataProvider<string> {
         content: response.content.map(place => {
           const parents = [];
           let currentParent = place.parent;
+
           while (currentParent) {
             parents.push(currentParent.name);
             currentParent = currentParent.parent;
           }
           let label = place.name;
+
           if (parents.length) label += ` (${parents.reverse().join(" > ")})`;
 
           return {

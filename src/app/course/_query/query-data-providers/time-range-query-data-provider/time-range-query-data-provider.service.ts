@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
-import { map, Observable } from "rxjs";
+import { map, type Observable } from "rxjs";
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { TimeRangeApiService } from "../../../../_api/time-range/time-range-api.service";
-import { Displayable } from "../../../../_types/displayable";
-import { WeekTimeRange } from "../../../../_types/week-time";
+import { type Displayable } from "../../../../_types/displayable";
+import { type WeekTimeRange } from "../../../../_types/week-time";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({
