@@ -8,7 +8,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "test:cli": "yarn test --no-progress --code-coverage --browsers=ChromeHeadless",
+    "test:cli": "ng test --no-progress --code-coverage --browsers=ChromeHeadless",
+    "test:cli:once": "ng test --no-watch --no-progress --code-coverage --browsers=ChromeHeadless",
     "lint": "ng lint",
     "format": "eslint --fix . && prettier --write --ignore-unknown .",
     "prepare": "husky install"

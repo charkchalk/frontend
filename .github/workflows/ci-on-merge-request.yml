@@ -40,7 +40,7 @@ jobs:
         run: pnpm install
 
       - name: ESLint Check
-        run: pnpm eslint .
+        run: pnpm lint
 
       - name: Prettier Check
         run: pnpm prettier --check --ignore-unknown .
@@ -51,7 +51,7 @@ jobs:
           ENV_NG_APP_API_ENDPOINT: ${{ vars.API_ENDPOINT }}
 
       - name: Unit Test
-        run: pnpm test:cli --no-watch
+        run: pnpm test:cli:once
 
   deploy-preview:
     name: Deploy Preview to Cloudflare Pages
