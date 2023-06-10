@@ -4,7 +4,7 @@ import { Injectable } from "@angular/core";
 import { NgHttpCachingHeaders } from "ng-http-caching";
 import { map, type Observable } from "rxjs";
 
-import { type QueryItem } from "../../course/_query/query-item";
+import type { QueryItem } from "../../course/_query/query-item";
 
 interface Condition<T> {
   key: string;
@@ -16,9 +16,9 @@ interface Condition<T> {
   providedIn: "root",
 })
 export class CourseApiService {
-  private uri = "/course";
+  private readonly uri = "/course";
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   getAll(
     data: QueryItem<unknown>[],
@@ -31,7 +31,7 @@ export class CourseApiService {
     const conditions: Condition<unknown>[] = [];
 
     for (const item of data) {
-      if (!item.key || !item.method || !item.value) continue;
+      if (!item.key || !item.method || !item.value.length) continue;
 
       let existingCondition = conditions.find(
         condition =>

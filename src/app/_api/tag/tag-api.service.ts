@@ -8,9 +8,9 @@ import { map, type Observable } from "rxjs";
   providedIn: "root",
 })
 export class TagApiService {
-  private uri = "/tag";
+  private readonly uri = "/tag";
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   getAll(
     options?: CanPaginate | { keyword: string },

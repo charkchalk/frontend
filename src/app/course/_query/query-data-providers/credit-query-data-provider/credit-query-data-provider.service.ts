@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { type Observable } from "rxjs";
+import type { Observable } from "rxjs";
 
-import { type Displayable } from "../../../../_types/displayable";
+import type { Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({
@@ -12,7 +12,7 @@ export class CreditQueryDataProviderService extends QueryDataProvider<string> {
 
   type = QueryDataType.text;
 
-  private methods: Displayable<string>[] = [
+  private readonly methods: Displayable<string>[] = [
     {
       label: "等於",
       value: "=",

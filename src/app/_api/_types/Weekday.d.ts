@@ -1,8 +1,8 @@
 type Weekday =
-  | "MONDAY"
-  | "TUESDAY"
-  | "WEDNESDAY"
-  | "THURSDAY"
   | "FRIDAY"
+  | "MONDAY"
   | "SATURDAY"
-  | "SUNDAY";
+  | "SUNDAY"
+  | "THURSDAY"
+  | "TUESDAY"
+  | "WEDNESDAY";

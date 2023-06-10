@@ -1,17 +1,17 @@
-import {
-  type HttpEvent,
-  type HttpHandler,
-  type HttpInterceptor,
-  type HttpRequest,
+import type {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
 } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { type Observable } from "rxjs";
+import type { Observable } from "rxjs";
 
 import { environment } from "../../../../environments/environment";
 
 @Injectable()
 export class BaseUrlInterceptor implements HttpInterceptor {
-  private endpoint = environment.API_ENDPOINT;
+  private readonly endpoint = environment.API_ENDPOINT;
 
   constructor() {
     if (!this.endpoint) throw new Error("No API endpoint provided.");

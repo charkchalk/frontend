@@ -17,12 +17,10 @@ describe("CourseSearchHelperComponent", () => {
   let courseQueryServiceSpy: jasmine.SpyObj<CourseQueryService>;
 
   beforeEach(async () => {
-    courseQueryServiceSpy = jasmine.createSpyObj("CourseQueryService", [
-      "getProviders",
-      "getQuery",
-      "getProvider",
-      "removeQuery",
-    ]);
+    courseQueryServiceSpy = jasmine.createSpyObj<CourseQueryService>(
+      "CourseQueryService",
+      ["getProviders", "getQuery", "getProvider", "removeQuery"],
+    );
 
     await TestBed.configureTestingModule({
       declarations: [CourseSearchHelperComponent],
@@ -51,7 +49,12 @@ describe("CourseSearchHelperComponent", () => {
     component = fixture.componentInstance;
     component.index = 0;
     courseQueryServiceSpy.getProviders.and.returnValue([]);
-    courseQueryServiceSpy.getQuery.and.returnValue({});
+    courseQueryServiceSpy.getQuery.and.returnValue({
+      key: null,
+      method: null,
+      value: [],
+    });
+
     fixture.detectChanges();
   });
 

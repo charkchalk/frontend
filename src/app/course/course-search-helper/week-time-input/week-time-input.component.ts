@@ -12,8 +12,8 @@ import {
   Validators,
 } from "@angular/forms";
 
-import { type Displayable } from "../../../_types/displayable";
-import { type WeekTime } from "../../../_types/week-time";
+import type { Displayable } from "../../../_types/displayable";
+import type { WeekTime } from "../../../_types/week-time";
 
 @Component({
   selector: "app-week-time-input",
@@ -36,7 +36,7 @@ export class WeekTimeInputComponent implements OnInit {
   ];
 
   /** An event emitter that emit events when value has been updated */
-  @Output() updated: EventEmitter<WeekTime> = new EventEmitter();
+  @Output() updated = new EventEmitter<WeekTime>();
 
   @Input() value: WeekTime = {};
 
@@ -44,20 +44,22 @@ export class WeekTimeInputComponent implements OnInit {
 
   formGroup!: FormGroup;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.formGroup = new FormGroup({
-      time: new FormControl(this.value?.time, Validators.required),
-      weekday: new FormControl(this.value?.day, Validators.required),
+      time: new FormControl(this.value.time, Validators.required),
+      weekday: new FormControl(this.value.day, Validators.required),
     });
 
     this.controlSet.emit(this.formGroup);
-    this.formGroup.valueChanges.subscribe(() => this.notifyQueryUpdate());
+    this.formGroup.valueChanges.subscribe(() => {
+      this.notifyQueryUpdate();
+    });
   }
 
-  notifyQueryUpdate() {
+  notifyQueryUpdate(): void {
     this.updated.emit({
-      day: this.formGroup.get("weekday")?.value,
-      time: this.formGroup.get("time")?.value,
+      day: this.formGroup.get("weekday")?.value as string,
+      time: this.formGroup.get("time")?.value as string,
     });
   }
 }

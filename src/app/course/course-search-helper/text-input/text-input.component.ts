@@ -6,10 +6,10 @@ import {
   Output,
 } from "@angular/core";
 import { type AbstractControl, FormControl, Validators } from "@angular/forms";
-import { type Observable } from "rxjs";
+import type { Observable } from "rxjs";
 
-import { type Displayable } from "../../../_types/displayable";
-import { type QueryDataProvider } from "../../_query/query-data-provider";
+import type { Displayable } from "../../../_types/displayable";
+import type { QueryDataProvider } from "../../_query/query-data-provider";
 
 @Component({
   selector: "app-text-input",
@@ -18,10 +18,10 @@ import { type QueryDataProvider } from "../../_query/query-data-provider";
 })
 export class TextInputComponent implements OnInit {
   /** An event emitter that emit events when input has been focused */
-  @Output() active: EventEmitter<void> = new EventEmitter();
+  @Output() active = new EventEmitter<void>();
 
   /** An event emitter that emit events when value has been updated */
-  @Output() updated: EventEmitter<Displayable<string>[]> = new EventEmitter();
+  @Output() updated = new EventEmitter<Displayable<string>[]>();
 
   /** Data provider of current filtering condition */
   @Input() provider?: QueryDataProvider;
@@ -44,24 +44,30 @@ export class TextInputComponent implements OnInit {
   control = new FormControl<string[]>([], Validators.required);
 
   ngOnInit(): void {
-    const values = (this.value as Displayable<string>[]) || [];
+    this.control.setValue(
+      (this.value as Displayable<string>[]).map(value => value.value),
+    );
 
-    this.control.setValue(values.map(value => value.value as string));
     this.controlSet.emit(this.control);
     if (!this.provider) this.control.disable();
 
-    this.providerChange?.subscribe(() => this.control.enable());
-    this.control.valueChanges.subscribe(() => this.onValueChanged());
+    this.providerChange?.subscribe(() => {
+      this.control.enable();
+    });
+
+    this.control.valueChanges.subscribe(() => {
+      this.onValueChanged();
+    });
   }
 
-  onValueChanged() {
+  onValueChanged(): void {
     const values = this.control.value
       ?.map(value => {
         const trimed = value.trim();
 
-        const error = this.provider?.getValidationResult(trimed);
+        const error = this.provider?.getValidationResult(trimed) ?? null;
 
-        if (error) {
+        if (!error) {
           this.error = error;
 
           return null;

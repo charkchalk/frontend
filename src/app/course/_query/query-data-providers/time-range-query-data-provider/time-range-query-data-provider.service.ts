@@ -3,8 +3,8 @@ import { map, type Observable } from "rxjs";
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { TimeRangeApiService } from "../../../../_api/time-range/time-range-api.service";
-import { type Displayable } from "../../../../_types/displayable";
-import { type WeekTimeRange } from "../../../../_types/week-time";
+import type { Displayable } from "../../../../_types/displayable";
+import type { WeekTimeRange } from "../../../../_types/week-time";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({
@@ -15,7 +15,7 @@ export class TimeRangeQueryDataProviderService extends QueryDataProvider<WeekTim
 
   type = QueryDataType.timeRange;
 
-  private methods: Displayable<string>[] = [
+  private readonly methods: Displayable<string>[] = [
     {
       label: "包含",
       value: "=",
@@ -26,7 +26,7 @@ export class TimeRangeQueryDataProviderService extends QueryDataProvider<WeekTim
     },
   ];
 
-  constructor(private timeRangeApiService: TimeRangeApiService) {
+  constructor(private readonly timeRangeApiService: TimeRangeApiService) {
     super();
   }
 
@@ -57,6 +57,7 @@ export class TimeRangeQueryDataProviderService extends QueryDataProvider<WeekTim
   }
 
   protected serializeValue(weekTime: Displayable<WeekTimeRange>): string {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return `${weekTime.value.start.day}-${weekTime.value.start.time}~${weekTime.value.end.day}-${weekTime.value.end.time}`;
   }
 
@@ -70,11 +71,11 @@ export class TimeRangeQueryDataProviderService extends QueryDataProvider<WeekTim
         label: `${startDay}-${startTime}~${endDay}-${endTime}`,
         value: {
           end: {
-            day: Number(endDay),
+            day: endDay,
             time: endTime,
           },
           start: {
-            day: Number(startDay),
+            day: startDay,
             time: startTime,
           },
         },

@@ -1,7 +1,7 @@
-import { type Displayable } from "../../_types/displayable";
+import type { Displayable } from "../../_types/displayable";
 
 export interface QueryItem<T> {
-  key?: string;
-  method?: string;
-  value?: Displayable<T>[];
+  key: string | null;
+  method: string | null;
+  value: Displayable<T>[];
 }

@@ -8,9 +8,9 @@ import { map, type Observable } from "rxjs";
   providedIn: "root",
 })
 export class TimeRangeApiService {
-  private uri = "/range/time";
+  private readonly uri = "/range/time";
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   getAll(
     options?: CanPaginate | { keyword: string },

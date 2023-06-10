@@ -13,11 +13,11 @@ import {
 } from "@angular/forms";
 import { Subject } from "rxjs";
 
-import { type Displayable } from "../../_types/displayable";
+import type { Displayable } from "../../_types/displayable";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { CourseQueryService } from "../_query/course-query.service";
-import { type QueryDataProvider } from "../_query/query-data-provider";
-import { type QueryItem } from "../_query/query-item";
+import type { QueryDataProvider } from "../_query/query-data-provider";
+import type { QueryItem } from "../_query/query-item";
 
 @Component({
   selector: "app-course-search-helper",
@@ -35,7 +35,7 @@ export class CourseSearchHelperComponent implements OnInit {
   providers: Displayable<string>[] = [];
 
   /** QueryItem that saves user inputted data */
-  query: QueryItem<unknown> = {};
+  query: QueryItem<unknown> = { key: null, method: null, value: [] };
 
   /** Current filtering provider */
   provider?: QueryDataProvider;
@@ -50,20 +50,17 @@ export class CourseSearchHelperComponent implements OnInit {
 
   @Output() removed: EventEmitter<number> = new EventEmitter<number>();
 
-  constructor(private courseQueryService: CourseQueryService) {}
+  constructor(private readonly courseQueryService: CourseQueryService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.providers = this.courseQueryService
       .getProviders()
       .map(provider => ({ label: provider.label, value: provider.value }));
 
     this.query = this.courseQueryService.getQuery(this.index);
     this.formGroup = new FormGroup({
-      key: new FormControl<string | undefined>(
-        this.query.key,
-        Validators.required,
-      ),
-      method: new FormControl<string | undefined>(
+      key: new FormControl<string | null>(this.query.key, Validators.required),
+      method: new FormControl<string | null>(
         { disabled: !this.provider, value: this.query.method },
         Validators.required,
       ),
@@ -77,30 +74,28 @@ export class CourseSearchHelperComponent implements OnInit {
    * @param providerKey key of the provider to set
    * @param reset reset query data or not, if reset, will reset query method and value
    */
-  setProvider(providerKey: string, reset = true) {
+  setProvider(providerKey: string, reset = true): void {
     if (reset) {
       this.query.key = providerKey;
-      // eslint-disable-next-line no-undefined
-      this.query.method = undefined;
-      // eslint-disable-next-line no-undefined
-      this.query.value = undefined;
+      this.query.method = null;
+      this.query.value = [];
       this.notifyQueryUpdate();
     }
     this.controlSet.emit(this.formGroup);
     this.formGroup.controls.method.enable();
     this.provider = this.courseQueryService.getProvider(providerKey);
-    this.methods = this.provider?.getMethods() || [];
+    this.methods = this.provider?.getMethods() ?? [];
     this.providerChange.next();
   }
 
-  onControlSet(control: AbstractControl) {
+  onControlSet(control: AbstractControl): void {
     this.formGroup.controls.content = control;
   }
 
   /**
    * To trigger queries change notification that query has been updated
    */
-  notifyQueryUpdate() {
+  notifyQueryUpdate(): void {
     this.formGroup.updateValueAndValidity();
     this.courseQueryService.setQuery(this.index, this.query);
   }
@@ -112,7 +107,7 @@ export class CourseSearchHelperComponent implements OnInit {
    * Update value after child component emit value updated event
    * @param value emitted value from input sub component
    */
-  valueUpdated(value: Displayable<unknown>[]) {
+  valueUpdated(value: Displayable<unknown>[]): void {
     this.query.value = value;
     this.notifyQueryUpdate();
   }
@@ -120,7 +115,7 @@ export class CourseSearchHelperComponent implements OnInit {
   /**
    * Remove this whole query from queries list
    */
-  removeQuery() {
+  removeQuery(): void {
     this.removed.emit(this.index);
     this.courseQueryService.removeQuery(this.index);
   }

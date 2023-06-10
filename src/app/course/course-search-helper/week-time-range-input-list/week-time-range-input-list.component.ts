@@ -6,11 +6,11 @@ import {
   Output,
 } from "@angular/core";
 import { type AbstractControl, FormArray } from "@angular/forms";
-import { type Observable } from "rxjs";
+import type { Observable } from "rxjs";
 
-import { type Displayable } from "../../../_types/displayable";
-import { type WeekTimeRange } from "../../../_types/week-time";
-import { type QueryDataProvider } from "../../_query/query-data-provider";
+import type { Displayable } from "../../../_types/displayable";
+import type { WeekTimeRange } from "../../../_types/week-time";
+import type { QueryDataProvider } from "../../_query/query-data-provider";
 
 @Component({
   selector: "app-week-time-range-input-list",
@@ -19,8 +19,7 @@ import { type QueryDataProvider } from "../../_query/query-data-provider";
 })
 export class WeekTimeRangeInputListComponent implements OnInit {
   /** An event emitter that emit events when value has been updated */
-  @Output() updated: EventEmitter<Displayable<WeekTimeRange>[]> =
-    new EventEmitter();
+  @Output() updated = new EventEmitter<Displayable<WeekTimeRange>[]>();
 
   /** Data provider of current filtering condition */
   @Input() provider?: QueryDataProvider;
@@ -38,14 +37,14 @@ export class WeekTimeRangeInputListComponent implements OnInit {
 
   formArray: FormArray = new FormArray<AbstractControl>([]);
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.weekTimeRanges = this.value as Displayable<WeekTimeRange>[];
     if (!this.value) this.weekTimeRanges = [];
 
     if (this.weekTimeRanges.length === 0) this.addEmptyRange();
   }
 
-  addEmptyRange() {
+  addEmptyRange(): void {
     const emptyRange: Displayable<WeekTimeRange> = {
       label: "",
       value: { end: {}, start: {} },
@@ -57,17 +56,17 @@ export class WeekTimeRangeInputListComponent implements OnInit {
   onWeekTimeRangeUpdated(
     index: number,
     weekTimeRange: Displayable<WeekTimeRange>,
-  ) {
+  ): void {
     this.weekTimeRanges[index] = weekTimeRange;
     this.notifyQueryUpdate();
   }
 
-  onWeekTimeRangeControlSet(index: number, control: AbstractControl) {
+  onWeekTimeRangeControlSet(index: number, control: AbstractControl): void {
     this.formArray.setControl(index, control);
     this.controlSet.emit(this.formArray);
   }
 
-  notifyQueryUpdate() {
+  notifyQueryUpdate(): void {
     this.updated.emit(this.weekTimeRanges);
   }
 }

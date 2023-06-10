@@ -16,8 +16,8 @@ export class CourseComponent implements OnInit {
   searching = false;
 
   constructor(
-    private route: ActivatedRoute,
-    private courseQueryService: CourseQueryService,
+    private readonly route: ActivatedRoute,
+    private readonly courseQueryService: CourseQueryService,
   ) {}
 
   ngOnInit(): void {

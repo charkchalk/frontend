@@ -1,5 +1,5 @@
 export interface WeekTime {
-  day?: number;
+  day?: string;
   time?: string;
 }
 

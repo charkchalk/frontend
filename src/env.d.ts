@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 declare namespace NodeJS {
   /** Merge declaration with `process` in order to override the global-scoped env. */
   export interface ProcessEnv {

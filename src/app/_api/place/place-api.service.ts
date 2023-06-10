@@ -8,9 +8,9 @@ import { map, type Observable } from "rxjs";
   providedIn: "root",
 })
 export class PlaceApiService {
-  private uri = "/place";
+  private readonly uri = "/place";
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   getAll(
     options?: CanPaginate | { keyword: string },

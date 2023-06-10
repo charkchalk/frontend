@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import { Injectable } from "@angular/core";
-import { type ParamMap } from "@angular/router";
+import type { ParamMap } from "@angular/router";
 import { BehaviorSubject, type Observable } from "rxjs";
 
 import { QueryDataProvider } from "./query-data-provider";
@@ -51,9 +51,9 @@ export class CourseQueryService {
     return this.providers.find(queryable => queryable.value === key);
   }
 
-  queries: QueryItem<unknown>[] = [{}];
+  queries: QueryItem<unknown>[] = [{ key: "keyword", method: null, value: [] }];
 
-  private queriesSubject = new BehaviorSubject<QueryItem<unknown>[]>(
+  private readonly queriesSubject = new BehaviorSubject<QueryItem<unknown>[]>(
     this.queries,
   );
 
@@ -65,40 +65,41 @@ export class CourseQueryService {
     return this.queriesSubject.value[index];
   }
 
-  addQuery(query: QueryItem<unknown> = {}) {
+  addQuery(
+    query: QueryItem<unknown> = { key: null, method: null, value: [] },
+  ): void {
     this.queries.push(query);
     this.queriesSubject.next(this.queries);
   }
 
-  setQuery(index: number, query: QueryItem<unknown>) {
+  setQuery(index: number, query: QueryItem<unknown>): void {
     this.queries[index] = query;
     this.queriesSubject.next(this.queries);
   }
 
-  removeQuery(index: number) {
+  removeQuery(index: number): void {
     this.queries.splice(index, 1);
     this.queriesSubject.next(this.queries);
   }
 
-  clearQueries() {
+  clearQueries(): void {
     this.queries = [];
     this.queriesSubject.next(this.queries);
   }
 
-  removeEmptyQueries() {
+  removeEmptyQueries(): void {
     this.queries = this.queries.filter(
-      query => query.key && query.method && query.value?.length,
+      query => query.key && query.method && query.value.length,
     );
 
     this.queriesSubject.next(this.queries);
   }
 
-  serializeQueries(): { [key: string]: string[] } {
-    const params: { [key: string]: string[] } = {};
+  serializeQueries(): Record<string, string[]> {
+    const params: Record<string, string[]> = {};
 
     this.queries.forEach(query => {
-      if (!query.key || !query.method || !query.value?.length) return;
-      if (!params[query.key]) params[query.key] = [];
+      if (!query.key || !query.method || !query.value.length) return;
       const provider = this.getProvider(query.key);
 
       if (!provider) return;
@@ -141,7 +142,9 @@ export class CourseQueryService {
       return Promise.all(queryParsers);
     });
 
-    await Promise.all(providers).then(() => this.removeEmptyQueries());
+    await Promise.all(providers).then(() => {
+      this.removeEmptyQueries();
+    });
 
     if (save) {
       this.queries = queries;

@@ -6,11 +6,11 @@ import {
   Output,
 } from "@angular/core";
 import { type AbstractControl, FormControl, Validators } from "@angular/forms";
-import { type AutoCompleteCompleteEvent } from "primeng/autocomplete";
+import type { AutoCompleteCompleteEvent } from "primeng/autocomplete";
 import { BehaviorSubject, type Observable, type Subscription } from "rxjs";
 
-import { type Displayable } from "../../../_types/displayable";
-import { type QueryDataProvider } from "../../_query/query-data-provider";
+import type { Displayable } from "../../../_types/displayable";
+import type { QueryDataProvider } from "../../_query/query-data-provider";
 
 @Component({
   selector: "app-select-input",
@@ -19,10 +19,10 @@ import { type QueryDataProvider } from "../../_query/query-data-provider";
 })
 export class SelectInputComponent implements OnInit {
   /** An event emitter that emit events when input has been focused */
-  @Output() active: EventEmitter<void> = new EventEmitter();
+  @Output() active = new EventEmitter<void>();
 
   /** An event emitter that emit events when value has been updated */
-  @Output() updated: EventEmitter<Displayable<string>[]> = new EventEmitter();
+  @Output() updated = new EventEmitter<Displayable<string>[]>();
 
   /** Data provider of current filtering condition */
   @Input() provider?: QueryDataProvider;
@@ -39,26 +39,30 @@ export class SelectInputComponent implements OnInit {
   /** Control of current filtering condition */
   control = new FormControl<Displayable<string>[]>([], Validators.required);
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.providerChange?.subscribe(() => {
       this.optionsPage = 0;
       this.options = [];
     });
 
-    const values = (this.value as Displayable<string>[]) ?? [];
-
-    this.control.setValue(values);
+    this.control.setValue(this.value as Displayable<string>[]);
     this.controlSet.emit(this.control);
     if (!this.provider) this.control.disable();
-    this.providerChange?.subscribe(() => this.control.enable());
-    this.control.valueChanges.subscribe(() => this.onValueChange());
+    this.providerChange?.subscribe(() => {
+      this.control.enable();
+    });
+
+    this.control.valueChanges.subscribe(() => {
+      this.onValueChange();
+    });
   }
 
   /**
    * On selected options changed
    */
-  onValueChange() {
-    this.updated.emit(this.control.value as Displayable<string>[]);
+  onValueChange(): void {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.updated.emit(this.control.value!);
   }
 
   /** Selectable options */
@@ -135,7 +139,7 @@ export class SelectInputComponent implements OnInit {
   waitForElement(
     parent: string | null,
     target: string,
-    validator: (element: Element) => boolean = () => true,
+    validator: (element: Element) => boolean = (): boolean => true,
   ): Promise<Element> {
     return new Promise(resolve => {
       const element = document.querySelector(target);
@@ -188,7 +192,7 @@ export class SelectInputComponent implements OnInit {
 
           return;
         }
-        this.bindLoadingTrigger();
+        void this.bindLoadingTrigger();
       });
   }
 

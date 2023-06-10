@@ -3,7 +3,7 @@ import { firstValueFrom, map, type Observable } from "rxjs";
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { TagApiService } from "../../../../_api/tag/tag-api.service";
-import { type Displayable } from "../../../../_types/displayable";
+import type { Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({
@@ -14,7 +14,7 @@ export class TagQueryDataProviderService extends QueryDataProvider<string> {
 
   type = QueryDataType.select;
 
-  private methods: Displayable<string>[] = [
+  private readonly methods: Displayable<string>[] = [
     {
       label: "等於",
       value: "=",
@@ -25,7 +25,7 @@ export class TagQueryDataProviderService extends QueryDataProvider<string> {
     },
   ];
 
-  constructor(private tagApiService: TagApiService) {
+  constructor(private readonly tagApiService: TagApiService) {
     super();
   }
 
