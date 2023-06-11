@@ -1,21 +1,21 @@
 import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { RouterModule, type Routes } from "@angular/router";
 
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "courses",
     pathMatch: "full",
+    redirectTo: "courses",
   },
   {
-    path: "courses",
     loadChildren: () =>
-      import("./course/course.module").then(m => m.CourseModule),
+      import("./course/course.module").then(module => module.CourseModule),
+    path: "courses",
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
+  imports: [RouterModule.forRoot(routes)],
 })
 export class AppRoutingModule {}

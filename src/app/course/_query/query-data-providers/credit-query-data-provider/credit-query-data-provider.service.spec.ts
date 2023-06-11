@@ -10,6 +10,7 @@ describe("CreditQueryDataProviderService", () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
+
     service = TestBed.inject(CreditQueryDataProviderService);
   });
 

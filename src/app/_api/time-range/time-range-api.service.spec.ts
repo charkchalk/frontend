@@ -10,6 +10,7 @@ describe("TimeRangeApiService", () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
+
     service = TestBed.inject(TimeRangeApiService);
   });
 

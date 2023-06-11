@@ -10,6 +10,7 @@ describe("DateRangeQueryDataProviderService", () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
+
     service = TestBed.inject(DateRangeQueryDataProviderService);
   });
 

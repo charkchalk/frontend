@@ -10,6 +10,7 @@ describe("TagQueryDataProviderService", () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
+
     service = TestBed.inject(TagQueryDataProviderService);
   });
 

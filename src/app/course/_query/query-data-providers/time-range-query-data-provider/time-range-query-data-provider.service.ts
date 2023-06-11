@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
-import { map, Observable } from "rxjs";
+import { map, type Observable } from "rxjs";
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { TimeRangeApiService } from "../../../../_api/time-range/time-range-api.service";
-import { Displayable } from "../../../../_types/displayable";
-import { WeekTimeRange } from "../../../../_types/week-time";
+import type { Displayable } from "../../../../_types/displayable";
+import type { WeekTimeRange } from "../../../../_types/week-time";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({
@@ -11,24 +12,26 @@ import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 })
 export class TimeRangeQueryDataProviderService extends QueryDataProvider<WeekTimeRange> {
   valueSeparator = ",";
+
   type = QueryDataType.timeRange;
 
-  private methods: Displayable<string>[] = [
+  private readonly methods: Displayable<string>[] = [
     {
-      value: "=",
       label: "包含",
+      value: "=",
     },
     {
-      value: "!=",
       label: "不包含",
+      value: "!=",
     },
   ];
 
-  constructor(private timeRangeApiService: TimeRangeApiService) {
+  constructor(private readonly timeRangeApiService: TimeRangeApiService) {
     super();
   }
 
   value = "timeRange";
+
   label = "上課時間";
 
   getMethods(): Displayable<string>[] {
@@ -39,15 +42,13 @@ export class TimeRangeQueryDataProviderService extends QueryDataProvider<WeekTim
     options: CanPaginate & { keyword: string },
   ): Observable<Paginated<Displayable<string>[]>> {
     return this.timeRangeApiService.getAll(options).pipe(
-      map(response => {
-        return {
-          pagination: response.pagination,
-          content: response.content.map(dateRange => ({
-            value: dateRange.uuid,
-            label: `${dateRange.weekday} ${dateRange.startTime} ~ ${dateRange.endTime}`,
-          })),
-        };
-      }),
+      map(response => ({
+        content: response.content.map(dateRange => ({
+          label: `${dateRange.weekday} ${dateRange.startTime} ~ ${dateRange.endTime}`,
+          value: dateRange.uuid,
+        })),
+        pagination: response.pagination,
+      })),
     );
   }
 
@@ -56,27 +57,28 @@ export class TimeRangeQueryDataProviderService extends QueryDataProvider<WeekTim
   }
 
   protected serializeValue(weekTime: Displayable<WeekTimeRange>): string {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return `${weekTime.value.start.day}-${weekTime.value.start.time}~${weekTime.value.end.day}-${weekTime.value.end.time}`;
   }
 
   protected async deserializeValues(
     valueStrings: string,
   ): Promise<Displayable<WeekTimeRange>[]> {
-    return valueStrings.split(this.valueSeparator).map(v => {
-      const [startDay, startTime, endDay, endTime] = v.split(/[-~]/);
+    return valueStrings.split(this.valueSeparator).map(value => {
+      const [startDay, startTime, endDay, endTime] = value.split(/[-~]/u);
 
       return {
+        label: `${startDay}-${startTime}~${endDay}-${endTime}`,
         value: {
-          start: {
-            day: Number(startDay),
-            time: startTime,
-          },
           end: {
-            day: Number(endDay),
+            day: endDay,
             time: endTime,
           },
+          start: {
+            day: startDay,
+            time: startTime,
+          },
         },
-        label: `${startDay}-${startTime}~${endDay}-${endTime}`,
       };
     });
   }

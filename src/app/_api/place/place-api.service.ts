@@ -1,15 +1,16 @@
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { NgHttpCachingHeaders } from "ng-http-caching";
-import { map, Observable } from "rxjs";
+import { map, type Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class PlaceApiService {
-  private _uri = "/place";
+  private readonly uri = "/place";
 
-  constructor(private _http: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   getAll(
     options?: CanPaginate | { keyword: string },
@@ -18,33 +19,31 @@ export class PlaceApiService {
       fromObject: options as Record<string, string>,
     });
 
-    return this._http
-      .get<PaginatedResponse<RawPlace[]>>(this._uri, {
-        responseType: "json",
-        params: params,
+    return this.httpClient
+      .get<PaginatedResponse<RawPlace[]>>(this.uri, {
         headers: {
           [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
         },
+        params,
+        responseType: "json",
       })
       .pipe(
-        map(response => {
-          return {
-            pagination: {
-              total: response.totalPages,
-              current: response.currentPage,
-            },
-            content: response.content,
-          };
-        }),
+        map(response => ({
+          content: response.content,
+          pagination: {
+            current: response.currentPage,
+            total: response.totalPages,
+          },
+        })),
       );
   }
 
   get(id: string): Observable<RawPlace> {
-    return this._http.get<RawPlace>(this._uri + "/" + id, {
-      responseType: "json",
+    return this.httpClient.get<RawPlace>(`${this.uri}/${id}`, {
       headers: {
         [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
       },
+      responseType: "json",
     });
   }
 }

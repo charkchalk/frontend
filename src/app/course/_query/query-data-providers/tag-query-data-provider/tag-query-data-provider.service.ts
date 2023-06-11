@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import { firstValueFrom, map, Observable } from "rxjs";
+import { firstValueFrom, map, type Observable } from "rxjs";
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { TagApiService } from "../../../../_api/tag/tag-api.service";
-import { Displayable } from "../../../../_types/displayable";
+import type { Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({
@@ -10,24 +11,26 @@ import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 })
 export class TagQueryDataProviderService extends QueryDataProvider<string> {
   valueSeparator = ",";
+
   type = QueryDataType.select;
 
-  private methods: Displayable<string>[] = [
+  private readonly methods: Displayable<string>[] = [
     {
-      value: "=",
       label: "等於",
+      value: "=",
     },
     {
-      value: "!=",
       label: "不等於",
+      value: "!=",
     },
   ];
 
-  constructor(private tagApiService: TagApiService) {
+  constructor(private readonly tagApiService: TagApiService) {
     super();
   }
 
   value = "tag";
+
   label = "修別或分類等";
 
   getMethods(): Displayable<string>[] {
@@ -38,27 +41,26 @@ export class TagQueryDataProviderService extends QueryDataProvider<string> {
     options: CanPaginate & { keyword: string },
   ): Observable<Paginated<Displayable<string>[]>> {
     return this.tagApiService.getAll(options).pipe(
-      map(response => {
-        return {
-          pagination: response.pagination,
-          content: response.content.map(organization => {
-            const parents = [];
-            let currentParent = organization.parent;
-            while (currentParent) {
-              parents.push(currentParent.name);
-              currentParent = currentParent.parent;
-            }
-            let label = organization.name;
-            if (parents.length)
-              label += " (" + parents.reverse().join(" > ") + ")";
+      map(response => ({
+        content: response.content.map(organization => {
+          const parents = [];
+          let currentParent = organization.parent;
 
-            return {
-              value: organization.uuid,
-              label,
-            };
-          }),
-        };
-      }),
+          while (currentParent) {
+            parents.push(currentParent.name);
+            currentParent = currentParent.parent;
+          }
+          let label = organization.name;
+
+          if (parents.length) label += ` (${parents.reverse().join(" > ")})`;
+
+          return {
+            label,
+            value: organization.uuid,
+          };
+        }),
+        pagination: response.pagination,
+      })),
     );
   }
 
@@ -73,15 +75,15 @@ export class TagQueryDataProviderService extends QueryDataProvider<string> {
   protected async deserializeValues(
     valueStrings: string,
   ): Promise<Displayable<string>[]> {
-    const values = valueStrings.split(this.valueSeparator).map(async v => {
-      const host = await firstValueFrom(this.tagApiService.get(v));
+    const values = valueStrings.split(this.valueSeparator).map(async value => {
+      const host = await firstValueFrom(this.tagApiService.get(value));
 
       return {
-        value: host.uuid,
         label: host.name,
+        value: host.uuid,
       };
     });
 
-    return await Promise.all(values);
+    return Promise.all(values);
   }
 }

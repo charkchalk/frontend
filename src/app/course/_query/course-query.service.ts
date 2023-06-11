@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import { Injectable } from "@angular/core";
-import { ParamMap } from "@angular/router";
-import { BehaviorSubject, Observable } from "rxjs";
+import type { ParamMap } from "@angular/router";
+import { BehaviorSubject, type Observable } from "rxjs";
 
 import { QueryDataProvider } from "./query-data-provider";
 import { CodeQueryDataProviderService } from "./query-data-providers/code-query-data-provider/code-query-data-provider.service";
@@ -50,8 +51,9 @@ export class CourseQueryService {
     return this.providers.find(queryable => queryable.value === key);
   }
 
-  queries: QueryItem<unknown>[] = [{}];
-  private queriesSubject = new BehaviorSubject<QueryItem<unknown>[]>(
+  queries: QueryItem<unknown>[] = [{ key: "keyword", method: null, value: [] }];
+
+  private readonly queriesSubject = new BehaviorSubject<QueryItem<unknown>[]>(
     this.queries,
   );
 
@@ -63,39 +65,43 @@ export class CourseQueryService {
     return this.queriesSubject.value[index];
   }
 
-  addQuery(query: QueryItem<unknown> = {}) {
+  addQuery(
+    query: QueryItem<unknown> = { key: null, method: null, value: [] },
+  ): void {
     this.queries.push(query);
     this.queriesSubject.next(this.queries);
   }
 
-  setQuery(index: number, query: QueryItem<unknown>) {
+  setQuery(index: number, query: QueryItem<unknown>): void {
     this.queries[index] = query;
     this.queriesSubject.next(this.queries);
   }
 
-  removeQuery(index: number) {
+  removeQuery(index: number): void {
     this.queries.splice(index, 1);
     this.queriesSubject.next(this.queries);
   }
 
-  clearQueries() {
+  clearQueries(): void {
     this.queries = [];
     this.queriesSubject.next(this.queries);
   }
 
-  removeEmptyQueries() {
-    this.queries = this.queries.filter(query => {
-      return query.key && query.method && query.value?.length;
-    });
+  removeEmptyQueries(): void {
+    this.queries = this.queries.filter(
+      query => query.key && query.method && query.value.length,
+    );
+
     this.queriesSubject.next(this.queries);
   }
 
-  serializeQueries(): { [key: string]: string[] } {
-    const params: { [key: string]: string[] } = {};
+  serializeQueries(): Record<string, string[]> {
+    const params: Record<string, string[]> = {};
+
     this.queries.forEach(query => {
-      if (!query.key || !query.method || !query.value?.length) return;
-      if (!params[query.key]) params[query.key] = [];
+      if (!query.key || !query.method || !query.value.length) return;
       const provider = this.getProvider(query.key);
+
       if (!provider) return;
 
       const existingIndex = params[query.key].findIndex(
@@ -123,18 +129,22 @@ export class CourseQueryService {
     if (save) this.clearQueries();
 
     const queries: QueryItem<unknown>[] = [];
-    const queryParsers = this.providers.map(displayable => {
+    const providers = this.providers.map(displayable => {
       const provider = this.getProvider(displayable.value);
-      if (!provider) return;
+
+      if (!provider) return null;
       const values = paramMap.getAll(displayable.value);
 
       const queryParsers = values.map(async value => {
         queries.push(await provider.deserializeQuery(value));
       });
+
       return Promise.all(queryParsers);
     });
 
-    await Promise.all(queryParsers).then(() => this.removeEmptyQueries());
+    await Promise.all(providers).then(() => {
+      this.removeEmptyQueries();
+    });
 
     if (save) {
       this.queries = queries;

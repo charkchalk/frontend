@@ -8,6 +8,7 @@ import { SelectInputComponent } from "./select-input.component";
 
 @NgModule({
   declarations: [SelectInputComponent],
+  exports: [SelectInputComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -15,6 +16,5 @@ import { SelectInputComponent } from "./select-input.component";
     AutoCompleteModule,
     ProgressBarModule,
   ],
-  exports: [SelectInputComponent],
 })
 export class SelectInputModule {}

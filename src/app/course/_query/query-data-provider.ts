@@ -1,7 +1,14 @@
-import { Observable } from "rxjs";
+import type { Observable } from "rxjs";
 
-import { Displayable } from "../../_types/displayable";
-import { QueryItem } from "./query-item";
+import type { Displayable } from "../../_types/displayable";
+import type { QueryItem } from "./query-item";
+
+// eslint-disable-next-line no-shadow
+export enum QueryDataType {
+  select = "select",
+  text = "text",
+  timeRange = "time-range",
+}
 
 export abstract class QueryDataProvider<T = unknown>
   implements Displayable<string>
@@ -13,6 +20,7 @@ export abstract class QueryDataProvider<T = unknown>
   abstract type: QueryDataType;
 
   abstract value: string;
+
   abstract label: string;
 
   /**
@@ -40,17 +48,20 @@ export abstract class QueryDataProvider<T = unknown>
    * @param query The query to be serialize
    */
   appendSerializedQuery(serializedQuery: string, query: QueryItem<T>): string {
-    if (!query.value || !query.value.length) return serializedQuery;
+    if (!query.value.length) return serializedQuery;
     const [method, ...remains] = serializedQuery.split(":");
+
     if (method !== query.method) throw new Error("Queries does not match!");
 
     const values = remains.join(":").split(this.valueSeparator);
+
     for (const value of query.value) {
       const valueString = this.serializeValue(value);
+
       if (!values.includes(valueString)) values.push(valueString);
     }
 
-    return method + ":" + values.join(this.valueSeparator);
+    return `${method}:${values.join(this.valueSeparator)}`;
   }
 
   /**
@@ -58,15 +69,17 @@ export abstract class QueryDataProvider<T = unknown>
    * @param query The query to be stringify
    */
   serializeQuery(query: QueryItem<T>): string {
-    if (!query.method || !query.value?.length) {
+    if (!query.method || !query.value.length) {
       throw new Error("Invalid query.");
     }
 
-    return query.method + ":" + this.serializeValues(query.value);
+    return `${query.method}:${this.serializeValues(query.value)}`;
   }
 
   protected serializeValues(values: Displayable<T>[]): string {
-    return values.map(v => this.serializeValue(v)).join(this.valueSeparator);
+    return values
+      .map(value => this.serializeValue(value))
+      .join(this.valueSeparator);
   }
 
   protected abstract serializeValue(value: Displayable<T>): string;
@@ -89,10 +102,4 @@ export abstract class QueryDataProvider<T = unknown>
   protected abstract deserializeValues(
     value: string,
   ): Promise<Displayable<T>[]>;
-}
-
-export enum QueryDataType {
-  text = "text",
-  select = "select",
-  timeRange = "time-range",
 }

@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import { firstValueFrom, map, Observable } from "rxjs";
+import { firstValueFrom, map, type Observable } from "rxjs";
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { DateRangeApiService } from "../../../../_api/date-range/date-range-api.service";
-import { Displayable } from "../../../../_types/displayable";
+import type { Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({
@@ -10,24 +11,26 @@ import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 })
 export class DateRangeQueryDataProviderService extends QueryDataProvider<string> {
   valueSeparator = ",";
+
   type = QueryDataType.select;
 
-  private methods: Displayable<string>[] = [
+  private readonly methods: Displayable<string>[] = [
     {
-      value: "=",
       label: "介於",
+      value: "=",
     },
     {
-      value: "!=",
       label: "不介於",
+      value: "!=",
     },
   ];
 
-  constructor(private dateRangeApiService: DateRangeApiService) {
+  constructor(private readonly dateRangeApiService: DateRangeApiService) {
     super();
   }
 
   value = "dateRange";
+
   label = "學期別或授課期間";
 
   getMethods(): Displayable<string>[] {
@@ -38,15 +41,13 @@ export class DateRangeQueryDataProviderService extends QueryDataProvider<string>
     options: CanPaginate & { keyword: string },
   ): Observable<Paginated<Displayable<string>[]>> {
     return this.dateRangeApiService.getAll(options).pipe(
-      map(response => {
-        return {
-          pagination: response.pagination,
-          content: response.content.map(dateRange => ({
-            value: dateRange.uuid,
-            label: `${dateRange.name} (${dateRange.description}) [${dateRange.startDate} ~ ${dateRange.endDate}]`,
-          })),
-        };
-      }),
+      map(response => ({
+        content: response.content.map(dateRange => ({
+          label: `${dateRange.name} (${dateRange.description}) [${dateRange.startDate} ~ ${dateRange.endDate}]`,
+          value: dateRange.uuid,
+        })),
+        pagination: response.pagination,
+      })),
     );
   }
 
@@ -61,15 +62,17 @@ export class DateRangeQueryDataProviderService extends QueryDataProvider<string>
   protected async deserializeValues(
     valueStrings: string,
   ): Promise<Displayable<string>[]> {
-    const values = valueStrings.split(this.valueSeparator).map(async v => {
-      const dateRange = await firstValueFrom(this.dateRangeApiService.get(v));
+    const values = valueStrings.split(this.valueSeparator).map(async value => {
+      const dateRange = await firstValueFrom(
+        this.dateRangeApiService.get(value),
+      );
 
       return {
-        value: dateRange.uuid,
         label: `${dateRange.name} (${dateRange.description}) [${dateRange.startDate} ~ ${dateRange.endDate}]`,
+        value: dateRange.uuid,
       };
     });
 
-    return await Promise.all(values);
+    return Promise.all(values);
   }
 }

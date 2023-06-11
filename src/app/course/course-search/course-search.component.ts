@@ -1,31 +1,35 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, type OnInit } from "@angular/core";
 import {
-  AbstractControl,
+  type AbstractControl,
   FormArray,
-  FormControl,
+  type FormControl,
   FormGroup,
 } from "@angular/forms";
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { Router } from "@angular/router";
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { CourseQueryService } from "../_query/course-query.service";
-import { QueryItem } from "../_query/query-item";
+import type { QueryItem } from "../_query/query-item";
 
 @Component({
   selector: "app-course-search",
-  templateUrl: "./course-search.component.html",
   styleUrls: ["./course-search.component.scss"],
+  templateUrl: "./course-search.component.html",
 })
 export class CourseSearchComponent implements OnInit {
   queries: QueryItem<unknown>[] = [];
-  queryParams: { [key: string]: string[] } = {};
+
+  queryParams: Record<string, string[]> = {};
+
   formArray: FormArray = new FormArray<FormGroup>([]);
 
   constructor(
-    private courseQueryManagerService: CourseQueryService,
-    private router: Router,
+    private readonly courseQueryManagerService: CourseQueryService,
+    private readonly router: Router,
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.courseQueryManagerService.getQueries().subscribe(queries => {
       this.queries = queries;
       this.queryParams = this.courseQueryManagerService.serializeQueries();
@@ -34,31 +38,37 @@ export class CourseSearchComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.formArray.controls
       .flatMap(function flatChildren(control): FormControl[] {
         if (control instanceof FormGroup || control instanceof FormArray) {
           return Object.values(control.controls)
-            .map((control: AbstractControl): FormControl[] =>
-              flatChildren.call(this, control),
+            .map((subControl: AbstractControl): FormControl[] =>
+              // eslint-disable-next-line no-invalid-this, @typescript-eslint/no-invalid-this
+              flatChildren.call(this, subControl),
             )
-            .flatMap(control => control);
+            .flatMap(subControl => subControl);
         }
+
         return [control as FormControl];
       })
-      .forEach(control => control.markAsDirty());
+      .forEach(control => {
+        control.markAsDirty();
+      });
 
     if (this.formArray.invalid) return;
 
     this.queryParams = this.courseQueryManagerService.serializeQueries();
-    this.router.navigate(["/courses"], { queryParams: this.queryParams });
+    this.router
+      .navigate(["/courses"], { queryParams: this.queryParams })
+      .catch(console.error);
   }
 
-  onChildControlSet(index: number, childControl: AbstractControl) {
+  onChildControlSet(index: number, childControl: AbstractControl): void {
     this.formArray.setControl(index, childControl);
   }
 
-  onChildControlRemove(index: number) {
+  onChildControlRemove(index: number): void {
     this.formArray.removeAt(index);
   }
 }

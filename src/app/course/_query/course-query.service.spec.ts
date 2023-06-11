@@ -10,6 +10,7 @@ describe("CourseQueryService", () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
+
     service = TestBed.inject(CourseQueryService);
   });
 
@@ -19,18 +20,21 @@ describe("CourseQueryService", () => {
 
   it("should add a new query", () => {
     const initialQueriesLength = service.queries.length;
+
     service.addQuery();
     expect(service.queries.length).toBe(initialQueriesLength + 1);
   });
 
   it("should update a query", () => {
-    const query = { key: "query1" };
+    const query = { key: "query1", method: null, value: [] };
+
     service.setQuery(0, query);
     expect(service.getQuery(0)).toEqual(query);
   });
 
   it("should remove a query", () => {
     const initialQueriesLength = service.queries.length;
+
     service.removeQuery(0);
     expect(service.queries.length).toBe(initialQueriesLength - 1);
   });

@@ -1,15 +1,16 @@
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { NgHttpCachingHeaders } from "ng-http-caching";
-import { map, Observable } from "rxjs";
+import { map, type Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class PersonApiService {
-  private _uri = "/person";
+  private readonly uri = "/person";
 
-  constructor(private _http: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   getAll(
     options?: CanPaginate | { keyword: string },
@@ -18,33 +19,31 @@ export class PersonApiService {
       fromObject: options as Record<string, string>,
     });
 
-    return this._http
-      .get<PaginatedResponse<RawPerson[]>>(this._uri, {
-        responseType: "json",
-        params: params,
+    return this.httpClient
+      .get<PaginatedResponse<RawPerson[]>>(this.uri, {
         headers: {
           [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
         },
+        params,
+        responseType: "json",
       })
       .pipe(
-        map(response => {
-          return {
-            pagination: {
-              total: response.totalPages,
-              current: response.currentPage,
-            },
-            content: response.content,
-          };
-        }),
+        map(response => ({
+          content: response.content,
+          pagination: {
+            current: response.currentPage,
+            total: response.totalPages,
+          },
+        })),
       );
   }
 
   get(id: string): Observable<RawPerson> {
-    return this._http.get<RawPerson>(this._uri + "/" + id, {
-      responseType: "json",
+    return this.httpClient.get<RawPerson>(`${this.uri}/${id}`, {
       headers: {
         [NgHttpCachingHeaders.ALLOW_CACHE]: "1",
       },
+      responseType: "json",
     });
   }
 }

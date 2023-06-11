@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { ButtonModule } from "primeng/button";
@@ -17,12 +17,11 @@ describe("CourseSearchHelperComponent", () => {
   let courseQueryServiceSpy: jasmine.SpyObj<CourseQueryService>;
 
   beforeEach(async () => {
-    courseQueryServiceSpy = jasmine.createSpyObj("CourseQueryService", [
-      "getProviders",
-      "getQuery",
-      "getProvider",
-      "removeQuery",
-    ]);
+    courseQueryServiceSpy = jasmine.createSpyObj<CourseQueryService>(
+      "CourseQueryService",
+      ["getProviders", "getQuery", "getProvider", "removeQuery"],
+    );
+
     await TestBed.configureTestingModule({
       declarations: [CourseSearchHelperComponent],
       imports: [
@@ -42,13 +41,20 @@ describe("CourseSearchHelperComponent", () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(CourseSearchHelperComponent);
+    // eslint-disable-next-line require-atomic-updates
     courseQueryServiceSpy = TestBed.inject(
       CourseQueryService,
     ) as jasmine.SpyObj<CourseQueryService>;
+
     component = fixture.componentInstance;
     component.index = 0;
     courseQueryServiceSpy.getProviders.and.returnValue([]);
-    courseQueryServiceSpy.getQuery.and.returnValue({});
+    courseQueryServiceSpy.getQuery.and.returnValue({
+      key: null,
+      method: null,
+      value: [],
+    });
+
     fixture.detectChanges();
   });
 

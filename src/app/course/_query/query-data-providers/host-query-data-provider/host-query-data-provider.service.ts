@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import { firstValueFrom, map, Observable } from "rxjs";
+import { firstValueFrom, map, type Observable } from "rxjs";
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { PersonApiService } from "../../../../_api/person/person-api.service";
-import { Displayable } from "../../../../_types/displayable";
+import type { Displayable } from "../../../../_types/displayable";
 import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 
 @Injectable({
@@ -10,24 +11,26 @@ import { QueryDataProvider, QueryDataType } from "../../query-data-provider";
 })
 export class HostQueryDataProviderService extends QueryDataProvider {
   valueSeparator = ",";
+
   type = QueryDataType.select;
 
-  private methods: Displayable<string>[] = [
+  private readonly methods: Displayable<string>[] = [
     {
-      value: "=",
       label: "等於",
+      value: "=",
     },
     {
-      value: "!=",
       label: "不等於",
+      value: "!=",
     },
   ];
 
-  constructor(private personApiService: PersonApiService) {
+  constructor(private readonly personApiService: PersonApiService) {
     super();
   }
 
   value = "host";
+
   label = "授課教師";
 
   getMethods(): Displayable<string>[] {
@@ -38,15 +41,13 @@ export class HostQueryDataProviderService extends QueryDataProvider {
     options: CanPaginate & { keyword: string },
   ): Observable<Paginated<Displayable<string>[]>> {
     return this.personApiService.getAll(options).pipe(
-      map(response => {
-        return {
-          pagination: response.pagination,
-          content: response.content.map(host => ({
-            value: host.uuid,
-            label: host.name,
-          })),
-        };
-      }),
+      map(response => ({
+        content: response.content.map(host => ({
+          label: host.name,
+          value: host.uuid,
+        })),
+        pagination: response.pagination,
+      })),
     );
   }
 
@@ -61,15 +62,15 @@ export class HostQueryDataProviderService extends QueryDataProvider {
   protected async deserializeValues(
     valueStrings: string,
   ): Promise<Displayable<string>[]> {
-    const values = valueStrings.split(this.valueSeparator).map(async v => {
-      const host = await firstValueFrom(this.personApiService.get(v));
+    const values = valueStrings.split(this.valueSeparator).map(async value => {
+      const host = await firstValueFrom(this.personApiService.get(value));
 
       return {
-        value: host.uuid,
         label: host.name,
+        value: host.uuid,
       };
     });
 
-    return await Promise.all(values);
+    return Promise.all(values);
   }
 }

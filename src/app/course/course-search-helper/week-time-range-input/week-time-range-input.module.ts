@@ -7,7 +7,7 @@ import { WeekTimeRangeInputComponent } from "./week-time-range-input.component";
 
 @NgModule({
   declarations: [WeekTimeRangeInputComponent],
-  imports: [CommonModule, WeekTimeInputModule, DividerModule],
   exports: [WeekTimeRangeInputComponent],
+  imports: [CommonModule, WeekTimeInputModule, DividerModule],
 })
 export class WeekTimeRangeInputModule {}

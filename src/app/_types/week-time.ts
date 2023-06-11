@@ -1,9 +1,9 @@
-export interface WeekTimeRange {
-  start: WeekTime;
-  end: WeekTime;
+export interface WeekTime {
+  day?: string;
+  time?: string;
 }
 
-export interface WeekTime {
-  day?: number;
-  time?: string;
+export interface WeekTimeRange {
+  end: WeekTime;
+  start: WeekTime;
 }
